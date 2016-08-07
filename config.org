@@ -93,7 +93,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                       :background nil)
   (set-face-attribute 'diff-refine-added nil
                       :foreground "Aquamarine"
-                      :background "black")                                           
+                      :background "black")
   (set-face-attribute 'diff-refine-removed nil
                       :inherit nil
                       :foreground "Aquamarine"
@@ -117,7 +117,30 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 
 * Packages
+** Abbrev-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package abbrev
+   :diminish abbrev-mode)
+#+END_SRC
+
+** Auto-Complete
+
+#+BEGIN_SRC emacs-lisp
+(use-package auto-complete
+   :ensure t
+   :diminish auto-complete-mode
+   :bind
+      (:map ac-mode-map
+      ("TAB" . ac-fuzzy-complete))
+   :config
+      (use-package fuzzy
+      :ensure t)
+      (auto-complete-mode t))
+#+END_SRC
+
 ** Elfeed
+
 #+begin_src emacs-lisp
 (use-package elfeed
   :ensure t
@@ -125,6 +148,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+end_src
 
 *** Elfeed-org
+
 #+BEGIN_SRC emacs-lisp
 (use-package elfeed-org
   :ensure t
@@ -141,6 +165,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 
 ** Helm mode
+
 #+BEGIN_SRC emacs-lisp
 (use-package helm
   :diminish helm-mode
@@ -179,6 +204,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   :config
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
 #+end_src
+
 *** Fullscreen magit
 
 #+begin_src emacs-lisp
@@ -196,6 +222,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+end_src
 
 ** Recentf
+
 #+begin_src emacs-lisp
 (use-package recentf
   :bind ("C-x C-r" . helm-recentf)
@@ -203,6 +230,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (recentf-mode t)
   (setq recentf-max-saved-items 200))
 #+end_src
+
+** Undo/Redo Tree
+
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+   :bind
+      ("C--" . undo-tree-undo)
+      ("C-x u" . undo-tree-visualize))
+#+END_SRC
 
 ** Winner mode
 
