@@ -1,0 +1,295 @@
+* Emacs Configuration
+
+I have been using Emacs extensively since I started working as a
+developer in Jan of 2014. Thanks to some awesome emacser's at my
+current company I have learnt a great deal about it. I remember my
+days of stuggle while learning emacs, but now all the hard work has
+paid off and I *absolutely love* EMACS!
+
+I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emacs config.
+
+* Installing Emacs
+I always use --with-imagemagick switch while installing, because I
+read rss feeds in emacs.
+
+On OSX
+#+BEGIN_SRC sh
+brew install emacs --with-imagemagick
+#+END_SRC
+
+* Defaults
+Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
+#+BEGIN_SRC emacs-lisp
+
+;; Keep all backup and auto-save files in one directory
+(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+
+;; Allow pasting selection outside of Emacs
+(setq x-select-enable-clipboard t)
+
+;; Show keystrokes in progress
+(setq echo-keystrokes 0.1)
+
+;; Move files to trash when deleting
+(setq delete-by-moving-to-trash t)
+
+;; Real emacs knights don't use shift to mark things
+(setq shift-select-mode nil)
+
+;; Transparently open compressed files
+(auto-compression-mode t)
+
+;; Answering just 'y' or 'n' will do
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Remove text in active region if inserting text
+(delete-selection-mode 1)
+
+;; Always display line and column numbers
+(setq line-number-mode t)
+(setq column-number-mode t)
+
+;; Lines should be 85 characters wide, not 72
+(setq fill-column 85)
+
+;; Never insert tabs
+(set-default 'indent-tabs-mode nil)
+
+;; Easily navigate sillycased words
+(global-subword-mode 1)
+
+;; Gatbage collect every 20MB 
+(setq gc-cons-threshold 20000000)
+
+;; Turn off the blinking cursor
+(blink-cursor-mode -1)
+
+;; Enable show parenthesis
+(show-paren-mode t)
+
+;; Window movement, a gamer might recognize these key combinations!
+(global-set-key (kbd "C-c i") 'windmove-up)
+(global-set-key (kbd "C-c k") 'windmove-down)
+(global-set-key (kbd "C-c l") 'windmove-right)
+(global-set-key (kbd "C-c j") 'windmove-left)
+
+;; Comment/un-comment
+(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+
+;; Compile Command
+(global-set-key (kbd "C-x c c") 'compile)
+
+(defun update-diff-colors ()
+  "update the colors for diff faces"
+  (set-face-attribute 'diff-added nil
+                      :foreground "brightgreen"
+                      :background nil)
+  (set-face-attribute 'diff-removed nil
+                      :foreground "brightred"
+                      :background nil)
+  (set-face-attribute 'diff-changed nil
+                      :foreground "white"
+                      :background nil)
+  (set-face-attribute 'diff-refine-added nil
+                      :foreground "Aquamarine"
+                      :background "black")                                           
+  (set-face-attribute 'diff-refine-removed nil
+                      :inherit nil
+                      :foreground "Aquamarine"
+                      :background nil)
+  (set-face-attribute 'diff-refine-change nil
+                      :foreground nil
+                      :background "black")
+  (set-face-attribute 'diff-hunk-header nil
+                      :inherit nil
+                      :foreground "yellow"
+                      :background nil)
+  (set-face-attribute 'diff-header nil
+                      :foreground "color-69"
+                      :background nil)
+  (set-face-attribute 'diff-file-header nil
+                      :foreground nil
+                      :background nil))
+
+(eval-after-load "diff-mode"
+  '(update-diff-colors))
+#+END_SRC
+
+* Packages
+** Elfeed
+#+begin_src emacs-lisp
+(use-package elfeed
+  :ensure t
+  :defer t)
+#+end_src
+
+*** Elfeed-org
+#+BEGIN_SRC emacs-lisp
+(use-package elfeed-org
+  :ensure t
+  :defer t)
+#+END_SRC
+
+** FCI mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package fill-column-indicator
+  :ensure t
+  :config
+  (setq fci-rule-column 85))
+#+END_SRC
+
+** Helm mode
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+  :diminish helm-mode
+  :ensure t
+  :init (progn
+          (require 'helm-config)
+          (setq helm-candidate-number-limit 100)
+          ;; From https://gist.github.com/antifuchs/9238468
+          (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+          helm-input-idle-delay 0.01  ; this actually updates things
+                                      ; reeeelatively quickly.
+          helm-yas-display-key-on-candidate t
+          helm-quick-update t)
+          (helm-mode)
+          (use-package helm-swoop
+          :ensure t
+          :bind ("M-i" . helm-swoop)))
+  :bind (("C-c h" . helm-mini)
+         ("C-h a" . helm-apropos)
+         ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("M-i" . helm-swoop)
+         ("C-x C-f" . helm-find-files))
+  :config (define-key helm-map (kbd "TAB" ) 'helm-execute-persistent-action ))
+(ido-mode -1) ;; Turn off ido mode.
+#+END_SRC
+
+** Magit
+
+#+begin_src emacs-lisp
+(use-package magit
+  :ensure t
+  :defer t
+  :bind ("C-c g" . magit-status)
+  :config
+  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
+#+end_src
+*** Fullscreen magit
+
+#+begin_src emacs-lisp
+;; full screen magit-status
+(defadvice magit-status (around magit-fullscreen activate)
+  (window-configuration-to-register :magit-fullscreen)
+  ad-do-it
+  (delete-other-windows))
+
+(defun magit-quit-session ()
+  "Restores the previous window configuration and kills the magit buffer"
+  (interactive)
+  (kill-buffer)
+  (jump-to-register :magit-fullscreen))
+#+end_src
+
+** Recentf
+#+begin_src emacs-lisp
+(use-package recentf
+  :bind ("C-x C-r" . helm-recentf)
+  :config
+  (recentf-mode t)
+  (setq recentf-max-saved-items 200))
+#+end_src
+
+** Winner mode
+
+Winner mode allows you to undo/redo changes to window changes in Emacs.
+
+#+begin_src emacs-lisp
+(use-package winner
+  :config
+  (winner-mode t))
+#+end_src
+
+* Arista Specific
+** Arastra library
+
+#+BEGIN_SRC emacs-lisp
+(use-package "Arastra")
+#+END_SRC
+
+** Bug Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package "bug-mode"
+  :bind  (("C-x g g" . bug-goto)
+          ("C-x g d" . bug-describe-change)))
+#+END_SRC
+
+** Abuild mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package "abuild" )
+#+END_SRC
+
+** Custom Func
+
+#+BEGIN_SRC emacs-lisp
+(defun p4-write-attempt (data context caller)
+  ; If it's a buffer that has a filename (not a special buffer like
+  ; *Messages* or *Completions*) and it's read-only and you wrote to it
+  (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
+      ; And the user wants to checked out
+      (if (y-or-n-p "Checkout in Perforce?")
+          (a4-edit (buffer-file-name)) ) ) )
+(setq command-error-function 'p4-write-attempt)
+#+END_SRC
+
+** Arista copy utils
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-x c p") 'cp-cur-word)
+(global-set-key (kbd "C-x c f") 'cp-cur-file-name)
+(global-set-key (kbd "C-x c w") 'cp-which-func)
+#+END_SRC
+
+** a4-changes mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package "a4-changes" )
+#+END_SRC
+
+** Open tasks.org
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-c t") 
+   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
+#+END_SRC
+
+** Shell
+
+#+BEGIN_SRC emacs-lisp
+(defun myshell (arg)
+  (interactive "c")
+  (if (or (< arg 32) (> arg 126))
+      (error "Please use printable character for shell name"))
+  (let* ((buffer (get-buffer (format "*shell*<%c>" arg))))
+    (if buffer
+	(switch-to-buffer buffer)
+      (progn
+	(shell)
+        (setq shell-dirtrackp nil)
+        (make-local-variable 'comint-input-sender)
+	(rename-buffer (format "*shell*<%c>" arg))))))
+(define-key global-map '[(meta ?z)] 'myshell)
+#+END_SRC
+
+** Pylint compile
+
+#+BEGIN_SRC emacs-lisp
+(use-package "python-pylint"
+  :bind (( "C-x y" . python-pylint)))
+#+END_SRC
