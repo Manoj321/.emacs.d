@@ -123,6 +123,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (use-package abbrev
    :diminish abbrev-mode)
 #+END_SRC
+** Ace-jump-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-jump-mode
+   :ensure t
+   :bind ("C-c SPC" . ace-jump-mode))
+#+END_SRC
 
 ** Auto-Complete
 
@@ -250,6 +257,19 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
   (winner-mode t))
 #+end_src
 
+** Expand Region
+
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+   :ensure t
+   :bind ("C-@" . er/expand-region))
+#+END_SRC
+
+** Fly-Check
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+   :ensure t)
+#+END_SRC
 * Arista Specific
 ** Arastra library
 
