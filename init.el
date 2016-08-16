@@ -21,9 +21,10 @@
 (require 'diminish)
 (require 'bind-key)
 
-;; Finally load config.org
-(org-babel-load-file (concat user-emacs-directory "config.org"))
-
 ;; So that Arista specific .el files are loaded.
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+(add-to-list 'load-path "/usr/share/emacs/site-lisp")
 (add-to-list 'load-path "~/.emacs.d/lisp/")
+
+;; Finally load config.org
+(org-babel-load-file (concat user-emacs-directory "config.org"))
