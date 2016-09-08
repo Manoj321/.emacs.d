@@ -32,7 +32,8 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
 (load-library "arastra-utils")
 
 ;;aformat mode
-(use-package aformat-mode)
+(use-package aformat-mode
+   :diminish aformat-mode)
 
 #+END_SRC
 
@@ -100,6 +101,13 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
         (make-local-variable 'comint-input-sender)
 	(rename-buffer (format "*shell*<%c>" arg))))))
 (define-key global-map '[(meta ?z)] 'myshell)
+
+(add-hook 'comint-mode-hook 
+          (lambda nil
+            (define-key (current-local-map) "\ep" 
+              'comint-previous-matching-input-from-input)
+            (define-key (current-local-map) "\en" 
+              'comint-next-matching-input-from-input)))
 #+END_SRC
 
 ** Pylint compile
@@ -292,6 +300,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
          ("C-x C-f" . helm-find-files))
   :config (define-key helm-map (kbd "TAB" ) 'helm-execute-persistent-action ))
 (ido-mode -1) ;; Turn off ido mode.
+#+END_SRC
+
+** pcomplete-extension
+
+#+BEGIN_SRC emacs-lisp
+(use-package pcomplete-extension
+:ensure t)
 #+END_SRC
 
 ** Magit
