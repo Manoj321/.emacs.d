@@ -8,7 +8,7 @@ paid off and I *absolutely love* EMACS!
 
 I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emacs config.
 
-* Arista Specific
+* COMMENT Arista Specific
 ** Arastra library
 
 #+BEGIN_SRC emacs-lisp
@@ -224,6 +224,63 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 #+END_SRC
 
+* Themes
+** Cyberpunk
+
+#+BEGIN_SRC emacs-lisp
+(use-package cyberpunk-theme
+  :ensure t
+  :init
+  (progn
+    (load-theme 'cyberpunk t)
+    (set-face-attribute `mode-line nil
+                        :box nil)
+    (set-face-attribute `mode-line-inactive nil
+                        :box nil)))
+#+END_SRC
+
+** Solarized
+#+BEGIN_SRC emacs-lisp
+(use-package solarized-theme
+  :init
+  (setq solarized-use-variable-pitch nil)
+  :ensure t)
+#+END_SRC
+
+** Monokai
+#+BEGIN_SRC emacs-lisp
+(use-package monokai-theme
+  :ensure t
+  :init
+  (setq monokai-use-variable-pitch nil))
+#+END_SRC
+
+** Waher
+#+BEGIN_SRC emacs-lisp
+(use-package waher-theme
+  :ensure t)
+#+END_SRC
+
+** Theme Functions
+
+#+BEGIN_SRC emacs-lisp
+(defun switch-theme (theme)
+  "Disables any currently active themes and loads THEME."
+  ;; This interactive call is taken from `load-theme'
+  (interactive
+   (list
+    (intern (completing-read "Load custom theme: "
+                             (mapc 'symbol-name
+                                   (custom-available-themes))))))
+  (let ((enabled-themes custom-enabled-themes))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme t)))
+
+(defun disable-active-themes ()
+  "Disables any currently active themes listed in `custom-enabled-themes'."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes))
+#+END_SRC
 * Packages
 ** Abbrev-mode
 
