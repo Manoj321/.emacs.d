@@ -294,6 +294,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (ido-mode -1) ;; Turn off ido mode.
 #+END_SRC
 
+** org-journal
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-journal
+   :ensure t
+   :config
+   (setq org-journal-dir "~/Dropbox/Notes/journal/"))
+#+END_SRC
+
 ** Magit
 
 #+begin_src emacs-lisp
