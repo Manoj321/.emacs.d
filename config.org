@@ -171,8 +171,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ;; Easily navigate sillycased words
 (global-subword-mode 1)
 
-;; Gatbage collect every 20MB 
-(setq gc-cons-threshold 20000000)
+;; Gatbage collect every 800KB 
+(setq gc-cons-threshold 800000)
 
 ;; Turn off the blinking cursor
 (blink-cursor-mode -1)
