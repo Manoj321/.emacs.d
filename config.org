@@ -8,94 +8,81 @@ paid off and I *absolutely love* EMACS!
 
 I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emacs config.
 
-* COMMENT Arista Specific
+* Arista Specific
 ** Arastra library
 
 #+BEGIN_SRC emacs-lisp
-;; Use separate emacs daemon for each project.
-(if (getenv "WP")
-    (setq server-name (getenv "WP")))
+;; load this only on arista server
+(when (and (getenv "HOSTNAME") (string-match "arista" (getenv "HOSTNAME")))
 
-(load-library "arastra-indent")
+   ;; Use separate emacs daemon for each project.
+   (if (getenv "WP")
+      (setq server-name (getenv "WP")))
 
-;; Integration with a4, for checking files out and for
-;; compiling/running/debugging within emacs.
-(load-library "a4")
+   (load-library "arastra-indent")
 
-;; Support for gnu id-utils
-(autoload 'gid "id-utils" "Lookup a string in a mkid database" t)
+   ;; Integration with a4, for checking files out and for
+   ;; compiling/running/debugging within emacs.
+   (load-library "a4")
 
-;; Arista gid extensions
-(load-library "a4-gid")
+   ;; Support for gnu id-utils
+   (autoload 'gid "id-utils" "Lookup a string in a mkid database" t)
 
-;; Some little useful functions like C-ct for a timestamp
-(load-library "arastra-utils")
-(load-library "cp-utils")
+   ;; Arista gid extensions
+   (load-library "a4-gid")
 
-;;aformat mode
-(use-package aformat-mode
-   :diminish aformat-mode)
+   ;; Some little useful functions like C-ct for a timestamp
+   (load-library "arastra-utils")
+   (load-library "cp-utils")
 
-#+END_SRC
+   ;; Aformat mode
+   (use-package aformat-mode
+      :diminish aformat-mode)
 
-** Bug Mode
+   ;; Bug Mode
+   (use-package "bug-mode"
+      :bind  (("C-x g g" . bug-goto)
+              ("C-x g d" . bug-describe-change)))
 
-#+BEGIN_SRC emacs-lisp
-(use-package "bug-mode"
-  :bind  (("C-x g g" . bug-goto)
-          ("C-x g d" . bug-describe-change)))
-#+END_SRC
+   ;; Abuild mode
+   (use-package "abuild" )
 
-** Abuild mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package "abuild" )
-#+END_SRC
-
-** Custom Func
-
-#+BEGIN_SRC emacs-lisp
-(defun p4-write-attempt (data context caller)
-  ; If it's a buffer that has a filename (not a special buffer like
-  ; *Messages* or *Completions*) and it's read-only and you wrote to it
-  (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
+   (defun p4-write-attempt (data context caller)
+   ; If it's a buffer that has a filename (not a special buffer like
+   ; *Messages* or *Completions*) and it's read-only and you wrote to it
+   (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
       ; And the user wants to checked out
       (if (y-or-n-p "Checkout in Perforce?")
-          (a4-edit (buffer-file-name)) ) ) )
-(setq command-error-function 'p4-write-attempt)
+      (a4-edit (buffer-file-name)) ) ) )
+   (setq command-error-function 'p4-write-attempt)
+
+   ;; Arista copy utils
+   (global-set-key (kbd "C-x c p") 'cp-cur-word)
+   (global-set-key (kbd "C-x c f") 'cp-cur-file-name)
+   (global-set-key (kbd "C-x c w") 'cp-which-func)
+
+   ;; a4-changes mode
+   (use-package "a4-changes" )
+
+   ;; Open tasks.org
+   (global-set-key (kbd "C-c t")
+      (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
+
+   ;; Pylint compile
+   (use-package "python-pylint"
+      :bind (( "C-x y" . python-pylint)))
+
+   ;; Inihibit Fsync
+   (setq write-region-inhibit-fsync t)
+
+   ;; PDB Hook 
+   (defun my-shell-mode-hook ()
+      (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
+   (add-hook 'shell-mode-hook 'my-shell-mode-hook)
+
+ );;end arista specific changes
 #+END_SRC
 
-** Arista copy utils
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x c p") 'cp-cur-word)
-(global-set-key (kbd "C-x c f") 'cp-cur-file-name)
-(global-set-key (kbd "C-x c w") 'cp-which-func)
-#+END_SRC
-
-** a4-changes mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package "a4-changes" )
-#+END_SRC
-
-** Open tasks.org
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-c t")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
-#+END_SRC
-
-** Pylint compile
-
-#+BEGIN_SRC emacs-lisp
-(use-package "python-pylint"
-  :bind (( "C-x y" . python-pylint)))
-#+END_SRC
-** Inihibit Fsync
-#+BEGIN_SRC emacs-lisp
-(setq write-region-inhibit-fsync t)
-#+END_SRC
 * Installing Emacs
 I always use --with-imagemagick switch while installing, because I
 read rss feeds in emacs.
@@ -346,17 +333,10 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 :ensure t)
 
 #+END_SRC
-* PDB fix
-
-#+BEGIN_SRC emacs-lisp
-(defun my-shell-mode-hook ()
-  (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
-(add-hook 'shell-mode-hook 'my-shell-mode-hook)
-#+END_SRC
 * Shell
 
 #+BEGIN_SRC emacs-lisp
-`(defun myshell (arg)
+(defun myshell (arg)
   (interactive "c")
   (if (or (< arg 32) (> arg 126))
       (error "Please use printable character for shell name"))
@@ -377,3 +357,4 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
             (define-key (current-local-map) "\en" 
               'comint-next-matching-input-from-input)))
 #+END_SRC
+
