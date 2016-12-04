@@ -30,6 +30,7 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
 
 ;; Some little useful functions like C-ct for a timestamp
 (load-library "arastra-utils")
+(load-library "cp-utils")
 
 ;;aformat mode
 (use-package aformat-mode
@@ -85,31 +86,6 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
    (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
 #+END_SRC
 
-** Shell
-
-#+BEGIN_SRC emacs-lisp
-(defun myshell (arg)
-  (interactive "c")
-  (if (or (< arg 32) (> arg 126))
-      (error "Please use printable character for shell name"))
-  (let* ((buffer (get-buffer (format "*shell*<%c>" arg))))
-    (if buffer
-	(switch-to-buffer buffer)
-      (progn
-	(shell)
-        (setq shell-dirtrackp nil)
-        (make-local-variable 'comint-input-sender)
-	(rename-buffer (format "*shell*<%c>" arg))))))
-(define-key global-map '[(meta ?z)] 'myshell)
-
-(add-hook 'comint-mode-hook 
-          (lambda nil
-            (define-key (current-local-map) "\ep" 
-              'comint-previous-matching-input-from-input)
-            (define-key (current-local-map) "\en" 
-              'comint-next-matching-input-from-input)))
-#+END_SRC
-
 ** Pylint compile
 
 #+BEGIN_SRC emacs-lisp
@@ -137,6 +113,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
+;; Don't you dare to warn me!
+(setq large-file-warning-threshold nil)
+
 ;; Allow pasting selection outside of Emacs
 (setq x-select-enable-clipboard t)
 
@@ -163,7 +142,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (setq column-number-mode t)
 
 ;; Lines should be 85 characters wide, not 72
-(setq fill-column 85)
+(setq-default fill-column 85)
 
 ;; Never insert tabs
 (set-default 'indent-tabs-mode nil)
@@ -171,8 +150,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ;; Easily navigate sillycased words
 (global-subword-mode 1)
 
-;; Gatbage collect every 800KB 
-(setq gc-cons-threshold 800000)
+;; Garbage collect every 400KB 
+(setq gc-cons-threshold 400000)
 
 ;; Turn off the blinking cursor
 (blink-cursor-mode -1)
@@ -226,69 +205,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 (eval-after-load "diff-mode"
   '(update-diff-colors))
-
-;;set fill column to 85
-(setq fill-column 85)
-
 #+END_SRC
 
-* Themes
-** Cyberpunk
-
-#+BEGIN_SRC emacs-lisp
-(use-package cyberpunk-theme
-  :ensure t
-  :init
-  (progn
-    (load-theme 'cyberpunk t)
-    (set-face-attribute `mode-line nil
-                        :box nil)
-    (set-face-attribute `mode-line-inactive nil
-                        :box nil)))
-#+END_SRC
-
-** Solarized
-#+BEGIN_SRC emacs-lisp
-(use-package solarized-theme
-  :init
-  (setq solarized-use-variable-pitch nil)
-  :ensure t)
-#+END_SRC
-
-** Monokai
-#+BEGIN_SRC emacs-lisp
-(use-package monokai-theme
-  :ensure t
-  :init
-  (setq monokai-use-variable-pitch nil))
-#+END_SRC
-
-** Waher
-#+BEGIN_SRC emacs-lisp
-(use-package waher-theme
-  :ensure t)
-#+END_SRC
-
-** Theme Functions
-
-#+BEGIN_SRC emacs-lisp
-(defun switch-theme (theme)
-  "Disables any currently active themes and loads THEME."
-  ;; This interactive call is taken from `load-theme'
-  (interactive
-   (list
-    (intern (completing-read "Load custom theme: "
-                             (mapc 'symbol-name
-                                   (custom-available-themes))))))
-  (let ((enabled-themes custom-enabled-themes))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme t)))
-
-(defun disable-active-themes ()
-  "Disables any currently active themes listed in `custom-enabled-themes'."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes))
-#+END_SRC
 * Packages
 ** Abbrev-mode
 
@@ -366,7 +284,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    :ensure t
    :config
    (setq org-journal-dir "~/Dropbox/Notes/journal/"))
->>>>>>> 7575b3fd8d03bee20004590a91b63ac44961f1b3
 #+END_SRC
 
 ** Magit
@@ -422,31 +339,41 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
    :ensure t)
 #+END_SRC
 
-** SmartParens
+** helm company
 
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens-config
-    :ensure smartparens
-    :diminish smartparens-mode
-    :config
-    (progn
-      (show-smartparens-global-mode t)))
+(use-package helm-company
+:ensure t)
 
-(add-hook 'python-mode-hook 'turn-on-smartparens-strict-mode)
 #+END_SRC
-
-** SmartScan
-
-#+BEGIN_SRC emacs-lisp
-(use-package smartscan
-  :ensure t
-  :config (global-smartscan-mode 1))
-#+END_SRC
-
 * PDB fix
 
 #+BEGIN_SRC emacs-lisp
 (defun my-shell-mode-hook ()
   (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
 (add-hook 'shell-mode-hook 'my-shell-mode-hook)
+#+END_SRC
+* Shell
+
+#+BEGIN_SRC emacs-lisp
+`(defun myshell (arg)
+  (interactive "c")
+  (if (or (< arg 32) (> arg 126))
+      (error "Please use printable character for shell name"))
+  (let* ((buffer (get-buffer (format "*shell*<%c>" arg))))
+    (if buffer
+	(switch-to-buffer buffer)
+      (progn
+	(shell)
+        (setq shell-dirtrackp nil)
+        (make-local-variable 'comint-input-sender)
+	(rename-buffer (format "*shell*<%c>" arg))))))
+(define-key global-map '[(meta ?z)] 'myshell)
+
+(add-hook 'comint-mode-hook 
+          (lambda nil
+            (define-key (current-local-map) "\ep" 
+              'comint-previous-matching-input-from-input)
+            (define-key (current-local-map) "\en" 
+              'comint-next-matching-input-from-input)))
 #+END_SRC
