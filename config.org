@@ -326,6 +326,15 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
    :ensure t)
 #+END_SRC
 
+** ledger-cli
+
+#+BEGIN_SRC emacs-lisp
+(use-package ledger-mode
+   :ensure t
+   :mode "\\.dat$")
+
+#+END_SRC
+
 ** helm company
 
 #+BEGIN_SRC emacs-lisp
