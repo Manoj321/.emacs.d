@@ -8,110 +8,81 @@ paid off and I *absolutely love* EMACS!
 
 I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emacs config.
 
-* COMMENT Arista Specific
+* Arista Specific
 ** Arastra library
 
 #+BEGIN_SRC emacs-lisp
-;; Use separate emacs daemon for each project.
-(if (getenv "WP")
-    (setq server-name (getenv "WP")))
+;; load this only on arista server
+(when (and (getenv "HOSTNAME") (string-match "arista" (getenv "HOSTNAME")))
 
-(load-library "arastra-indent")
+   ;; Use separate emacs daemon for each project.
+   (if (getenv "WP")
+      (setq server-name (getenv "WP")))
 
-;; Integration with a4, for checking files out and for
-;; compiling/running/debugging within emacs.
-(load-library "a4")
+   (load-library "arastra-indent")
 
-;; Support for gnu id-utils
-(autoload 'gid "id-utils" "Lookup a string in a mkid database" t)
+   ;; Integration with a4, for checking files out and for
+   ;; compiling/running/debugging within emacs.
+   (load-library "a4")
 
-;; Arista gid extensions
-(load-library "a4-gid")
+   ;; Support for gnu id-utils
+   (autoload 'gid "id-utils" "Lookup a string in a mkid database" t)
 
-;; Some little useful functions like C-ct for a timestamp
-(load-library "arastra-utils")
+   ;; Arista gid extensions
+   (load-library "a4-gid")
 
-;;aformat mode
-(use-package aformat-mode)
+   ;; Some little useful functions like C-ct for a timestamp
+   (load-library "arastra-utils")
+   (load-library "cp-utils")
 
-#+END_SRC
+   ;; Aformat mode
+   (use-package aformat-mode
+      :diminish aformat-mode)
 
-** Bug Mode
+   ;; Bug Mode
+   (use-package "bug-mode"
+      :bind  (("C-x g g" . bug-goto)
+              ("C-x g d" . bug-describe-change)))
 
-#+BEGIN_SRC emacs-lisp
-(use-package "bug-mode"
-  :bind  (("C-x g g" . bug-goto)
-          ("C-x g d" . bug-describe-change)))
-#+END_SRC
+   ;; Abuild mode
+   (use-package "abuild" )
 
-** Abuild mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package "abuild" )
-#+END_SRC
-
-** Custom Func
-
-#+BEGIN_SRC emacs-lisp
-(defun p4-write-attempt (data context caller)
-  ; If it's a buffer that has a filename (not a special buffer like
-  ; *Messages* or *Completions*) and it's read-only and you wrote to it
-  (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
+   (defun p4-write-attempt (data context caller)
+   ; If it's a buffer that has a filename (not a special buffer like
+   ; *Messages* or *Completions*) and it's read-only and you wrote to it
+   (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
       ; And the user wants to checked out
       (if (y-or-n-p "Checkout in Perforce?")
-          (a4-edit (buffer-file-name)) ) ) )
-(setq command-error-function 'p4-write-attempt)
+      (a4-edit (buffer-file-name)) ) ) )
+   (setq command-error-function 'p4-write-attempt)
+
+   ;; Arista copy utils
+   (global-set-key (kbd "C-x c p") 'cp-cur-word)
+   (global-set-key (kbd "C-x c f") 'cp-cur-file-name)
+   (global-set-key (kbd "C-x c w") 'cp-which-func)
+
+   ;; a4-changes mode
+   (use-package "a4-changes" )
+
+   ;; Open tasks.org
+   (global-set-key (kbd "C-c t")
+      (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
+
+   ;; Pylint compile
+   (use-package "python-pylint"
+      :bind (( "C-x y" . python-pylint)))
+
+   ;; Inihibit Fsync
+   (setq write-region-inhibit-fsync t)
+
+   ;; PDB Hook 
+   (defun my-shell-mode-hook ()
+      (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
+   (add-hook 'shell-mode-hook 'my-shell-mode-hook)
+
+ );;end arista specific changes
 #+END_SRC
 
-** Arista copy utils
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-x c p") 'cp-cur-word)
-(global-set-key (kbd "C-x c f") 'cp-cur-file-name)
-(global-set-key (kbd "C-x c w") 'cp-which-func)
-#+END_SRC
-
-** a4-changes mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package "a4-changes" )
-#+END_SRC
-
-** Open tasks.org
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key (kbd "C-c t")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
-#+END_SRC
-
-** Shell
-
-#+BEGIN_SRC emacs-lisp
-(defun myshell (arg)
-  (interactive "c")
-  (if (or (< arg 32) (> arg 126))
-      (error "Please use printable character for shell name"))
-  (let* ((buffer (get-buffer (format "*shell*<%c>" arg))))
-    (if buffer
-	(switch-to-buffer buffer)
-      (progn
-	(shell)
-        (setq shell-dirtrackp nil)
-        (make-local-variable 'comint-input-sender)
-	(rename-buffer (format "*shell*<%c>" arg))))))
-(define-key global-map '[(meta ?z)] 'myshell)
-#+END_SRC
-
-** Pylint compile
-
-#+BEGIN_SRC emacs-lisp
-(use-package "python-pylint"
-  :bind (( "C-x y" . python-pylint)))
-#+END_SRC
-** Inihibit Fsync
-#+BEGIN_SRC emacs-lisp
-(setq write-region-inhibit-fsync t)
-#+END_SRC
 * Installing Emacs
 I always use --with-imagemagick switch while installing, because I
 read rss feeds in emacs.
@@ -128,6 +99,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ;; Keep all backup and auto-save files in one directory
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+
+;; Don't you dare to warn me!
+(setq large-file-warning-threshold nil)
 
 ;; Allow pasting selection outside of Emacs
 (setq x-select-enable-clipboard t)
@@ -155,7 +129,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (setq column-number-mode t)
 
 ;; Lines should be 85 characters wide, not 72
-(setq fill-column 85)
+(setq-default fill-column 85)
 
 ;; Never insert tabs
 (set-default 'indent-tabs-mode nil)
@@ -163,8 +137,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ;; Easily navigate sillycased words
 (global-subword-mode 1)
 
-;; Gatbage collect every 20MB 
-(setq gc-cons-threshold 20000000)
+;; Garbage collect every 400KB 
+(setq gc-cons-threshold 400000)
 
 ;; Turn off the blinking cursor
 (blink-cursor-mode -1)
@@ -218,69 +192,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 (eval-after-load "diff-mode"
   '(update-diff-colors))
-
-;;set fill column to 85
-(setq fill-column 85)
-
 #+END_SRC
 
-* Themes
-** Cyberpunk
-
-#+BEGIN_SRC emacs-lisp
-(use-package cyberpunk-theme
-  :ensure t
-  :init
-  (progn
-    (load-theme 'cyberpunk t)
-    (set-face-attribute `mode-line nil
-                        :box nil)
-    (set-face-attribute `mode-line-inactive nil
-                        :box nil)))
-#+END_SRC
-
-** Solarized
-#+BEGIN_SRC emacs-lisp
-(use-package solarized-theme
-  :init
-  (setq solarized-use-variable-pitch nil)
-  :ensure t)
-#+END_SRC
-
-** Monokai
-#+BEGIN_SRC emacs-lisp
-(use-package monokai-theme
-  :ensure t
-  :init
-  (setq monokai-use-variable-pitch nil))
-#+END_SRC
-
-** Waher
-#+BEGIN_SRC emacs-lisp
-(use-package waher-theme
-  :ensure t)
-#+END_SRC
-
-** Theme Functions
-
-#+BEGIN_SRC emacs-lisp
-(defun switch-theme (theme)
-  "Disables any currently active themes and loads THEME."
-  ;; This interactive call is taken from `load-theme'
-  (interactive
-   (list
-    (intern (completing-read "Load custom theme: "
-                             (mapc 'symbol-name
-                                   (custom-available-themes))))))
-  (let ((enabled-themes custom-enabled-themes))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme t)))
-
-(defun disable-active-themes ()
-  "Disables any currently active themes listed in `custom-enabled-themes'."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes))
-#+END_SRC
 * Packages
 ** Abbrev-mode
 
@@ -301,7 +214,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+begin_src emacs-lisp
 (use-package elfeed
   :ensure t
-  :defer t)
+  :defer t
+  :config (setq elfeed-db-directory "~/Dropbox/.elfeed"))
 #+end_src
 
 *** Elfeed-org
@@ -413,31 +327,70 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
    :ensure t)
 #+END_SRC
 
-** SmartParens
+** ledger-cli
 
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens-config
-    :ensure smartparens
-    :diminish smartparens-mode
-    :config
-    (progn
-      (show-smartparens-global-mode t)))
+(use-package ledger-mode
+   :ensure t
+   :mode "\\.dat$")
 
-(add-hook 'python-mode-hook 'turn-on-smartparens-strict-mode)
 #+END_SRC
 
-** SmartScan
+** helm company
 
 #+BEGIN_SRC emacs-lisp
-(use-package smartscan
-  :ensure t
-  :config (global-smartscan-mode 1))
-#+END_SRC
+(use-package helm-company
+:ensure t)
 
-* PDB fix
+#+END_SRC
+** jedi mode
 
 #+BEGIN_SRC emacs-lisp
-(defun my-shell-mode-hook ()
-  (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
-(add-hook 'shell-mode-hook 'my-shell-mode-hook)
+(use-package jedi
+   :ensure t
+   :config
+   (progn
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (setq jedi:complete-on-dot t)))
 #+END_SRC
+
+** YAML mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+   :ensure t
+   :mode "\\.yaml$")
+#+END_SRC
+** Highlight indent
+
+#+BEGIN_SRC emacs-lisp
+   (use-package highlight-indent-guides
+   :ensure t
+   :config (setq highlight-indent-guides-method 'character))
+#+END_SRC
+
+* Shell
+
+#+BEGIN_SRC emacs-lisp
+(defun myshell (arg)
+  (interactive "c")
+  (if (or (< arg 32) (> arg 126))
+      (error "Please use printable character for shell name"))
+  (let* ((buffer (get-buffer (format "*shell*<%c>" arg))))
+    (if buffer
+	(switch-to-buffer buffer)
+      (progn
+	(shell)
+        (setq shell-dirtrackp nil)
+        (make-local-variable 'comint-input-sender)
+	(rename-buffer (format "*shell*<%c>" arg))))))
+(define-key global-map '[(meta ?z)] 'myshell)
+
+(add-hook 'comint-mode-hook 
+          (lambda nil
+            (define-key (current-local-map) "\ep" 
+              'comint-previous-matching-input-from-input)
+            (define-key (current-local-map) "\en" 
+              'comint-next-matching-input-from-input)))
+#+END_SRC
+
