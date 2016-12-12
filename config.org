@@ -214,7 +214,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+begin_src emacs-lisp
 (use-package elfeed
   :ensure t
-  :defer t)
+  :defer t
+  :config (setq elfeed-db-directory "~/Dropbox/.elfeed"))
 #+end_src
 
 *** Elfeed-org
@@ -342,6 +343,32 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 :ensure t)
 
 #+END_SRC
+** jedi mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package jedi
+   :ensure t
+   :config
+   (progn
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (setq jedi:complete-on-dot t)))
+#+END_SRC
+
+** YAML mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+   :ensure t
+   :mode "\\.yaml$")
+#+END_SRC
+** Highlight indent
+
+#+BEGIN_SRC emacs-lisp
+   (use-package highlight-indent-guides
+   :ensure t
+   :config (setq highlight-indent-guides-method 'character))
+#+END_SRC
+
 * Shell
 
 #+BEGIN_SRC emacs-lisp
