@@ -381,7 +381,6 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 	(switch-to-buffer buffer)
       (progn
 	(shell)
-        (setq shell-dirtrackp nil)
         (make-local-variable 'comint-input-sender)
 	(rename-buffer (format "*shell*<%c>" arg))))))
 (define-key global-map '[(meta ?z)] 'myshell)

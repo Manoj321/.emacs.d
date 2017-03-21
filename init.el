@@ -34,10 +34,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(gud-gdb-command-name "gdb --annotate=1")
+ '(highlight-indent-guides-method (quote character))
  '(large-file-warning-threshold nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(highlight-indent-guides-character-face ((t (:foreground "gray73")))))
+ '(highlight-indent-guides-character-face ((t (:foreground "gray73"))))
+ '(highlight ((t (:background "color-237"))))
+ '(ledger-font-xact-highlight-face ((t (:background "color-237")))))
