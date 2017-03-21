@@ -4,6 +4,7 @@
 *** tech
 ** Blog                                      :blog:
 *** http://www.lifehack.org/feed
+*** http://www.saffo.com/feed/
 ** Comic                                     :comic:
 *** http://what-if.xkcd.com/feed.atom
 *** http://xkcd.com/atom.xml
