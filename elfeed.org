@@ -1,6 +1,5 @@
 * Elfeed                                     :elfeed:
 ** News                                      :news:
-*** http://feeds.feedburner.com/Mashable
 *** http://www.wsj.com/xml/rss/3_7031.xml
 *** tech
 ** Blog                                      :blog:
