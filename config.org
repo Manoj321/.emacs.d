@@ -146,6 +146,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ;; Enable show parenthesis
 (show-paren-mode t)
 
+;; Just run my code.
+(setq org-confirm-babel-evaluate nil)
+
 ;; Window movement, a gamer might recognize these key combinations!
 (global-set-key (kbd "C-c i") 'windmove-up)
 (global-set-key (kbd "C-c k") 'windmove-down)
@@ -209,23 +212,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    :bind ("C-c SPC" . ace-jump-mode))
 #+END_SRC
 
-** Elfeed
-
-#+begin_src emacs-lisp
-(use-package elfeed
-  :ensure t
-  :defer t
-  :config (setq elfeed-db-directory "~/Dropbox/.elfeed"))
-#+end_src
-
-*** Elfeed-org
-
+** DockerFile-mode
 #+BEGIN_SRC emacs-lisp
-(use-package elfeed-org
-  :ensure t
-  :defer t)
+(use-package dockerfile-mode
+    :ensure t)
 #+END_SRC
-
 ** FCI mode
 
 #+BEGIN_SRC emacs-lisp
@@ -360,6 +351,12 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 (use-package yaml-mode
    :ensure t
    :mode "\\.yaml$")
+#+END_SRC
+** Go mode
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode
+:ensure t
+:config (add-hook 'before-save-hook #'gofmt-before-save))
 #+END_SRC
 ** Highlight indent
 

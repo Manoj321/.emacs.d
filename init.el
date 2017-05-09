@@ -33,7 +33,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(gud-gdb-command-name "gdb --annotate=1")
  '(highlight-indent-guides-method (quote character))
  '(large-file-warning-threshold nil))
 (custom-set-faces
@@ -43,4 +42,19 @@
  ;; If there is more than one, they won't work right.
  '(highlight-indent-guides-character-face ((t (:foreground "gray73"))))
  '(highlight ((t (:background "color-237"))))
- '(ledger-font-xact-highlight-face ((t (:background "color-237")))))
+ '(ledger-font-xact-highlight-face ((t (:background "color-237"))))
+ '(magit-diff-added ((t (:foreground "#22aa22"))))
+ '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
+ '(magit-diff-base ((t (:foreground "#aaaa11"))))
+ '(magit-diff-base-highlight ((t (:foreground "#aaaa11"))))
+ '(magit-diff-conflict-heading ((t (:inherit nil))))
+ '(magit-diff-context-highlight ((t (:foreground "grey50"))))
+ '(magit-diff-file-heading-highlight ((t (:inherit nil))))
+ '(magit-diff-hunk-heading ((t (:foreground "grey30"))))
+ '(magit-diff-hunk-heading-highlight ((t (:foreground "grey30"))))
+ '(magit-diff-lines-boundary ((t (:inherit nil))))
+ '(magit-diff-our ((t nil)))
+ '(magit-diff-removed ((t (:foreground "#aa2222"))))
+ '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
+ '(magit-section-highlight ((t nil))))
+
