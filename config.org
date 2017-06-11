@@ -2,7 +2,7 @@
 
 I have been using Emacs extensively since Jan of 2014. Thanks to some awesome
 emacser's at my current company I have learnt a great deal about it. I remember my
-days of stuggle while learning emacs, but now all the hard work has paid off and I
+days of struggle while learning emacs, but now all the hard work has paid off and I
 *absolutely love* EMACS!
 
 I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emacs config.
