@@ -195,6 +195,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 (eval-after-load "diff-mode"
   '(update-diff-colors))
+
+; Set location
+(setq calendar-latitude 37.4)
+(setq calendar-longitude -121.9)
+(setq calendar-location-name "San Jose, CA")
 #+END_SRC
 
 * Packages
@@ -216,6 +221,19 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 (use-package dockerfile-mode
     :ensure t)
+#+END_SRC
+** Elfeed
+#+begin_src emacs-lisp
+(use-package elfeed
+   :ensure t
+   :defer t
+   :config (setq elfeed-db-directory "~/Dropbox/.elfeed"))
+#+end_src
+** elfeed-org
+#+BEGIN_SRC emacs-lisp
+(use-package elfeed-org
+  :ensure t
+  :defer t)
 #+END_SRC
 ** FCI mode
 
@@ -255,6 +273,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   :config (define-key helm-map (kbd "TAB" ) 'helm-execute-persistent-action ))
 (ido-mode -1) ;; Turn off ido mode.
 #+END_SRC
+** Kubernetes
+   #+BEGIN_SRC emacs-lisp
+   (use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview))
+   #+END_SRC
 
 ** org-journal
 
@@ -291,7 +315,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (kill-buffer)
   (jump-to-register :magit-fullscreen))
 #+end_src
-
 ** Recentf
 
 #+begin_src emacs-lisp
@@ -327,6 +350,16 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 
 #+END_SRC
 
+** markdown mode
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+#+END_SRC
 ** helm company
 
 #+BEGIN_SRC emacs-lisp

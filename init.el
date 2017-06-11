@@ -33,15 +33,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("38e64ea9b3a5e512ae9547063ee491c20bd717fe59d9c12219a0b1050b439cdd" default)))
+ '(gud-gdb-command-name "gdb --annotate=1")
  '(highlight-indent-guides-method (quote character))
- '(large-file-warning-threshold nil))
+ '(large-file-warning-threshold nil)
+ '(magit-diff-highlight-hunk-body nil)
+ '(package-selected-packages
+   (quote
+    (kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(highlight-indent-guides-character-face ((t (:foreground "gray73"))))
  '(highlight ((t (:background "color-237"))))
+ '(highlight-indent-guides-character-face ((t (:foreground "gray73"))))
  '(ledger-font-xact-highlight-face ((t (:background "color-237"))))
  '(magit-diff-added ((t (:foreground "#22aa22"))))
  '(magit-diff-added-highlight ((t (:foreground "#22aa22"))))
@@ -51,7 +59,7 @@
  '(magit-diff-context-highlight ((t (:foreground "grey50"))))
  '(magit-diff-file-heading-highlight ((t (:inherit nil))))
  '(magit-diff-hunk-heading ((t (:foreground "grey30"))))
- '(magit-diff-hunk-heading-highlight ((t (:foreground "grey30"))))
+ '(magit-diff-hunk-heading-highlight ((t (:foreground "nil"))))
  '(magit-diff-lines-boundary ((t (:inherit nil))))
  '(magit-diff-our ((t nil)))
  '(magit-diff-removed ((t (:foreground "#aa2222"))))
