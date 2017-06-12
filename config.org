@@ -199,6 +199,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (setq calendar-latitude 37.4)
 (setq calendar-longitude -121.9)
 (setq calendar-location-name "San Jose, CA")
+
+; gofmt code
+(add-hook 'before-save-hook #'gofmt-before-save)
 #+END_SRC
 
 * Packages

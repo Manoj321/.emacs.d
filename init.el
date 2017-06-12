@@ -38,6 +38,7 @@
     ("38e64ea9b3a5e512ae9547063ee491c20bd717fe59d9c12219a0b1050b439cdd" default)))
  '(gud-gdb-command-name "gdb --annotate=1")
  '(highlight-indent-guides-method (quote character))
+ '(kubernetes-logs-arguments (quote ("--tail=500")))
  '(large-file-warning-threshold nil)
  '(magit-diff-highlight-hunk-body nil)
  '(package-selected-packages
