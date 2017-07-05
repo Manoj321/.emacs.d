@@ -202,6 +202,14 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 ; gofmt code
 (add-hook 'before-save-hook #'gofmt-before-save)
+
+; Load languages
+(org-babel-do-load-languages 'org-babel-load-languages
+    '(
+        (shell . t)
+        (python . t)
+    )
+)
 #+END_SRC
 
 * Packages
