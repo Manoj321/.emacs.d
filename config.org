@@ -308,6 +308,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   :bind ("C-c g" . magit-status)
   :config
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
+
+;; Push to review remote for gerrit
+(defun magit-push-to-gerrit ()
+  (interactive)
+  (magit-git-command "push review" (magit-toplevel)))
+
+(magit-define-popup-action 'magit-push-popup
+  ?g
+  "push to gerrit"
+  'magit-push-to-gerrit)
 #+end_src
 
 *** Fullscreen magit
