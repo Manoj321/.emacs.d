@@ -206,13 +206,30 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ; Load languages
 (org-babel-do-load-languages 'org-babel-load-languages
     '(
-        (shell . t)
+        (sh . t)
         (python . t)
         (emacs-lisp . nil)
     )
 )
 #+END_SRC
 
+* Theme
+** Zerodark theme
+  #+BEGIN_SRC emacs-lisp
+  (when window-system
+    (use-package zerodark-theme
+       :ensure t))
+  #+END_SRC
+** Power line mode
+   #+BEGIN_SRC emacs-lisp
+   (when window-system
+     (use-package powerline
+        :ensure t
+        :init (powerline-center-theme)
+        :config (progn
+                  (setq powerline-default-separator 'curve)
+                  (setq powerline-height 12))))
+   #+END_SRC
 * Packages
 ** Abbrev-mode
 
