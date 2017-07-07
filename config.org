@@ -208,6 +208,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     '(
         (shell . t)
         (python . t)
+        (emacs-lisp . nil)
     )
 )
 #+END_SRC
