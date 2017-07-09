@@ -95,6 +95,9 @@ brew install emacs --with-imagemagick
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 
+;; set font to 13pt
+(set-face-attribute 'default nil :height 140)
+
 ;; Keep all backup and auto-save files in one directory
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
 (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
@@ -424,6 +427,16 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
    :ensure t
    :mode "\\.yaml$")
 #+END_SRC
+** Matlab
+   #+BEGIN_SRC emacs-lisp
+   (use-package matlab-mode
+     :ensure t
+     :mode "\\.m$"
+     :init (progn
+              (setq matlab-indent-function t)
+              (setq matlab-shell-command "/Applications/MATLAB_R2012b.app/bin/matlab")
+              (setq matlab-shell-command-switches (list "-nodesktop" "-nosplash"))))
+   #+END_SRC
 ** Go mode
 #+BEGIN_SRC emacs-lisp
 (use-package go-mode
