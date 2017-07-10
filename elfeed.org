@@ -1,20 +1,20 @@
 * Elfeed                                     :elfeed:
-** News                                      :news:
-*** http://www.wsj.com/xml/rss/3_7031.xml
-*** tech
-** Blog                                      :blog:
-*** http://www.lifehack.org/feed
+** Blog                                                                :blog:
 *** http://www.saffo.com/feed/
-** Comic                                     :comic:
+
+** Comic                                                              :comic:
 *** http://what-if.xkcd.com/feed.atom
 *** http://xkcd.com/atom.xml
-** Programming                               :programming:
+
+** Programming                                                  :programming:
 *** http://nullprogram.com/feed/
 *** Python                                   :python:
 **** http://feeds.feedburner.com/PyMOTW
-** startups                                  :startup:
+
+** Startups                                                         :startup:
 *** http://feeds.feedburner.com/fullhackernews
-** NASA                                      :nasa:
+
+** NASA                                                                :nasa:
 *** https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss
 *** https://www.nasa.gov/rss/dyn/breaking_news.rss
 *** https://www.nasa.gov/rss/dyn/educationnews.rss
