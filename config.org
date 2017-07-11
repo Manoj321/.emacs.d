@@ -144,7 +144,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (global-subword-mode 1)
 
 ;; Garbage collect every 400KB 
-(setq gc-cons-threshold 400000)
+(setq gc-cons-threshold 3500000)
 
 ;; Turn off the blinking cursor
 (blink-cursor-mode -1)
