@@ -96,7 +96,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 
 ;; set font to 13pt
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 120)
 
 ;; Keep all backup and auto-save files in one directory
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -328,7 +328,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   ;; be define in .git/config
   (defun magit-push-to-gerrit ()
     (interactive)
-    (magit-git-command-topdir "git push origin HEAD:refs/for/master"))
+    (magit-git-command-topdir "git push review"))
 
   (use-package magit
     :ensure t
