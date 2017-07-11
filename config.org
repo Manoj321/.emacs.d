@@ -95,6 +95,10 @@ brew install emacs --with-imagemagick
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 
+;; Open tasks.org
+(global-set-key (kbd "C-c a")
+   (lambda() (interactive)(find-file "~/Dropbox/Notes/gtd.org")))
+
 ;; set font to 13pt
 (set-face-attribute 'default nil :height 120)
 
