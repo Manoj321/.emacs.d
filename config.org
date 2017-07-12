@@ -249,6 +249,43 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    :bind ("C-c SPC" . ace-jump-mode))
 #+END_SRC
 
+** Autocomplete mode
+#+BEGIN_SRC emacs-lisp
+(use-package auto-complete
+  :commands auto-complete-mode
+  :init
+  (progn
+    (auto-complete-mode t))
+  :config
+  (progn
+    (use-package auto-complete-config)
+
+    (ac-set-trigger-key "TAB")
+    (ac-config-default)
+
+    (setq ac-delay 0.02)
+    (setq ac-use-menu-map t)
+    (setq ac-menu-height 50)
+    (setq ac-use-quick-help nil)
+    (setq ac-comphist-file  "~/.emacs.d/ac-comphist.dat")
+    (setq ac-ignore-case nil)
+    (setq ac-dwim  t)
+    (setq ac-fuzzy-enable t)
+
+    (use-package ac-dabbrev
+      :config
+      (progn
+        (add-to-list 'ac-sources 'ac-source-dabbrev)))
+
+    (setq ac-modes '(css-mode
+                     emacs-lisp-mode
+                     go-mode
+                     lisp-interaction-mode
+                     lisp-mode
+                     makefile-mode
+                     python-mode
+                     sh-mode))))
+#+END_SRC
 ** DockerFile-mode
 #+BEGIN_SRC emacs-lisp
 (use-package dockerfile-mode
