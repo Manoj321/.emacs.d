@@ -63,10 +63,6 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
    ;; a4-changes mode
    (use-package "a4-changes" )
 
-   ;; Open tasks.org
-   (global-set-key (kbd "C-c t")
-      (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
-
    ;; Pylint compile
    (use-package "python-pylint"
       :bind (( "C-x y" . python-pylint)))
@@ -88,7 +84,7 @@ read rss feeds in emacs.
 
 On OSX
 #+BEGIN_SRC sh
-brew install emacs --with-imagemagick
+brew install emacs --with-cocoa --with-gnutls --with-rsvg --with-imagemagick
 #+END_SRC
 
 * Defaults
@@ -96,6 +92,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 
 ;; Open tasks.org
+(global-set-key (kbd "C-c t")
+   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
+
+;; Get things done
 (global-set-key (kbd "C-c a")
    (lambda() (interactive)(find-file "~/Dropbox/Notes/gtd.org")))
 

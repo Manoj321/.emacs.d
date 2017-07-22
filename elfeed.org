@@ -2,13 +2,15 @@
 ** Blog                                                                :blog:
 *** http://www.saffo.com/feed/
 
+** ACM QUEUE                                                           :acmQ:
+*** http://queue.acm.org/rss/feeds/queuecontent.xml
 ** Comic                                                              :comic:
 *** http://what-if.xkcd.com/feed.atom
 *** http://xkcd.com/atom.xml
 
 ** Programming                                                  :programming:
 *** http://nullprogram.com/feed/
-*** Python                                   :python:
+*** Python                                                           :python:
 **** http://feeds.feedburner.com/PyMOTW
 
 ** Startups                                                         :startup:
@@ -19,3 +21,5 @@
 *** https://www.nasa.gov/rss/dyn/breaking_news.rss
 *** https://www.nasa.gov/rss/dyn/educationnews.rss
 *** http://www.jpl.nasa.gov/multimedia/rss/news.xml
+** ISRO
+*** http://spacenews.com/feed/                                         :isro:
