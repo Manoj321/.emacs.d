@@ -100,7 +100,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    (lambda() (interactive)(find-file "~/Dropbox/Notes/gtd.org")))
 
 ;; set font to 13pt
-(set-face-attribute 'default nil :height 120)
+(set-face-attribute 'default nil :height 130)
 
 ;; Keep all backup and auto-save files in one directory
 (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -236,13 +236,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    #+END_SRC
 * Packages
 ** Abbrev-mode
-
 #+BEGIN_SRC emacs-lisp
 (use-package abbrev
    :diminish abbrev-mode)
 #+END_SRC
-** Ace-jump-mode
 
+** Ace-jump-mode
 #+BEGIN_SRC emacs-lisp
 (use-package ace-jump-mode
    :ensure t
@@ -269,7 +268,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (setq ac-use-quick-help nil)
     (setq ac-comphist-file  "~/.emacs.d/ac-comphist.dat")
     (setq ac-ignore-case nil)
-    (setq ac-dwim  t)
+    (setq ac-dwim t)
     (setq ac-fuzzy-enable t)
 
     (use-package ac-dabbrev
@@ -286,11 +285,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                      python-mode
                      sh-mode))))
 #+END_SRC
+
 ** DockerFile-mode
 #+BEGIN_SRC emacs-lisp
 (use-package dockerfile-mode
     :ensure t)
 #+END_SRC
+
 ** Elfeed
 #+begin_src emacs-lisp
 (use-package elfeed
@@ -298,14 +299,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    :defer t
    :config (setq elfeed-db-directory "~/Dropbox/.elfeed"))
 #+end_src
-** elfeed-org
+
+** Elfeed-org
 #+BEGIN_SRC emacs-lisp
 (use-package elfeed-org
   :ensure t
   :defer t)
 #+END_SRC
-** FCI mode
 
+** FCI mode
 #+BEGIN_SRC emacs-lisp
 (use-package fill-column-indicator
   :ensure t
@@ -313,8 +315,27 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (setq fci-rule-column 85))
 #+END_SRC
 
-** Helm mode
+** Fly-Check
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+   :ensure t)
+#+END_SRC
 
+** Go mode
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode
+:ensure t
+:config (progn
+          (add-hook 'before-save-hook #'gofmt-before-save)))
+#+END_SRC
+
+** Helm company
+#+BEGIN_SRC emacs-lisp
+(use-package helm-company
+:ensure t)
+#+END_SRC
+
+** Helm mode
 #+BEGIN_SRC emacs-lisp
 (use-package helm
   :diminish helm-mode
@@ -342,24 +363,33 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   :config (define-key helm-map (kbd "TAB" ) 'helm-execute-persistent-action ))
 (ido-mode -1) ;; Turn off ido mode.
 #+END_SRC
+
+** Jedi mode
+#+BEGIN_SRC emacs-lisp
+(use-package jedi
+   :ensure t
+   :config
+   (progn
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (setq jedi:complete-on-dot t)))
+#+END_SRC
+
 ** Kubernetes
-   #+BEGIN_SRC emacs-lisp
-   (use-package kubernetes
+#+BEGIN_SRC emacs-lisp
+(use-package kubernetes
   :ensure t
   :commands (kubernetes-overview))
    #+END_SRC
 
-** org-journal
-
+** Ledger-cli
 #+BEGIN_SRC emacs-lisp
-(use-package org-journal
+(use-package ledger-mode
    :ensure t
-   :config
-   (setq org-journal-dir "~/Dropbox/Notes/journal/"))
+   :mode "\\.dat$")
+
 #+END_SRC
 
 ** Magit
-
 #+begin_src emacs-lisp
   ;; Pushing to explicit refs is a multi step process. This function adds push review
   ;; git command to push to gerrits magic branch refs/for/master. Review remote should
@@ -381,7 +411,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+end_src
 
 *** Fullscreen magit
-
 #+begin_src emacs-lisp
 ;; full screen magit-status
 (defadvice magit-status (around magit-fullscreen activate)
@@ -395,42 +424,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (kill-buffer)
   (jump-to-register :magit-fullscreen))
 #+end_src
-** Recentf
 
-#+begin_src emacs-lisp
-(use-package recentf
-  :bind ("C-x C-r" . helm-recentf)
-  :config
-  (recentf-mode t)
-  (setq recentf-max-saved-items 200))
-#+end_src
-
-** Winner mode
-
-Winner mode allows you to undo/redo changes to window changes in Emacs.
-
-#+begin_src emacs-lisp
-(use-package winner
-  :config
-  (winner-mode t))
-#+end_src
-
-** Fly-Check
+** Highlight indent
 #+BEGIN_SRC emacs-lisp
-(use-package flycheck
-   :ensure t)
-#+END_SRC
-
-** ledger-cli
-
-#+BEGIN_SRC emacs-lisp
-(use-package ledger-mode
+(use-package highlight-indent-guides
    :ensure t
-   :mode "\\.dat$")
-
+   :config (setq highlight-indent-guides-method 'character))
 #+END_SRC
-
-** markdown mode
+    
+** Markdown mode
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
   :ensure t
@@ -440,31 +442,7 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 #+END_SRC
-** helm company
 
-#+BEGIN_SRC emacs-lisp
-(use-package helm-company
-:ensure t)
-
-#+END_SRC
-** jedi mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package jedi
-   :ensure t
-   :config
-   (progn
-      (add-hook 'python-mode-hook 'jedi:setup)
-      (setq jedi:complete-on-dot t)))
-#+END_SRC
-
-** YAML mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package yaml-mode
-   :ensure t
-   :mode "\\.yaml$")
-#+END_SRC
 ** Matlab
    #+BEGIN_SRC emacs-lisp
    (use-package matlab-mode
@@ -475,19 +453,44 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
               (setq matlab-shell-command "/Applications/MATLAB_R2012b.app/bin/matlab")
               (setq matlab-shell-command-switches (list "-nodesktop" "-nosplash"))))
    #+END_SRC
-** Go mode
-#+BEGIN_SRC emacs-lisp
-(use-package go-mode
-:ensure t
-:config (progn
-          (add-hook 'before-save-hook #'gofmt-before-save)))
-#+END_SRC
-** Highlight indent
 
+** Org-journal
 #+BEGIN_SRC emacs-lisp
-   (use-package highlight-indent-guides
+(use-package org-journal
    :ensure t
-   :config (setq highlight-indent-guides-method 'character))
+   :config
+   (setq org-journal-dir "~/Dropbox/Notes/journal/"))
+#+END_SRC
+
+** Recentf
+#+begin_src emacs-lisp
+(use-package recentf
+  :bind ("C-x C-r" . helm-recentf)
+  :config
+  (recentf-mode t)
+  (setq recentf-max-saved-items 200))
+#+end_src
+
+** Winner mode
+Winner mode allows you to undo/redo changes to window changes in Emacs.
+#+begin_src emacs-lisp
+(use-package winner
+  :config
+  (winner-mode t))
+#+end_src
+
+** YAML mode
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+   :ensure t
+   :mode "\\.yaml$")
+#+END_SRC
+
+** Undo tree
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t
+  :config (global-undo-tree-mode))
 #+END_SRC
 
 * Shell

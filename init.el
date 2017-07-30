@@ -43,7 +43,7 @@
  '(magit-diff-highlight-hunk-body nil)
  '(package-selected-packages
    (quote
-    (kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode))))
+    (undo-tree kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
