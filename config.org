@@ -490,6 +490,7 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 #+BEGIN_SRC emacs-lisp
 (use-package undo-tree
   :ensure t
+  :diminish undo-tree-mode
   :config (global-undo-tree-mode))
 #+END_SRC
 
