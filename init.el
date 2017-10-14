@@ -20,6 +20,7 @@
   (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
+(require 'netrc)
 
 ;; So that Arista specific .el files are loaded.
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
