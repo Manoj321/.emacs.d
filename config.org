@@ -207,12 +207,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (setq calendar-longitude -121.9)
 (setq calendar-location-name "San Jose, CA")
 
+;; set global line highlight mode
+(setq global-hl-line-mode t)
+
 ; Load languages
 (org-babel-do-load-languages 'org-babel-load-languages
     '(
-        (sh . t)
+        (shell . t)
         (python . t)
-        (emacs-lisp . nil)
+        (influxdb . t)
+        (sql . t)
     )
 )
 #+END_SRC
