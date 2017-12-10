@@ -92,16 +92,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 
 ;; Open meetings.org
-(global-set-key (kbd "C-c m")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/meetings.org")))
+(global-set-key (kbd "C-c a")
+   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/arista.org")))
 
 ;; Open tasks.org
 (global-set-key (kbd "C-c t")
    (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
-
-;; Get things done
-(global-set-key (kbd "C-c a")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/gtd.org")))
 
 ;; set font to 13pt
 (set-face-attribute 'default nil :height 110 :width 'normal)
@@ -169,7 +165,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
 ;; Compile Command
-(global-set-key (kbd "C-x c c") 'compile)
+(global-set-key (kbd "C-c c") 'compile)
 
 (defun update-diff-colors ()
   "update the colors for diff faces"
