@@ -325,12 +325,39 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    :ensure t)
 #+END_SRC
 
+** Go Guru
+#+BEGIN_SRC emacs-lisp
+(use-package go-guru
+  :ensure t
+  :config (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode))
+#+END_SRC
 ** Go mode
 #+BEGIN_SRC emacs-lisp
 (use-package go-mode
-:ensure t
-:config (progn
-          (add-hook 'before-save-hook #'gofmt-before-save)))
+  :ensure t
+  :config
+    (defun my-go-mode-hook ()
+      ; Use goimports instead of go-fmt
+      (setq gofmt-command "goimports")
+      ; Call Gofmt before saving
+      (add-hook 'before-save-hook 'gofmt-before-save)
+      ; Customize compile command to run go build
+      (if (not (string-match "go" compile-command))
+        (set (make-local-variable 'compile-command)
+          "go build -v && go test -v && go vet")))
+
+    (add-hook 'go-mode-hook 'my-go-mode-hook))
+#+END_SRC
+
+** Go Autocomplete
+#+BEGIN_SRC emacs-lisp
+(use-package go-autocomplete
+  :ensure t
+  :requires go-mode
+  :config
+    (defun auto-complete-for-go ()
+      (auto-complete-mode 1))
+    (add-hook 'go-mode-hook 'auto-complete-for-go))
 #+END_SRC
 
 ** Helm company
@@ -376,6 +403,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    (progn
       (add-hook 'python-mode-hook 'jedi:setup)
       (setq jedi:complete-on-dot t)))
+#+END_SRC
+
+** tickscript-mode
+#+BEGIN_SRC emacs-lisp
+   (use-package tickscript-mode
+     :ensure t)
 #+END_SRC
 
 ** Kubernetes
@@ -466,6 +499,23 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    (setq org-journal-dir "~/Dropbox/Notes/journal/"))
 #+END_SRC
 
+** PDB
+#+BEGIN_SRC emacs-lisp
+  (use-package pdb-mode
+    :ensure t)
+#+END_SRC
+** pdf tools
+#+BEGIN_SRC emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :bind (:map pdf-view-mode-map
+          ("M-g g" . pdf-view-goto-label))
+    :config
+      (progn
+        (setq pdf-tools-handle-upgrades nil) ; Use brew upgrade pdf-tools instead.
+        (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
+        (pdf-tools-install)))
+#+END_SRC
 ** Recentf
 #+begin_src emacs-lisp
 (use-package recentf
