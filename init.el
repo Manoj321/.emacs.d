@@ -39,12 +39,10 @@
     ("38e64ea9b3a5e512ae9547063ee491c20bd717fe59d9c12219a0b1050b439cdd" default)))
  '(gud-gdb-command-name "gdb --annotate=1")
  '(highlight-indent-guides-method (quote character))
- '(kubernetes-logs-arguments (quote ("--tail=500")))
- '(large-file-warning-threshold nil)
- '(magit-diff-highlight-hunk-body nil)
+ '(kubernetes-logs-arguments (quote ("--tail=500")) t)
  '(package-selected-packages
    (quote
-    (undo-tree kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode))))
+    (ac-dabbrev pdf-tools go-guru go-autocomplete graphviz-dot-mode tickscript-mode ob-http pdb-mode undo-tree kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -67,4 +65,3 @@
  '(magit-diff-removed ((t (:foreground "#aa2222"))))
  '(magit-diff-removed-highlight ((t (:foreground "#aa2222"))))
  '(magit-section-highlight ((t nil))))
-
