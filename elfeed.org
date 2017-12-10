@@ -1,6 +1,7 @@
 * Elfeed                                     :elfeed:
 ** Blog                                                                :blog:
 *** http://www.saffo.com/feed/
+*** https://www.influxdata.com/blog/category/tech/releases/feed/      :influx:
 
 ** ACM QUEUE                                                           :acmQ:
 *** http://queue.acm.org/rss/feeds/queuecontent.xml
@@ -18,8 +19,3 @@
 
 ** NASA                                                                :nasa:
 *** https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss
-*** https://www.nasa.gov/rss/dyn/breaking_news.rss
-*** https://www.nasa.gov/rss/dyn/educationnews.rss
-*** http://www.jpl.nasa.gov/multimedia/rss/news.xml
-** ISRO
-*** http://spacenews.com/feed/                                         :isro:
