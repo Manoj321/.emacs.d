@@ -415,7 +415,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** Kubernetes
 #+BEGIN_SRC emacs-lisp
 (use-package kubernetes
-  :ensure t
+  :custom (kubernetes-logs-arguments (quote ("--tail=500")))
   :commands (kubernetes-overview))
    #+END_SRC
 
@@ -440,6 +440,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :ensure t
     :defer t
     :bind ("C-c g" . magit-status)
+    :custom (magit-diff-highlight-hunk-body nil)
     :config
     (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
     (magit-define-popup-action 'magit-push-popup
