@@ -329,6 +329,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
 (use-package go-guru
   :ensure t
+  :custom-face (go-guru-hl-identifier-face ((t (:underline t))))
   :config (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode))
 #+END_SRC
 ** Go mode
