@@ -97,7 +97,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 ;; Open tasks.org
 (global-set-key (kbd "C-c t")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/tasks.org")))
+   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/gtd.org")))
 
 ;; set font to 13pt
 (set-face-attribute 'default nil :height 110 :width 'normal)
@@ -135,7 +135,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (setq column-number-mode t)
 
 ;; Lines should be 85 characters wide, not 72
-(setq-default fill-column 85)
+(setq-default fill-column 80)
 
 ;; Never insert tabs
 (set-default 'indent-tabs-mode nil)
@@ -165,7 +165,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
 ;; Compile Command
-(global-set-key (kbd "C-c c") 'compile)
+(global-set-key (kbd "C-c C-c") 'compile)
+
+;; org-capture
+(global-set-key (kbd "C-c c") 'org-capture)
 
 (defun update-diff-colors ()
   "update the colors for diff faces"
@@ -219,6 +222,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         (sql . t)
     )
 )
+
+;; enable fly-spell and aut-fill modes for org-mode by default
+(add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'auto-fill-mode)
 #+END_SRC
 
 * Theme
@@ -296,6 +303,18 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :ensure t)
 #+END_SRC
 
+** Docker
+   #+BEGIN_SRC emacs-lisp
+   (use-package docker
+   :ensure t
+   :init
+   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+   (setq exec-path (append exec-path '("/usr/local/bin")))
+   (setenv "DOCKER_TLS_VERIFY" "1")
+   (setenv "DOCKER_HOST" "tcp://192.168.99.100:2376")
+   (setenv "DOCKER_CERT_PATH" "/Users/manojm321/.docker/machine/machines/default")
+   (setenv "DOCKER_MACHINE_NAME" "default"))
+   #+END_SRC
 ** Elfeed
 #+begin_src emacs-lisp
 (use-package elfeed
@@ -345,7 +364,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
       ; Customize compile command to run go build
       (if (not (string-match "go" compile-command))
         (set (make-local-variable 'compile-command)
-          "go build -v && go test -v && go vet")))
+          "go build -v && go test -v -race && go vet")))
 
     (add-hook 'go-mode-hook 'my-go-mode-hook))
 #+END_SRC
@@ -396,6 +415,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (ido-mode -1) ;; Turn off ido mode.
 #+END_SRC
 
+** Interleave
+   #+BEGIN_SRC emacs-lisp
+   (use-package interleave
+   :ensure t)
+   #+END_SRC
 ** Jedi mode
 #+BEGIN_SRC emacs-lisp
 (use-package jedi
@@ -406,6 +430,22 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
       (setq jedi:complete-on-dot t)))
 #+END_SRC
 
+** Jenkins-mode
+#+BEGIN_SRC emacs-lisp
+(use-package jenkins
+  :ensure t
+  :init (progn
+           (setq jenkins-url "http://jenkins")
+           (setq jenkins-username "manojm321")))
+#+END_SRC
+** Indium
+   #+BEGIN_SRC emacs-lisp
+   (use-package js2-mode
+   :ensure t)
+   (use-package indium
+   :requires js2-mode
+   :ensure t)
+   #+END_SRC
 ** tickscript-mode
 #+BEGIN_SRC emacs-lisp
    (use-package tickscript-mode
@@ -493,6 +533,29 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
               (setq matlab-shell-command-switches (list "-nodesktop" "-nosplash"))))
    #+END_SRC
 
+** Org
+   #+BEGIN_SRC emacs-lisp
+   (use-package org
+   :ensure t
+   :config (progn
+              (setq org-directory "~/Dropbox/org")
+              (setq org-agenda-files '("~/Dropbox/org/"))
+              (setq org-agenda-text-search-extra-files '(agenda-archives))
+              (setq org-blank-before-new-entry (quote ((heading) (plain-list-item))))
+              (setq org-enforce-todo-dependencies t)
+              (setq org-log-done (quote time))
+              (setq org-log-redeadline (quote time))
+              (setq org-log-reschedule (quote time))
+              (setq org-capture-templates
+              '(("a" "My TODO task format." entry
+              (file "todo.org")
+              "* TODO %?
+              SCHEDULED: %t")
+              ("l" "A link, for reading later." entry
+              (file+headline "notes.org" "Reading List")
+              "* %:description\n%u\n\n%c\n\n%i"
+              :empty-lines 1)))))
+   #+END_SRC
 ** Org-journal
 #+BEGIN_SRC emacs-lisp
 (use-package org-journal
@@ -501,6 +564,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    (setq org-journal-dir "~/Dropbox/Notes/journal/"))
 #+END_SRC
 
+** org-pdfview
+   #+BEGIN_SRC emacs-lisp
+   (use-package org-pdfview
+   :ensure t
+   :config
+   (add-to-list 'org-file-apps '("\\.pdf\\'" . (lambda (file link) (org-pdfview-open link)))))
+   #+END_SRC
 ** PDB
 #+BEGIN_SRC emacs-lisp
   (use-package pdb-mode
@@ -511,13 +581,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (use-package pdf-tools
     :ensure t
     :bind (:map pdf-view-mode-map
-          ("M-g g" . pdf-view-goto-label))
+          ("o" . pdf-outline)
+          ("M-g g" . pdf-view-goto-label)
+          ("M" . pdf-view-midnight-minor-mode))
     :config
       (progn
         (setq pdf-tools-handle-upgrades nil) ; Use brew upgrade pdf-tools instead.
-        (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
-        (pdf-tools-install)))
+        (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+        (pdf-tools-install))
 #+END_SRC
+
 ** Recentf
 #+begin_src emacs-lisp
 (use-package recentf
@@ -557,13 +630,13 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
   (interactive "c")
   (if (or (< arg 32) (> arg 126))
       (error "Please use printable character for shell name"))
-  (let* ((buffer (get-buffer (format "*shell*<%c>" arg))))
+  (let* ((buffer (get-buffer (format "*eshell*<%c>" arg))))
     (if buffer
 	(switch-to-buffer buffer)
       (progn
-	(shell)
+	(eshell)
         (make-local-variable 'comint-input-sender)
-	(rename-buffer (format "*shell*<%c>" arg))))))
+	(rename-buffer (format "*eshell*<%c>" arg))))))
 (define-key global-map '[(meta ?z)] 'myshell)
 
 (add-hook 'comint-mode-hook 
