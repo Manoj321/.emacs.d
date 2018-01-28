@@ -29,6 +29,10 @@
 
 ;; Finally load config.org
 (org-babel-load-file (concat user-emacs-directory "config.org"))
+
+;; load secrets
+(load-library "~/secrets.el.gpg")
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -42,7 +46,7 @@
  '(kubernetes-logs-arguments (quote ("--tail=500")) t)
  '(package-selected-packages
    (quote
-    (ac-dabbrev pdf-tools go-guru go-autocomplete graphviz-dot-mode tickscript-mode ob-http pdb-mode undo-tree kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode))))
+    (hierarchy redditor redditor-mode redittor-mode redittor org-gcal tree-mode htmlize org-mu4e mu4e-alert mu4e js2-mode indium fontawesome ess adaptive-wrap ac-dabbrev pdf-tools go-guru go-autocomplete graphviz-dot-mode tickscript-mode ob-http pdb-mode undo-tree kubernetes yaml-mode waher-theme use-package solarized-theme smartscan smartparens org-journal ob-go monokai-theme markdown-mode magit ledger-mode jedi highlight-indent-guides helm-swoop helm-company gotest flymd flycheck fill-column-indicator exec-path-from-shell elfeed-web elfeed-org dockerfile-mode docker cyberpunk-theme ace-jump-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
