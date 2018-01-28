@@ -90,133 +90,140 @@ brew install emacs --with-cocoa --with-gnutls --with-rsvg --with-imagemagick
 * Defaults
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
-;; set font to 13pt
-(set-face-attribute 'default nil :height 110 :width 'normal)
+  ;; set font to 13pt
+  (set-face-attribute 'default nil :height 110 :width 'normal)
 
-;; Keep all backup and auto-save files in one directory
-(setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
-(setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
+  ;; Keep all backup and auto-save files in one directory
+  (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+  (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-;; Don't you dare to warn me!
-(setq large-file-warning-threshold nil)
+  ;; Don't you dare to warn me!
+  (setq large-file-warning-threshold nil)
 
-;; Allow pasting selection outside of Emacs
-(setq x-select-enable-clipboard t)
+  ;; Allow pasting selection outside of Emacs
+  (setq x-select-enable-clipboard t)
 
-;; Show keystrokes in progress
-(setq echo-keystrokes 0.1)
+  ;; Show keystrokes in progress
+  (setq echo-keystrokes 0.1)
 
-;; Move files to trash when deleting
-(setq delete-by-moving-to-trash t)
+  ;; Move files to trash when deleting
+  (setq delete-by-moving-to-trash t)
 
-;; Real emacs knights don't use shift to mark things
-(setq shift-select-mode nil)
+  ;; Real emacs knights don't use shift to mark things
+  (setq shift-select-mode nil)
 
-;; Transparently open compressed files
-(auto-compression-mode t)
+  ;; Transparently open compressed files
+  (auto-compression-mode t)
 
-;; Answering just 'y' or 'n' will do
-(defalias 'yes-or-no-p 'y-or-n-p)
+  ;; Answering just 'y' or 'n' will do
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Remove text in active region if inserting text
-(delete-selection-mode 1)
+  ;; Remove text in active region if inserting text
+  (delete-selection-mode 1)
 
-;; Always display line and column numbers
-(setq line-number-mode t)
-(setq column-number-mode t)
+  ;; Always display line and column numbers
+  (setq line-number-mode t)
+  (setq column-number-mode t)
 
-;; Lines should be 85 characters wide, not 72
-(setq-default fill-column 80)
+  ;; Lines should be 85 characters wide, not 72
+  (setq-default fill-column 80)
 
-;; Never insert tabs
-(set-default 'indent-tabs-mode nil)
+  ;; Never insert tabs
+  (set-default 'indent-tabs-mode nil)
 
-;; Easily navigate sillycased words
-(global-subword-mode 1)
+  ;; Easily navigate sillycased words
+  (global-subword-mode 1)
 
-;; Garbage collect every 400KB 
-(setq gc-cons-threshold 8000000)
+  ;; Garbage collect every 800KB
+  (setq gc-cons-threshold 8000000)
 
-;; Turn off the blinking cursor
-(blink-cursor-mode -1)
+  ;; Turn off the blinking cursor
+  (blink-cursor-mode -1)
 
-;; Enable show parenthesis
-(show-paren-mode t)
+  ;; Enable show parenthesis
+  (show-paren-mode t)
 
-;; Just run my code.
-(setq org-confirm-babel-evaluate nil)
+  ;; highlight current line
+  (setq global-hl-line-mode t)
 
-;; Window movement, a gamer might recognize these key combinations!
-(global-set-key (kbd "C-c i") 'windmove-up)
-(global-set-key (kbd "C-c k") 'windmove-down)
-(global-set-key (kbd "C-c l") 'windmove-right)
-(global-set-key (kbd "C-c j") 'windmove-left)
+  ;; Window movement, a gamer might recognize these key combinations!
+  (use-package windmove
+    :bind (("C-c i" . windmove-up)
+           ("C-c k" . windmove-down)
+           ("C-c l" . windmove-right)
+           ("C-c j" . windmove-left)))
 
-;; Comment/un-comment
-(global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
+  (use-package timeclock
+    :bind (("C-c O" . timeclock-out)
+           ("C-c I" . timeclock-in))
+    :config (setq timeclock-file "~/Dropbox/accounting/timelog.dat"))
 
-;; Compile Command
-(global-set-key (kbd "C-c C-c") 'compile)
+  (global-set-key (kbd "M-m") 'back-to-indentation)
 
-;; org-capture
-(global-set-key (kbd "C-c c") 'org-capture)
+  ;; Comment/un-comment
+  (global-set-key (kbd "C-c ;") 'comment-or-uncomment-region)
 
-(defun update-diff-colors ()
-  "update the colors for diff faces"
-  (set-face-attribute 'diff-added nil
-                      :foreground "brightgreen"
-                      :background nil)
-  (set-face-attribute 'diff-removed nil
-                      :foreground "brightred"
-                      :background nil)
-  (set-face-attribute 'diff-changed nil
-                      :foreground "white"
-                      :background nil)
-  (set-face-attribute 'diff-refine-added nil
-                      :foreground "Aquamarine"
-                      :background "black")
-  (set-face-attribute 'diff-refine-removed nil
-                      :inherit nil
-                      :foreground "Aquamarine"
-                      :background nil)
-  (set-face-attribute 'diff-refine-change nil
-                      :foreground nil
-                      :background "black")
-  (set-face-attribute 'diff-hunk-header nil
-                      :inherit nil
-                      :foreground "yellow"
-                      :background nil)
-  (set-face-attribute 'diff-header nil
-                      :foreground "color-69"
-                      :background nil)
-  (set-face-attribute 'diff-file-header nil
-                      :foreground nil
-                      :background nil))
+  ;; Compile Command
+  (global-set-key (kbd "C-c C-c") 'compile)
 
-(eval-after-load "diff-mode"
-  '(update-diff-colors))
+  (defun update-diff-colors ()
+    "update the colors for diff faces"
+    (set-face-attribute 'diff-added nil
+                        :foreground "brightgreen"
+                        :background nil)
+    (set-face-attribute 'diff-removed nil
+                        :foreground "brightred"
+                        :background nil)
+    (set-face-attribute 'diff-changed nil
+                        :foreground "white"
+                        :background nil)
+    (set-face-attribute 'diff-refine-added nil
+                        :foreground "Aquamarine"
+                        :background "black")
+    (set-face-attribute 'diff-refine-removed nil
+                        :inherit nil
+                        :foreground "Aquamarine"
+                        :background nil)
+    (set-face-attribute 'diff-refine-change nil
+                        :foreground nil
+                        :background "black")
+    (set-face-attribute 'diff-hunk-header nil
+                        :inherit nil
+                        :foreground "yellow"
+                        :background nil)
+    (set-face-attribute 'diff-header nil
+                        :foreground "color-69"
+                        :background nil)
+    (set-face-attribute 'diff-file-header nil
+                        :foreground nil
+                        :background nil))
 
-; Set location
-(setq calendar-latitude 37.4)
-(setq calendar-longitude -121.9)
-(setq calendar-location-name "San Jose, CA")
+  (eval-after-load "diff-mode"
+    '(update-diff-colors))
 
-;; set global line highlight mode
-(setq global-hl-line-mode t)
+  ; Set location
+  (setq calendar-latitude 37.4)
+  (setq calendar-longitude -121.9)
+  (setq calendar-location-name "San Jose, CA")
 
-; Load languages
-(org-babel-do-load-languages 'org-babel-load-languages
-    '(
-        (shell . t)
-        (python . t)
-        (influxdb . t)
-        (sql . t)
-    )
-)
+  ;; set global line highlight mode
+  (setq global-hl-line-mode t)
 
-;; enable fly-spell and aut-fill modes for org-mode by default
-(add-hook 'org-mode-hook 'flyspell-mode)
-(add-hook 'org-mode-hook 'auto-fill-mode)
+  ; Load languages
+  (org-babel-do-load-languages 'org-babel-load-languages
+      '(
+          (shell . t)
+          (python . t)
+          (influxdb . t)
+          (sql . t)
+      )
+  )
+
+  ;;timelog file
+
+
+  ;;Donot use proportional fonts
+  (setq shr-use-fonts nil)
 #+END_SRC
 
 * Theme
