@@ -321,10 +321,21 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    #+END_SRC
 ** Elfeed
 #+begin_src emacs-lisp
-(use-package elfeed
-   :ensure t
-   :defer t
-   :config (setq elfeed-db-directory "~/Dropbox/.elfeed"))
+  (use-package elfeed
+    :ensure t
+    :defer t
+    :custom-face (elfeed-search-title-face ((t (:foreground "#c678dd" :height 1.2))))
+    :config (setq elfeed-db-directory "~/Dropbox/.elfeed"
+                  elfeed-search-title-max-width 100))
+
+  (defun mkm-elfeed()
+    "Setup elfeed-org and fetch new feeds"
+    (interactive)
+    (elfeed-org)
+    (elfeed)
+    (delete-other-windows)
+    (elfeed-search-fetch())
+    (goto-char (point-min)))
 #+end_src
 
 ** Elfeed-org
