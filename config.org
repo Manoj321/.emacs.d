@@ -575,6 +575,18 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (use-package org-mu4e
     :config (setq org-mu4e-convert-to-html t))
 
+  (defun compose-attach-marked-files ()
+    "Compose mail and attach all the marked files from a dired buffer."
+    (interactive)
+    (let ((files (dired-get-marked-files)))
+      (compose-mail nil nil nil t)
+      (dolist (file files)
+        (if (file-regular-p file)
+            (mml-attach-file file
+                             (mm-default-file-encoding file)
+                             nil "attachment")
+          (message "skipping non-regular file %s" file)))))
+#+END_SRC
 
 ** Org
    #+BEGIN_SRC emacs-lisp
