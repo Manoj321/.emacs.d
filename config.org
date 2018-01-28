@@ -681,27 +681,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   (split-window-right)
                   (eww url))))))))
    #+END_SRC
+** org-gcal
    #+BEGIN_SRC emacs-lisp
-   (use-package org
-   :ensure t
-   :config (progn
-              (setq org-directory "~/Dropbox/org")
-              (setq org-agenda-files '("~/Dropbox/org/"))
-              (setq org-agenda-text-search-extra-files '(agenda-archives))
-              (setq org-blank-before-new-entry (quote ((heading) (plain-list-item))))
-              (setq org-enforce-todo-dependencies t)
-              (setq org-log-done (quote time))
-              (setq org-log-redeadline (quote time))
-              (setq org-log-reschedule (quote time))
-              (setq org-capture-templates
-              '(("a" "My TODO task format." entry
-              (file "todo.org")
-              "* TODO %?
-              SCHEDULED: %t")
-              ("l" "A link, for reading later." entry
-              (file+headline "notes.org" "Reading List")
-              "* %:description\n%u\n\n%c\n\n%i"
-              :empty-lines 1)))))
+  (use-package org-gcal
+     :ensure t)
+     (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
    #+END_SRC
 ** Org-journal
 #+BEGIN_SRC emacs-lisp
