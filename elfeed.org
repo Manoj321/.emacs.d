@@ -1,21 +1,28 @@
-* Elfeed                                     :elfeed:
+* Elfeed                                                             :elfeed:
 ** Blog                                                                :blog:
-*** http://www.saffo.com/feed/
-*** https://www.influxdata.com/blog/category/tech/releases/feed/      :influx:
 
-** ACM QUEUE                                                           :acmQ:
+*** http://www.saffo.com/feed/
+*** https://www.influxdata.com/blog/category/tech/releases/feed/
 *** http://queue.acm.org/rss/feeds/queuecontent.xml
+*** http://nullprogram.com/feed/
+
+** News                                                                :news:
+
+*** General                                                         :general:
+
+**** https://www.npr.org/rss/rss.php
+
+*** Technology                                                         :tech:
+
+**** https://medium.com/feed/tag/technology
+**** http://feeds.feedburner.com/TechCrunch/
+**** http://feeds.feedburner.com/fullhackernews
+
 ** Comic                                                              :comic:
+
 *** http://what-if.xkcd.com/feed.atom
 *** http://xkcd.com/atom.xml
 
-** Programming                                                  :programming:
-*** http://nullprogram.com/feed/
-*** Python                                                           :python:
-**** http://feeds.feedburner.com/PyMOTW
+** Space                                                              :space:
 
-** Startups                                                         :startup:
-*** http://feeds.feedburner.com/fullhackernews
-
-** NASA                                                                :nasa:
 *** https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss
