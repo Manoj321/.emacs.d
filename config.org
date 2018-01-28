@@ -476,10 +476,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 ** Ledger-cli
 #+BEGIN_SRC emacs-lisp
-(use-package ledger-mode
-   :ensure t
-   :mode "\\.dat$")
-
+  (use-package ledger-mode
+    :ensure t
+     :config '(ledger-reports
+                (quote
+                   (("bofa-bal" "%(binary) -f %(ledger-file) bal credit:bofa")
+                   ("bal" "%(binary) -f %(ledger-file) bal")
+                   ("reg" "%(binary) -f %(ledger-file) reg")
+                   ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                   ("account" "%(binary) -f %(ledger-file) reg %(account)"))))
+     :mode "\\.dat$")
 #+END_SRC
 
 ** Magit
