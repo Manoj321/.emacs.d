@@ -589,6 +589,44 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 
 ** Org
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :ensure t
+    :bind (("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           ("M-m" . back-to-indentation))
+    :custom-face  '((org-block-begin-line ((t (:background "gray22" :foreground "gray50" :height 0.9))))
+                    (org-block-end-line ((t (:background "gray22" :foreground "gray50" :height 0.9)))))
+    :config ((setq org-directory "~/Dropbox/org")
+             org-agenda-files '("~/Dropbox/org/")
+             org-agenda-text-search-extra-files '(agenda-archives)
+             org-blank-before-new-entry ('((heading) (plain-list-item)))
+             org-enforce-todo-dependencies t
+             org-log-done 'time
+             org-log-redeadline 'time
+             org-log-reschedule 'time
+             org-confirm-babel-evaluate nil
+             org-log-redeadline 'time
+             org-src-tab-acts-natively t
+             org-capture-templates
+             '(("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
+                "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
+               ("e" "Capture email as TODO" entry (file+headline "todo.org" "In")
+                "* TODO %?\n\n%a\n" :empty-lines-after 2 :prepend t)
+               ("l" "Capture a link from clipboard" entry (file "~/Dropbox/org/notes.org")
+                "* TODO %?%i\n\t:PROPERTIES:\n\t:URL: %c\n\t:END:\n%u" :empty-lines-after 2 :prepend t)
+               ("r" "Read about this later." entry (file "~/Dropbox/org/notes.org")
+                "* TODO %?\n\n" :empty-lines-after 2 :prepend t)
+               ("m" "Meeting notes" entry (file "~/Dropbox/org/meetings.org" )
+                "* %U %?" :empty-lines-after 2 :prepend t)
+               ("t" "Capture a TODO task" entry (file+headline "~/Dropbox/org/todo.org" "In")
+                "* TODO %?" :empty-lines-after 2 :prepend t)
+               ("p" "Capture a TODO task" entry (file+headline "~/Dropbox/org/todo.org" "In")
+                "* TODO %?" :empty-lines-after 2 :prepend t))))
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
+
+   #+END_SRC
    #+BEGIN_SRC emacs-lisp
    (use-package org
    :ensure t
