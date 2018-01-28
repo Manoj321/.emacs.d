@@ -90,15 +90,6 @@ brew install emacs --with-cocoa --with-gnutls --with-rsvg --with-imagemagick
 * Defaults
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
-
-;; Open meetings.org
-(global-set-key (kbd "C-c a")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/arista.org")))
-
-;; Open tasks.org
-(global-set-key (kbd "C-c t")
-   (lambda() (interactive)(find-file "~/Dropbox/Notes/Arista/gtd.org")))
-
 ;; set font to 13pt
 (set-face-attribute 'default nil :height 110 :width 'normal)
 
