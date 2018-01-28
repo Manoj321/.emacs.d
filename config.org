@@ -666,6 +666,20 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                          (org-agenda-overriding-header "ALL tasks:"))))
            ((org-agenda-files '("~/Dropbox/org/notes.org"))))))
 
+  (defun mkm-read()
+    "Read a notes entry with webpage and notes TODO side-by-side"
+    (interactive)
+    (let*  ((url-prop (org-entry-properties (point) "URL")))
+      (progn
+        (if url-prop
+            (let* ((url (cdr (assoc "URL" url-prop))))
+              (if (string-match-p (regexp-quote "youtube.com") url)
+                  (browse-url url)
+                (progn
+                  (org-narrow-to-subtree)
+                  (delete-other-windows)
+                  (split-window-right)
+                  (eww url))))))))
    #+END_SRC
    #+BEGIN_SRC emacs-lisp
    (use-package org
