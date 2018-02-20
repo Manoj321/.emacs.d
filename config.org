@@ -813,3 +813,11 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
               'comint-next-matching-input-from-input)))
 #+END_SRC
 
+* Re-create scratch buffer
+  #+BEGIN_SRC emacs-lisp
+  (defun mkm-get-scratch-buffer nil
+   "create/switch to a scratch buffer"
+   (interactive)
+   (switch-to-buffer (get-buffer-create "*scratch*"))
+   (lisp-interaction-mode))
+  #+END_SRC
