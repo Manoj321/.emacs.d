@@ -594,6 +594,27 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                              (mm-default-file-encoding file)
                              nil "attachment")
           (message "skipping non-regular file %s" file)))))
+  (progn
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Unread posts addressed to me"
+                                  :query "recip:manojm321 flag:list flag:unread "
+                                  :key ?m))
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Unread posts addressed to me"
+                                  :query "s:InfluxData flag:unread"
+                                  :key ?d))
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Unread posts from spidar"
+                                  :query "from:spidar flag:unread"
+                                  :key ?s))
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Unread review requests"
+                                  :query "\( s:Change in OR s:Review Request \)AND flag:unread"
+                                  :key ?r))
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Invitations"
+                                  :query "s:Invitation AND flag:unread"
+                                  :key ?i)))
 #+END_SRC
 
 ** Org
