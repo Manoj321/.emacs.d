@@ -5,18 +5,17 @@
 *** https://www.influxdata.com/blog/category/tech/releases/feed/
 *** http://queue.acm.org/rss/feeds/queuecontent.xml
 *** http://nullprogram.com/feed/
+*** https://8thlight.com/blog/feed/atom.xml                    :craftmanship:
 
 ** News                                                                :news:
 
-*** General                                                         :general:
-
-**** https://www.npr.org/rss/rss.php
-
 *** Technology                                                         :tech:
 
-**** https://medium.com/feed/tag/technology
-**** http://feeds.feedburner.com/TechCrunch/
-**** http://feeds.feedburner.com/fullhackernews
+**** http://feeds.feedburner.com/oreilly/radar/atom                 :oreilly:
+
+*** Books
+
+**** http://feeds.feedburner.com/oreilly/upcomingbooks                :oreilly:
 
 ** Comic                                                              :comic:
 
