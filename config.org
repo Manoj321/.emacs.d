@@ -322,6 +322,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    (setenv "DOCKER_CERT_PATH" "/Users/manojm321/.docker/machine/machines/default")
    (setenv "DOCKER_MACHINE_NAME" "default"))
    #+END_SRC
+** Docker tramp
+   #+BEGIN_SRC emacs-lisp
+     (use-package docker-tramp
+        :ensure t)
+   #+END_SRC
 ** Elfeed
 #+begin_src emacs-lisp
   (use-package elfeed
