@@ -147,7 +147,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (show-paren-mode t)
 
   ;; highlight current line
-  (setq global-hl-line-mode t)
+  (global-hl-line-mode t)
 
   ;; Window movement, a gamer might recognize these key combinations!
   (use-package windmove
