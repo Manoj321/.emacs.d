@@ -90,6 +90,9 @@ brew install emacs --with-cocoa --with-gnutls --with-rsvg --with-imagemagick
 * Defaults
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
+  ;; Hurts my ears
+  (setq ring-bell-function 'ignore)
+
   ;; set font to 13pt
   (set-face-attribute 'default nil :height 110 :width 'normal)
 
