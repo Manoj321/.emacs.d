@@ -709,6 +709,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                     (delete-other-windows)
                     (split-window-right)
                     (eww url))))))))
+  (setq org-export-with-author nil)
+  (setq org-export-with-date nil)
+  (setq org-export-with-toc nil)
+  (setq org-export-with-creator nil)
    #+END_SRC
 ** org-gcal
    #+BEGIN_SRC emacs-lisp
