@@ -90,6 +90,8 @@ brew install emacs --with-cocoa --with-gnutls --with-rsvg --with-imagemagick
 * Defaults
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
+  (display-time)
+  (setq display-time-format "%I:%M")
   ;; Hurts my ears
   (setq ring-bell-function 'ignore)
 
