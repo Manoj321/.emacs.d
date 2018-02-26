@@ -580,7 +580,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   mu4e-view-show-images t
                   mu4e-sent-messages-behavior 'sent
                   message-kill-buffer-on-exit t
-                  mu4e-get-mail-command "offlineimap"
+                  mu4e-get-mail-command "offlineimap -o"
                   mu4e-attachment-dir  "~/Downloads"
                   mu4e-view-show-images t
                   mu4e-headers-fields '((:human-date . 10)
