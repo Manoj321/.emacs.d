@@ -13,9 +13,13 @@
 
 **** http://feeds.feedburner.com/oreilly/radar/atom                 :oreilly:
 
-*** Books
+*** Books                                                              :book:
 
 **** http://feeds.feedburner.com/oreilly/upcomingbooks                :oreilly:
+
+*** emacs                                                             :emacs:
+
+**** http://reddit.com/r/emacs/.rss
 
 ** Comic                                                              :comic:
 
