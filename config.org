@@ -90,6 +90,13 @@ brew install emacs --with-cocoa --with-gnutls --with-rsvg --with-imagemagick
 * Defaults
 Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
+  ;; Turn off GUI, because GUI makes you slow.
+  (when window-system
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (tooltip-mode -1))
+
   (display-time)
   (setq display-time-format "%I:%M")
   ;; Hurts my ears
@@ -217,10 +224,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   ; Load languages
   (org-babel-do-load-languages 'org-babel-load-languages
       '(
-          (shell . t)
+          (sh . t)
           (python . t)
           (influxdb . t)
           (sql . t)
+          (emacs-lisp . t)
       )
   )
 
@@ -333,7 +341,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+begin_src emacs-lisp
   (use-package elfeed
     :ensure t
-    :defer t
     :custom-face (elfeed-search-title-face ((t (:foreground "#c678dd" :height 1.2))))
     :config (setq elfeed-db-directory "~/Dropbox/.elfeed"
                   elfeed-search-title-max-width 100))
@@ -480,6 +487,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** Kubernetes
 #+BEGIN_SRC emacs-lisp
 (use-package kubernetes
+  :ensure t
   :custom (kubernetes-logs-arguments (quote ("--tail=500")))
   :commands (kubernetes-overview))
    #+END_SRC
@@ -638,7 +646,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
                                   :name "Invitations"
                                   :query "s:Invitation AND flag:unread"
-                                  :key ?i)))
+                                  :key ?i))
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Unread Cron messages"
+                                  :query "s:Cron AND flag:unread"
+                                  :key ?c)))
 #+END_SRC
 
 ** Org
