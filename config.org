@@ -758,6 +758,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (setq org-export-with-toc nil)
   (setq org-export-with-creator nil)
    #+END_SRC
+** org-bullets
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+   :ensure t
+   :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+#+END_SRC
 ** org-gcal
    #+BEGIN_SRC emacs-lisp
   (use-package org-gcal
