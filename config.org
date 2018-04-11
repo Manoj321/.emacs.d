@@ -652,6 +652,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                                   :key ?c)))
 #+END_SRC
 
+** Mu4e-alert
+   #+BEGIN_SRC emacs-lisp
+   (use-package mu4e-alert
+    :ensure t
+    :config (progn
+              (setq mu4e-alert-interesting-mail-query
+                    "recip:manojm321 flag:unread date:7d..now AND NOT flag:trashed")
+              (mu4e-alert-enable-mode-line-display)))
+   #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp
   (use-package org
