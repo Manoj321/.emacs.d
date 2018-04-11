@@ -1,11 +1,29 @@
 * Elfeed                                                             :elfeed:
+*** Video                                                             :video:
+
+** https://www.youtube.com/feeds/videos.xml?channel_id=UCkRmQ_G_NbdbCQMpALg6UPg :emacsrocks:
+** https://www.youtube.com/feeds/videos.xml?channel_id=UCxkMDXQ5qzYOgXPRnOBrp1w :mikeZamansky:
+
 ** Blog                                                                :blog:
 
 *** http://www.saffo.com/feed/
-*** https://www.influxdata.com/blog/category/tech/releases/feed/
 *** http://queue.acm.org/rss/feeds/queuecontent.xml
 *** http://nullprogram.com/feed/
 *** https://8thlight.com/blog/feed/atom.xml                    :craftmanship:
+*** http://www.aaronsw.com/2002/feeds/pgessays.rss              :paul:graham:
+
+*** Influxdata                                                   :influxdata:
+
+**** https://www.influxdata.com/blog/category/tech/releases/feed/
+**** https://influxdb.com/index.xml
+**** https://www.influxdata.com/blog/category/news/feed/
+
+*** Emacs                                                             :emacs:
+
+**** http://irreal.org/blog/?feed=rss2                               :irreal:
+**** http://endlessparentheses.com/atom.xml                    :endlessparen:
+**** https://oremacs.com/atom.xml                                   :oremacs:
+**** http://planet.emacsen.org/atom.xml                             :emacsen:
 
 ** News                                                                :news:
 
@@ -16,6 +34,7 @@
 *** Books                                                              :book:
 
 **** http://feeds.feedburner.com/oreilly/upcomingbooks                :oreilly:
+**** https://www.goodreads.com/user/updates_rss/4975060          :colinjones:
 
 *** emacs                                                             :emacs:
 
