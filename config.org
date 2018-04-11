@@ -671,88 +671,152 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :custom-face  '((org-block-begin-line ((t (:background "gray22" :foreground "gray50" :height 0.9))))
                     (org-block-end-line ((t (:background "gray22" :foreground "gray50" :height 0.9)))))
     :config (setq org-directory '("~/Dropbox/org")
-                   org-agenda-files '("~/Dropbox/org/")
-                   org-agenda-text-search-extra-files '(agenda-archives)
-                   org-blank-before-new-entry '((heading) (plain-list-item))
-                   org-enforce-todo-dependencies t
-                   org-log-done 'time
-                   org-log-redeadline 'time
-                   org-log-reschedule 'time
-                   org-confirm-babel-evaluate nil
-                   org-log-redeadline 'time
-                   org-src-tab-acts-natively t
-                   org-capture-templates
-                   '(("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
-                      "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
-                     ("e" "Capture email as TODO" entry (file+headline "todo.org" "In")
-                      "* TODO %?\n\n%a\n" :empty-lines-after 2 :prepend t)
-                     ("l" "Capture a link from clipboard" entry (file "~/Dropbox/org/notes.org")
-                      "* TODO %?%i\n\t:PROPERTIES:\n\t:URL: %c\n\t:END:\n%u" :empty-lines-after 2 :prepend t)
-                     ("r" "Read about this later." entry (file "~/Dropbox/org/notes.org")
-                      "* TODO %?\n\n" :empty-lines-after 2 :prepend t)
-                     ("m" "Meeting notes" entry (file "~/Dropbox/org/meetings.org" )
-                      "* %U %?" :empty-lines-after 2 :prepend t)
-                     ("t" "Capture a TODO task" entry (file+headline "~/Dropbox/org/todo.org" "In")
-                      "* TODO %?" :empty-lines-after 2 :prepend t)
-                     ("p" "Capture a TODO task" entry (file+headline "~/Dropbox/org/todo.org" "In")
-                      "* TODO %?" :empty-lines-after 2 :prepend t))))
-    (add-hook 'org-mode-hook 'flyspell-mode)
-    (add-hook 'org-mode-hook 'auto-fill-mode)
+                  org-agenda-files '("~/Dropbox/org/")
+                  org-agenda-text-search-extra-files '(agenda-archives)
+                  org-blank-before-new-entry '((heading) (plain-list-item))
+                  org-enforce-todo-dependencies t
+                  org-log-done 'time
+                  org-log-redeadline 'time
+                  org-log-reschedule 'time
+                  org-confirm-babel-evaluate nil
+                  org-log-redeadline 'time
+                  org-src-tab-acts-natively t
+                  org-use-speed-commands t
+                  org-src-fontify-natively t
+                  org-capture-templates
+                  '(("a" "Appointment" entry (file  "~/Dropbox/org/gcal.org" )
+                     "* %?\n\n%^T\n\n:PROPERTIES:\n\n:END:\n\n")
+                    ("e" "Capture email as TODO" entry (file "~/Dropbox/org/todo.org")
+                     "* TODO %?\n\n%a\n" :empty-lines-after 2 :prepend t)
+                    ("l" "Capture a link from clipboard" entry (file "~/Dropbox/org/notes.org")
+                     (function mkm-org-capture/link)  :empty-lines-after 2 :prepend t)
+                    ("r" "Read about this later." entry (file "~/Dropbox/org/notes.org")
+                     "* TODO %?\n\n" :empty-lines-after 2 :prepend t)
+                    ("m" "Meeting notes" entry (file "~/Dropbox/org/meetings.org" )
+                     "* %U %?" :empty-lines-after 2 :prepend t)
+                    ("t" "Capture a TODO task" entry (file "~/Dropbox/org/todo.org")
+                     "* TODO %?" :empty-lines-after 2 :prepend t)
+                    ("f" "Capture a elfeed to notes" entry (file "~/Dropbox/org/notes.org")
+                     (function mkm-elfeed/capture) :empty-lines-after 2 :prepend t)
+                    ("h" "Capture a habit" plain (file "~/Dropbox/accounting/timelog.dat")
+                     (function mkm-org-capture/activity) :immediate-finish t)
+                    ("p" "Capture a TODO task" entry (file "~/Dropbox/org/personal.org")
+                     "* TODO %?\n\s\s- " :empty-lines-after 2 :prepend t))))
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook 'auto-fill-mode)
 
-    (defun air-org-skip-subtree-if-priority (priority)
-      "Skip an agenda subtree if it has a priority of PRIORITY.
-  PRIORITY may be one of the characters ?A, ?B, or ?C."
-      (let ((subtree-end (save-excursion (org-end-of-subtree t)))
-            (pri-value (* 1000 (- org-lowest-priority priority)))
-            (pri-current (org-get-priority (thing-at-point 'line t))))
-        (if (= pri-value pri-current)
-            subtree-end
-          nil)))
+  ;; mark bold text in red color
+  (add-to-list 'org-emphasis-alist '("*" (:foreground "red")))
 
-    (setq org-agenda-custom-commands
-          '(("d" "Daily agenda and TODOs except from notes.org"
-             ((tags "PRIORITY=\"A\""
-                    ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                     (org-agenda-overriding-header "High-priority unfinished tasks:")))
-              (agenda "" ((org-agenda-ndays 1)))
-              (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                          (org-agenda-skip-if nil '(scheduled deadline))))
-                           (org-agenda-overriding-header "ALL tasks:"))))
-             ((org-agenda-files '("~/Dropbox/org/gcal.org"
-                                  "~/Dropbox/org/todo.org"
-                                  "~/Dropbox/org/meetings.org"))))
-            ("a" "Daily agenda and all TODOs"
-             ((tags "PRIORITY=\"A\""
-                    ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                     (org-agenda-overriding-header "High-priority unfinished tasks:")))
-              (agenda "" ((org-agenda-ndays 1)))
-              (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                          (org-agenda-skip-if nil '(scheduled deadline))))
-                           (org-agenda-overriding-header "ALL tasks:")))))
-            ("r" "Daily agenda and all TODOs"
-             ((tags "PRIORITY=\"A\""
-                    ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                     (org-agenda-overriding-header "High-priority unfinished tasks:")))
-              (agenda "" ((org-agenda-ndays 1)))
-              (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                          (org-agenda-skip-if nil '(scheduled deadline))))
-                           (org-agenda-overriding-header "ALL tasks:"))))
-             ((org-agenda-files '("~/Dropbox/org/notes.org"))))))
+  (defun air-org-skip-subtree-if-priority (priority)
+    "Skip an agenda subtree if it has a priority of PRIORITY.
+        PRIORITY may be one of the characters ?A, ?B, or ?C."
+    (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+          (pri-value (* 1000 (- org-lowest-priority priority)))
+          (pri-current (org-get-priority (thing-at-point 'line t))))
+      (if (= pri-value pri-current)
+          subtree-end
+        nil)))
 
-    (defun mkm-read()
-      "Read a notes entry with webpage and notes TODO side-by-side"
-      (interactive)
-      (let*  ((url-prop (org-entry-properties (point) "URL")))
-        (progn
-          (if url-prop
-              (let* ((url (cdr (assoc "URL" url-prop))))
-                (if (string-match-p (regexp-quote "youtube.com") url)
-                    (browse-url url)
-                  (progn
-                    (org-narrow-to-subtree)
-                    (delete-other-windows)
-                    (split-window-right)
-                    (eww url))))))))
+  (setq org-agenda-custom-commands
+        '(("d" "Daily agenda and TODOs except from notes.org"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+            (agenda "" ((org-agenda-span 'day)))
+            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                         (org-agenda-overriding-header "ALL tasks:"))))
+           ((org-agenda-files '("~/Dropbox/org/gcal.org"
+                                "~/Dropbox/org/todo.org"
+                                "~/Dropbox/org/meetings.org"))))
+          ("p" "Personal agenda"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+            (agenda "" ((org-agenda-span 'day)))
+            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                         (org-agenda-overriding-header "ALL tasks:"))))
+           ((org-agenda-files '("~/Dropbox/org/personal.org"))))
+          ("a" "Daily agenda and all TODOs"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+            (agenda "" ((org-agenda-span 'day)))
+            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                         (org-agenda-overriding-header "ALL tasks:")))))
+          ("r" "Reading list"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+            (agenda "" ((org-agenda-span 'day)))
+            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                         (org-agenda-overriding-header "ALL tasks:"))))
+           ((org-agenda-files '("~/Dropbox/org/notes.org"))))))
+
+  (defun mkm-org/read-entry()
+    "Read a notes entry with webpage and notes TODO side-by-side"
+    (interactive)
+    (let*  ((url-prop (org-entry-properties nil nil "URL")))
+      (progn
+        (if url-prop
+            (let* ((url (cdr (assoc "URL" url-prop))))
+              (if (string-match-p (regexp-quote "youtube.com") url)
+                  (browse-url url)
+                (progn
+                  (org-narrow-to-subtree)
+                  (delete-other-windows)
+                  (split-window-right)
+                  (eww url))))))))
+
+  (defun mkm-elfeed/capture ()
+    (let ((entry (elfeed-search-selected :single)))
+      (concat "* TODO "
+              (elfeed-entry-title entry)
+              "\n\t:PROPERTIES:\n\t:URL: "
+              (elfeed-entry-link entry)
+              "\n\t:END:\n")))
+
+  (defun mkm-elfeed/play-video ()
+    (interactive)
+    (let* ((entry (elfeed-search-selected :single))
+           (url (elfeed-entry-link entry)))
+      (elfeed-search-untag-all-unread)
+      (start-process "vlc" "*vlc*"
+                     "/Applications/VLC.app/Contents/MacOS/VLC" url)))
+
+
+  (define-key elfeed-search-mode-map "v" #'mkm-elfeed/play-video)
+
+  (defun mkm-org-capture/activity ()
+    (let ((activity (read-string "Activity: " ))
+          (minutes (read-number "Minutes: " )))
+      (concat "i "
+              (format-time-string "%Y/%m/%d %H:%M:%S"
+                                  (time-subtract (current-time)
+                                                 (seconds-to-time (* minutes 60))))
+              " "
+              activity
+              "\no "
+              (format-time-string "%Y/%m/%d %H:%M:%S")
+              " done" )))
+
+  (defun mkm-org-capture/link ()
+    "Make a TODO entry with a link in clipboard. Page title is used as task heading."
+    (let* ((url-string (s-trim (x-get-clipboard)))
+           (pdf (string-suffix-p "pdf" url-string)))
+      (unless pdf
+        (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
+              (concat "* TODO "
+                      page-title
+                      "\n\t:PROPERTIES:\n\t:URL: "
+                      url-string
+                      "\n\t:END:\n\n\s\s- %?")))))
+
+
   (setq org-export-with-author nil)
   (setq org-export-with-date nil)
   (setq org-export-with-toc nil)
