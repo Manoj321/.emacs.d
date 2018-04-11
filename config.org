@@ -244,17 +244,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   #+BEGIN_SRC emacs-lisp
   (when window-system
     (use-package zerodark-theme
-       :ensure t))
+       :ensure t
+       :config (zerodark-setup-modeline-format)))
   #+END_SRC
-** Power line mode
-   #+BEGIN_SRC emacs-lisp
-   (when window-system
-     (use-package powerline
-        :ensure t
-        :init (powerline-center-theme)
-        :config (progn
-                  (setq powerline-default-separator 'curve)
-                  (setq powerline-height 12))))
    #+END_SRC
 * Packages
 ** Abbrev-mode
