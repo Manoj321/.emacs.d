@@ -571,25 +571,30 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :bind (("C-c m" . mu4e))
     :config (setq mu4e-index-cleanup nil      ;; don't do a full cleanup check
                   mu4e-index-lazy-check t    ;; don't consider up-to-date dirs
-                  mu4e-maildir   "~/Maildir"
-                  mu4e-sent-folder "/Gmail/[Gmail].Sent Mail"
-                  mu4e-drafts-folder "/Gmail/[Gmail].Drafts"
-                  mu4e-trash-folder "/Gmail/[Gmail].Trash"
-                  mu4e-refile-folder "/Gmail/[Gmail].Archive"
+                  mu4e-maildir   "~/mbsync"
+                  mu4e-sent-folder "/[Gmail].Sent Mail"
+                  mu4e-drafts-folder "/[Gmail].Drafts"
+                  mu4e-trash-folder "/[Gmail].Trash"
+                  mu4e-refile-folder "/[Gmail].Archive"
                   mu4e-confirm-quit nil
                   mu4e-view-show-images t
                   mu4e-sent-messages-behavior 'sent
                   message-kill-buffer-on-exit t
-                  mu4e-get-mail-command "offlineimap -o"
+                  mu4e-get-mail-command "mbsync gmail"
                   mu4e-attachment-dir  "~/Downloads"
                   mu4e-view-show-images t
+                  mu4e-headers-results-limit 300
+                  mu4e-update-interval 300
+                  mu4e-hide-index-messages t
                   mu4e-headers-fields '((:human-date . 10)
                                          (:flags . 6)
                                          (:recipnum)
                                          (:mailing-list . 20)
                                          (:from-or-to . 20)
-                                         (:thread-subject))
+                                         (:subject))
                   mu4e-view-prefer-html nil))
+
+  (advice-add 'mu4e~headers-quit-buffer :after 'bury-buffer)
 
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (add-hook 'mu4e-view-mode-hook
