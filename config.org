@@ -609,6 +609,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
               (set-fill-column 72)
               (flyspell-mode)))
 
+  (setq shr-color-visible-luminance-min 50)
+
   (use-package org-mu4e
     :config (setq org-mu4e-convert-to-html t))
 
