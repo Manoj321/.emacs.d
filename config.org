@@ -352,6 +352,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :ensure t)
 #+END_SRC
 
+** Fly-spell
+ #+BEGIN_SRC emacs-lisp
+   (use-package flyspell
+     :ensure t
+     :config (setq flyspell-issue-message-flag t))
+ #+END_SRC
 ** Go Guru
 #+BEGIN_SRC emacs-lisp
 (use-package go-guru
