@@ -290,13 +290,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** Dictionary
 #+BEGIN_SRC emacs-lisp
   (use-package dictionary
-    :bind (("C-c d" . dictionary-lookup-definition))
-    :ensure t)
+    :bind (("C-c d" . dictionary-lookup-definition)))
 #+END_SRC
 ** DockerFile-mode
 #+BEGIN_SRC emacs-lisp
 (use-package dockerfile-mode
-    :ensure t)
+    :mode "Dockerfile.*")
 #+END_SRC
 
 ** Docker
