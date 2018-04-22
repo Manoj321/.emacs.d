@@ -299,22 +299,20 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 
 ** Docker
-   #+BEGIN_SRC emacs-lisp
-   (use-package docker
-   :ensure t
-   :init
-   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-   (setq exec-path (append exec-path '("/usr/local/bin")))
-   (setenv "DOCKER_TLS_VERIFY" "1")
-   (setenv "DOCKER_HOST" "tcp://192.168.99.100:2376")
-   (setenv "DOCKER_CERT_PATH" "/Users/manojm321/.docker/machine/machines/default")
-   (setenv "DOCKER_MACHINE_NAME" "default"))
-   #+END_SRC
-** Docker tramp
-   #+BEGIN_SRC emacs-lisp
-     (use-package docker-tramp
-        :ensure t)
-   #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (use-package docker
+    :commands (docker-images docker-containers)
+    :init
+    (when (string= system-type "darwin")
+      (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+      (setq exec-path (append exec-path '("/usr/local/bin")))
+      (setenv "DOCKER_TLS_VERIFY" "1")
+      (setenv "DOCKER_HOST" "tcp://192.168.99.100:2376")
+      (setenv "DOCKER_CERT_PATH" "/Users/manojm321/.docker/machine/machines/default")
+      (setenv "DOCKER_MACHINE_NAME" "default"))
+    :config (use-package docker-tramp
+              :ensure t))
+#+END_SRC
 ** Elfeed
 #+begin_src emacs-lisp
   (use-package elfeed
