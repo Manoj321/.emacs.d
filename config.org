@@ -340,10 +340,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 ** FCI mode
 #+BEGIN_SRC emacs-lisp
-(use-package fill-column-indicator
-  :ensure t
-  :config
-  (setq fci-rule-column 85))
+  (use-package fill-column-indicator
+    :commands (fci-mode)
+    :config
+    (setq fci-rule-column 85))
 #+END_SRC
 
 ** Fly-Check
