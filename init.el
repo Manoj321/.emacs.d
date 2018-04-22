@@ -17,6 +17,8 @@
   :ensure t)
 (use-package bind-key
   :ensure t)
+(use-package use-package-ensure-system-package
+  :ensure t)
 
 ;; So that Arista specific .el files are loaded.
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
