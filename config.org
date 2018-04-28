@@ -748,7 +748,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (defun mkm-org/read-entry()
     "Read a notes entry with webpage and notes TODO side-by-side"
     (interactive)
-    (let*  ((url-prop (org-entry-properties nil nil "URL")))
+    (let*  ((url-prop (org-entry-properties nil "URL")))
       (progn
         (if url-prop
             (let* ((url (cdr (assoc "URL" url-prop))))
