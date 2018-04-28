@@ -764,9 +764,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (let ((entry (elfeed-search-selected :single)))
       (concat "* TODO "
               (elfeed-entry-title entry)
-              "\n\t:PROPERTIES:\n\t:URL: "
+              "\n\s\s:PROPERTIES:\n\s\s:URL: "
               (elfeed-entry-link entry)
-              "\n\t:END:\n")))
+              "\n\s\s:END:\n")))
 
   (defun mkm-elfeed/play-video ()
     (interactive)
@@ -800,9 +800,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
               (concat "* TODO "
                       page-title
-                      "\n\t:PROPERTIES:\n\t:URL: "
+                      "\n\s\s:PROPERTIES:\n\s\s:URL: "
                       url-string
-                      "\n\t:END:\n\n\s\s- %?")))))
+                      "\n\s\s:END:\n\n\s\s- %?")))))
 
 
   (setq org-export-with-author nil)
