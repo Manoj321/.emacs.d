@@ -637,6 +637,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :bind ("C-c g" . magit-status)
     :custom (magit-diff-highlight-hunk-body nil)
     :hook (git-commit-setup . git-commit-turn-on-flyspell)
+    :pin melpa-stable
     :config
     (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
     (magit-define-popup-action 'magit-push-popup
