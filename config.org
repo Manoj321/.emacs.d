@@ -490,31 +490,30 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 ** Go mode
 #+BEGIN_SRC emacs-lisp
-(use-package go-mode
-  :ensure t
-  :config
-    (defun my-go-mode-hook ()
-      ; Use goimports instead of go-fmt
-      (setq gofmt-command "goimports")
-      ; Call Gofmt before saving
-      (add-hook 'before-save-hook 'gofmt-before-save)
-      ; Customize compile command to run go build
-      (if (not (string-match "go" compile-command))
-        (set (make-local-variable 'compile-command)
-          "go build -v && go test -v -race && go vet")))
+  (use-package go-mode
+    :mode "\\.go"
+    :hook (before-save . gofmt-before-save)
+    :config
+      (defun my-go-mode-hook ()
+        ; Use goimports instead of go-fmt
+        (setq gofmt-command "goimports")
+        ; Customize compile command to run go build
+        (if (not (string-match "go" compile-command))
+          (set (make-local-variable 'compile-command)
+            "go build -v && go test -v -race && go vet")))
 
-    (add-hook 'go-mode-hook 'my-go-mode-hook))
+      (add-hook 'go-mode-hook 'my-go-mode-hook))
 #+END_SRC
 
 ** Go Autocomplete
 #+BEGIN_SRC emacs-lisp
-(use-package go-autocomplete
-  :ensure t
-  :requires go-mode
-  :config
-    (defun auto-complete-for-go ()
-      (auto-complete-mode 1))
-    (add-hook 'go-mode-hook 'auto-complete-for-go))
+  (use-package go-autocomplete
+    :ensure t
+    :requires go-mode
+    :config
+      (defun auto-complete-for-go ()
+        (auto-complete-mode 1))
+      (add-hook 'go-mode-hook 'auto-complete-for-go))
 #+END_SRC
 
 ** Helm company
@@ -599,14 +598,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
     :ensure t
-     :config '(ledger-reports
-                (quote
-                   (("bofa-bal" "%(binary) -f %(ledger-file) bal credit:bofa")
-                   ("bal" "%(binary) -f %(ledger-file) bal")
-                   ("reg" "%(binary) -f %(ledger-file) reg")
-                   ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                   ("account" "%(binary) -f %(ledger-file) reg %(account)"))))
-     :mode "\\.dat$")
+    :config (setq ledger-reports
+                  (quote
+                   (("bal" "%(binary) -f %(ledger-file) bal")
+                    ("reg" "%(binary) -f %(ledger-file) reg")
+                    ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                    ("account-reg" "%(binary) -f %(ledger-file) reg --tail 30 %(account)")
+                    ("account-bal" "%(binary) -f %(ledger-file) bal %(account)")))
+                  ledger-report-is-reversed t)
+    :mode "\\.dat$")
 #+END_SRC
 
 ** Magit
