@@ -1032,12 +1032,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** Recentf
 #+begin_src emacs-lisp
 (use-package recentf
-  :bind ("C-x C-r" . helm-recentf)
   :config
   (recentf-mode t)
   (setq recentf-max-saved-items 200))
 #+end_src
-
 ** Rust
    #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
