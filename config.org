@@ -899,67 +899,70 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (defun mkm-org/read-entry()
     "Read a notes entry with webpage and notes TODO side-by-side"
     (interactive)
-    (let*  ((url-prop (org-entry-properties nil "URL")))
+    (let*  ((url-prop (org-entry-properties nil "URL"))
+            (pdf-prop (org-entry-properties nil "INTERLEAVE_PDF")))
       (progn
-        (if url-prop
-            (let* ((url (cdr (assoc "URL" url-prop))))
-              (if (string-match-p (regexp-quote "youtube.com") url)
-                  (browse-url url)
-                (progn
-                  (org-narrow-to-subtree)
-                  (delete-other-windows)
-                  (split-window-right)
-                  (eww url))))))))
+        (cond (pdf-prop
+               (interleave-mode))
+              (url-prop
+               (let* ((url (cdr (assoc "URL" url-prop))))
+                 (if (string-match-p (regexp-quote "youtube.com") url)
+                     (browse-url url)
+                   (progn
+                     (org-narrow-to-subtree)
+                     (delete-other-windows)
+                     (split-window-right)
+                     (eww url)))))))))
 
-  (defun mkm-elfeed/capture ()
-    (let ((entry (elfeed-search-selected :single)))
-      (concat "* TODO "
-              (elfeed-entry-title entry)
-              "\n\s\s:PROPERTIES:\n\s\s:URL: "
-              (elfeed-entry-link entry)
-              "\n\s\s:END:\n")))
+    (defun mkm-elfeed/capture ()
+      (let ((entry (elfeed-search-selected :single)))
+        (concat "* TODO "
+                (elfeed-entry-title entry)
+                "\n\s\s:PROPERTIES:\n\s\s:URL: "
+                (elfeed-entry-link entry)
+                "\n\s\s:END:\n")))
 
-  (defun mkm-elfeed/play-video ()
-    (interactive)
-    (let* ((entry (elfeed-search-selected :single))
-           (url (elfeed-entry-link entry)))
-      (elfeed-search-untag-all-unread)
-      (start-process "vlc" "*vlc*"
-                     "/Applications/VLC.app/Contents/MacOS/VLC" url)))
-
-
-  (define-key elfeed-search-mode-map "v" #'mkm-elfeed/play-video)
-
-  (defun mkm-org-capture/activity ()
-    (let ((activity (read-string "Activity: " ))
-          (minutes (read-number "Minutes: " )))
-      (concat "i "
-              (format-time-string "%Y/%m/%d %H:%M:%S"
-                                  (time-subtract (current-time)
-                                                 (seconds-to-time (* minutes 60))))
-              " "
-              activity
-              "\no "
-              (format-time-string "%Y/%m/%d %H:%M:%S")
-              " done" )))
-
-  (defun mkm-org-capture/link ()
-    "Make a TODO entry with a link in clipboard. Page title is used as task heading."
-    (let* ((url-string (s-trim (x-get-clipboard)))
-           (pdf (string-suffix-p "pdf" url-string)))
-      (unless pdf
-        (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
-              (concat "* TODO "
-                      page-title
-                      "\n\s\s:PROPERTIES:\n\s\s:URL: "
-                      url-string
-                      "\n\s\s:END:\n\n\s\s- %?")))))
+    (defun mkm-elfeed/play-video ()
+      (interactive)
+      (let* ((entry (elfeed-search-selected :single))
+             (url (elfeed-entry-link entry)))
+        (elfeed-search-untag-all-unread)
+        (start-process "vlc" "*vlc*"
+                       "/Applications/VLC.app/Contents/MacOS/VLC" url)))
 
 
-  (setq org-export-with-author nil)
-  (setq org-export-with-date nil)
-  (setq org-export-with-toc nil)
-  (setq org-export-with-creator nil)
+    (define-key elfeed-search-mode-map "v" #'mkm-elfeed/play-video)
+
+    (defun mkm-org-capture/activity ()
+      (let ((activity (read-string "Activity: " ))
+            (minutes (read-number "Minutes: " )))
+        (concat "i "
+                (format-time-string "%Y/%m/%d %H:%M:%S"
+                                    (time-subtract (current-time)
+                                                   (seconds-to-time (* minutes 60))))
+                " "
+                activity
+                "\no "
+                (format-time-string "%Y/%m/%d %H:%M:%S")
+                " done" )))
+
+    (defun mkm-org-capture/link ()
+      "Make a TODO entry with a link in clipboard. Page title is used as task heading."
+      (let* ((url-string (s-trim (x-get-clipboard)))
+             (pdf (string-suffix-p "pdf" url-string)))
+        (unless pdf
+          (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
+            (concat "* TODO "
+                    page-title
+                    "\n\s\s:PROPERTIES:\n\s\s:URL: "
+                    url-string
+                    "\n\s\s:END:\n\n\s\s- %?")))))
+
+
+    (setq org-export-with-author nil)
+    (setq org-export-with-date nil)
+    (setq org-export-with-toc nil)
+    (setq org-export-with-creator nil)
    #+END_SRC
 ** org-bullets
 #+BEGIN_SRC emacs-lisp
