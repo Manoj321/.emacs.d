@@ -227,6 +227,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
   ;;Donot use proportional fonts
   (setq shr-use-fonts nil)
+
+  (when window-system
+    (set-frame-name "EMAIL")
+    (make-frame '((name . "ORG")))
+    (make-frame '((name . "EDIT")))
+
+    (global-set-key (kbd "s-1") (lambda () (interactive) (select-frame-by-name "EMAIL")))
+    (global-set-key (kbd "s-2") (lambda () (interactive) (select-frame-by-name "ORG")))
+    (global-set-key (kbd "s-3") (lambda () (interactive) (select-frame-by-name "EDIT"))))
 #+END_SRC
 
 * Theme
