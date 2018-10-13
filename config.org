@@ -1080,25 +1080,40 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
 * Shell
 
 #+BEGIN_SRC emacs-lisp
-(defun myshell (arg)
-  (interactive "c")
-  (if (or (< arg 32) (> arg 126))
-      (error "Please use printable character for shell name"))
-  (let* ((buffer (get-buffer (format "*eshell*<%c>" arg))))
-    (if buffer
-	(switch-to-buffer buffer)
-      (progn
-	(eshell)
-        (make-local-variable 'comint-input-sender)
-	(rename-buffer (format "*eshell*<%c>" arg))))))
-(define-key global-map '[(meta ?z)] 'myshell)
+  (setq eshell-prompt-function
+        (lambda ()
+          (concat
+           (propertize "┌─[" 'face `(:foreground "green"))
+           (propertize (user-login-name) 'face `(:foreground "red"))
+           (propertize "@" 'face `(:foreground "green"))
+           (propertize (car (split-string (system-name) "\\." t)) 'face `(:foreground "blue"))
+           (propertize "]──[" 'face `(:foreground "green"))
+           (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "yellow"))
+           (propertize "]──[" 'face `(:foreground "green"))
+           (propertize (concat (eshell/pwd)) 'face `(:foreground "white"))
+           (propertize "]\n" 'face `(:foreground "green"))
+           (propertize "└─>" 'face `(:foreground "green"))
+           (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "green")))))
 
-(add-hook 'comint-mode-hook 
-          (lambda nil
-            (define-key (current-local-map) "\ep" 
-              'comint-previous-matching-input-from-input)
-            (define-key (current-local-map) "\en" 
-              'comint-next-matching-input-from-input)))
+  (defun myshell (arg)
+    (interactive "c")
+    (if (or (< arg 32) (> arg 126))
+        (error "Please use printable character for shell name"))
+    (let* ((buffer (get-buffer (format "*eshell*<%c>" arg))))
+      (if buffer
+          (switch-to-buffer buffer)
+        (progn
+          (eshell)
+          (make-local-variable 'comint-input-sender)
+          (rename-buffer (format "*eshell*<%c>" arg))))))
+  (define-key global-map '[(meta ?z)] 'myshell)
+
+  (add-hook 'comint-mode-hook
+            (lambda nil
+              (define-key (current-local-map) "\ep"
+                'comint-previous-matching-input-from-input)
+              (define-key (current-local-map) "\en"
+                'comint-next-matching-input-from-input)))
 #+END_SRC
 
 * Re-create scratch buffer
