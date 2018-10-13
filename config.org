@@ -1124,3 +1124,48 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
    (switch-to-buffer (get-buffer-create "*scratch*"))
    (lisp-interaction-mode))
   #+END_SRC
+* Custom func
+  #+BEGIN_SRC emacs-lisp
+    (defun k8s-log-follow-cmd-string(pod)
+      (concat "kubectl -n production logs -f " pod " &"))
+
+    (defun k8logs(appname)
+      (let* ((pods (shell-command-to-string
+                    (concat "kubectl -n production get pods -o jsonpath -l app="
+                            appname
+                            " --template='{.items[*].metadata.name}'"))))
+        (mapcar #'(lambda (pod)
+                    (let* ((buffer-name (concat "*" pod "*")))
+                      (shell-command
+                        (k8s-log-follow-cmd-string pod)
+                        buffer-name)
+                      (pop-to-buffer buffer-name)))
+                (split-string pods))))
+  #+END_SRC
+
+random info page
+#+BEGIN_SRC emacs-lisp
+(defun info--get-node-count ()
+  (save-excursion
+    (let ((case-fold-search t)
+          (count 0))
+      (goto-char (point-min))
+      (search-forward "\n* menu:" nil t)
+      (while (search-forward "\n* " nil t)
+        (setq count (1+ count)))
+      count)))
+
+(defun emacs-info-random()
+  (interactive)
+  (info "emacs")
+  (Info-goto-node (Info-extract-menu-counting
+                   (random (info--get-node-count)))))
+#+END_SRC
+
+show utc time
+#+BEGIN_SRC emacs-lisp
+  (defun utc()
+    (current-time-string (current-time) t))
+  (defun india()
+    (current-time-string (current-time) "Asia/Kolkata"))
+#+END_SRC
