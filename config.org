@@ -441,7 +441,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
            (insert tag-column))))
    #+END_SRC
 
-
 ** Elfeed-org
 #+BEGIN_SRC emacs-lisp
 (use-package elfeed-org
