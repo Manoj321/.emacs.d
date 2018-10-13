@@ -788,6 +788,18 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                     "recip:manojm321 flag:unread date:7d..now AND NOT flag:trashed")
               (mu4e-alert-enable-mode-line-display)))
    #+END_SRC
+** Mu4e-conversation
+   #+BEGIN_SRC emacs-lisp
+     (use-package mu4e-conversation
+       :requires mu4e
+       :ensure t
+       :config (global-mu4e-conversation-mode))
+   #+END_SRC
+** protbuf-mode
+   #+BEGIN_SRC emacs-lisp
+   (use-package protobuf-mode
+     :ensure t)
+   #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp
   (use-package org
