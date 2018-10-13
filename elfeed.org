@@ -38,7 +38,7 @@
 
 *** emacs                                                             :emacs:
 
-**** http://reddit.com/r/emacs/.rss
+**** http://reddit.com/r/emacs/.rss                                  :reddit:
 
 ** Comic                                                              :comic:
 
