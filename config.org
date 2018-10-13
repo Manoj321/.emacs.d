@@ -196,9 +196,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                         :inherit nil
                         :foreground "Aquamarine"
                         :background nil)
-    (set-face-attribute 'diff-refine-change nil
-                        :foreground nil
-                        :background "black")
     (set-face-attribute 'diff-hunk-header nil
                         :inherit nil
                         :foreground "yellow"
