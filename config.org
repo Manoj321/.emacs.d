@@ -705,14 +705,15 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   mu4e-confirm-quit nil
                   mu4e-view-show-images t
                   mu4e-sent-messages-behavior 'sent
-                  message-kill-buffer-on-exit t
                   mu4e-get-mail-command "mbsync gmail"
                   mu4e-attachment-dir  "~/Downloads"
                   mu4e-view-show-images t
-                  mu4e-headers-results-limit 300
+                  mu4e-headers-results-limit 500
                   mu4e-update-interval 300
                   mu4e-hide-index-messages t
-                  mu4e-headers-fields '((:human-date . 10)
+                  mu4e-headers-include-related nil
+                  mu4e-headers-date-format "%y/%m/%d %H:%M:%S"
+                  mu4e-headers-fields '((:date . nil)
                                          (:flags . 6)
                                          (:recipnum)
                                          (:mailing-list . 20)
