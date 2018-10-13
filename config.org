@@ -521,6 +521,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 (use-package helm-company
 :ensure t)
 #+END_SRC
+** Helm godoc
+   #+BEGIN_SRC emacs-lisp
+   (use-package helm-go-package
+      :ensure t)
+   #+END_SRC
 
 ** Helm mode
 #+BEGIN_SRC emacs-lisp
