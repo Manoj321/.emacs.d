@@ -973,9 +973,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 ** org-gcal
    #+BEGIN_SRC emacs-lisp
-  (use-package org-gcal
-     :ensure t)
-     (add-hook 'org-agenda-mode-hook (lambda () (org-gcal-sync) ))
+     (use-package org-gcal
+        :ensure t
+        :config (run-with-timer 0 (* 60 60) #'org-gcal-sync))
    #+END_SRC
 ** Org-journal
 #+BEGIN_SRC emacs-lisp
