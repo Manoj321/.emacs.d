@@ -11,71 +11,71 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
 ** Arastra library
 
 #+BEGIN_SRC emacs-lisp
-;; load this only on arista server
-(when (and (getenv "HOSTNAME") (string-match "arista" (getenv "HOSTNAME")))
+  ;; load this only on arista server
+  (when (and (getenv "HOSTNAME") (string-match "arista" (getenv "HOSTNAME")))
 
-   ;; Use separate emacs daemon for each project.
-   (if (getenv "WP")
-      (setq server-name (getenv "WP")))
+     ;; Use separate emacs daemon for each project.
+     (if (getenv "WP")
+        (setq server-name (getenv "WP")))
 
-   (load-library "arastra-indent")
+     (load-library "arastra-indent")
 
-   ;; Integration with a4, for checking files out and for
-   ;; compiling/running/debugging within emacs.
-   (load-library "a4")
+     ;; Integration with a4, for checking files out and for
+     ;; compiling/running/debugging within emacs.
+     (load-library "a4")
 
-   ;; Support for gnu id-utils
-   (autoload 'gid "id-utils" "Lookup a string in a mkid database" t)
+     ;; Support for gnu id-utils
+     (autoload 'gid "id-utils" "Lookup a string in a mkid database" t)
 
-   ;; Arista gid extensions
-   (load-library "a4-gid")
+     ;; Arista gid extensions
+     (load-library "a4-gid")
 
-   ;; Some little useful functions like C-ct for a timestamp
-   (load-library "arastra-utils")
-   (load-library "cp-utils")
+     ;; Some little useful functions like C-ct for a timestamp
+     (load-library "arastra-utils")
+     (load-library "cp-utils")
 
-   ;; Aformat mode
-   (use-package aformat-mode
-      :diminish aformat-mode)
+     ;; Aformat mode
+     (use-package aformat-mode
+        :diminish aformat-mode)
 
-   ;; Bug Mode
-   (use-package "bug-mode"
-      :bind  (("C-x g g" . bug-goto)
-              ("C-x g d" . bug-describe-change)))
+     ;; Bug Mode
+     (use-package "bug-mode"
+        :bind  (("C-x g g" . bug-goto)
+                ("C-x g d" . bug-describe-change)))
 
-   ;; Abuild mode
-   (use-package "abuild" )
+     ;; Abuild mode
+     (use-package "abuild" )
 
-   (defun p4-write-attempt (data context caller)
-   ; If it's a buffer that has a filename (not a special buffer like
-   ; *Messages* or *Completions*) and it's read-only and you wrote to it
-   (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
-      ; And the user wants to checked out
-      (if (y-or-n-p "Checkout in Perforce?")
-      (a4-edit (buffer-file-name)) ) ) )
-   (setq command-error-function 'p4-write-attempt)
+     (defun p4-write-attempt (data context caller)
+     ; If it's a buffer that has a filename (not a special buffer like
+     ; *Messages* or *Completions*) and it's read-only and you wrote to it
+     (if (and (buffer-file-name) (eq 'buffer-read-only (car data)))
+        ; And the user wants to checked out
+        (if (y-or-n-p "Checkout in Perforce?")
+        (a4-edit (buffer-file-name)) ) ) )
+     (setq command-error-function 'p4-write-attempt)
 
-   ;; Arista copy utils
-   (global-set-key (kbd "C-x c p") 'cp-cur-word)
-   (global-set-key (kbd "C-x c f") 'cp-cur-file-name)
-   (global-set-key (kbd "C-x c w") 'cp-which-func)
+     ;; Arista copy utils
+     (global-set-key (kbd "C-x c p") 'cp-cur-word)
+     (global-set-key (kbd "C-x c f") 'cp-cur-file-name)
+     (global-set-key (kbd "C-x c w") 'cp-which-func)
 
-   ;; a4-changes mode
-   (use-package "a4-changes" )
+     ;; a4-changes mode
+     (use-package "a4-changes" )
 
-   ;; Pylint compile
-   (use-package "python-pylint"
-      :bind (( "C-x y" . python-pylint)))
+     ;; Pylint compile
+     (use-package "python-pylint"
+        :bind (( "C-x y" . python-pylint)))
 
-   ;; Inihibit Fsync
-   (setq write-region-inhibit-fsync t)
+     ;; Inihibit Fsync
+     (setq write-region-inhibit-fsync t)
 
-   ;; PDB Hook 
-   (defun my-shell-mode-hook ()
-      (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
-   (add-hook 'shell-mode-hook 'my-shell-mode-hook)
+     ;; PDB Hook
+     (defun my-shell-mode-hook ()
+        (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
+     (add-hook 'shell-mode-hook 'my-shell-mode-hook)
 
- );;end arista specific changes
+     );;end arista specific changes
 #+END_SRC
 
 * Installing Emacs
