@@ -728,7 +728,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
             (lambda()
               ;; try to emulate some of the eww key-bindings
               (local-set-key (kbd "<tab>") 'shr-next-link)
-              (local-set-key (kbd "<backtab>") 'shr-previous-link)))
+              (local-set-key (kbd "<backtab>") 'sdhr-previous-link)))
 
   (add-hook 'mu4e-compose-mode-hook
             (defun mkm-compose-message-setting ()
