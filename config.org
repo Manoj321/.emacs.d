@@ -240,13 +240,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 * Theme
 ** Zerodark theme
-  #+BEGIN_SRC emacs-lisp
-  (when window-system
-    (use-package zerodark-theme
-       :ensure t
-       :config (zerodark-setup-modeline-format)))
-  #+END_SRC
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (when window-system
+        (use-package zerodark-theme
+           :ensure t
+           :config (zerodark-setup-modeline-format)))
+    #+END_SRC
 * Packages
 ** Dictionary
 #+BEGIN_SRC emacs-lisp
