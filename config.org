@@ -236,6 +236,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (global-set-key (kbd "s-1") (lambda () (interactive) (select-frame-by-name "EMAIL")))
     (global-set-key (kbd "s-2") (lambda () (interactive) (select-frame-by-name "ORG")))
     (global-set-key (kbd "s-3") (lambda () (interactive) (select-frame-by-name "EDIT"))))
+
+  ;; Split windows vertically, stops magit from horizontally splitting
+  (setq split-height-threshold 100)
 #+END_SRC
 
 * Theme
