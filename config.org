@@ -221,6 +221,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (org-babel-do-load-languages 'org-babel-load-languages
                                '((python . t)
                                  (influxdb . t)
+                                 (shell . t)
                                  (sql . t)
                                  (emacs-lisp . t)))
 
