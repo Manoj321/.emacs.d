@@ -258,8 +258,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 ** DockerFile-mode
 #+BEGIN_SRC emacs-lisp
-(use-package dockerfile-mode
-    :mode "Dockerfile.*")
+  (use-package dockerfile-mode
+      :mode "Dockerfile.*")
 #+END_SRC
 
 ** Docker
