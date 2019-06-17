@@ -351,15 +351,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :mode "\\.go"
     :hook (before-save . gofmt-before-save)
     :config
-      (defun my-go-mode-hook ()
-        ; Use goimports instead of go-fmt
-        (setq gofmt-command "goimports")
-        ; Customize compile command to run go build
-        (if (not (string-match "go" compile-command))
+    (defun my-go-mode-hook ()
+      (setq gofmt-command "goimports")
+      (lsp-go-enable)
+      (yas-minor-mode)
+      ;; Customize compile command to run go build
+      (if (not (string-match "go" compile-command))
           (set (make-local-variable 'compile-command)
-            "go build -v && go test -v -race && go vet")))
+               "go build -v && go test -v -race && go vet")))
 
-      (add-hook 'go-mode-hook 'my-go-mode-hook))
+    (add-hook 'go-mode-hook 'my-go-mode-hook))
 #+END_SRC
 
 ** Go Autocomplete
