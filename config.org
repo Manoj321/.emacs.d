@@ -250,6 +250,18 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
            :config (zerodark-setup-modeline-format)))
     #+END_SRC
 * Packages
+** Company mode
+    #+BEGIN_SRC emacs-lisp
+      (use-package "company"
+        :ensure t
+        :hook (after-init-hook . global-company-mode))
+    #+END_SRC
+** company lsp
+    #+BEGIN_SRC emacs-lisp
+      (use-package "company-lsp"
+        :ensure t
+        :config (push 'company-lsp company-backends))
+    #+END_SRC
 ** Dictionary
 #+BEGIN_SRC emacs-lisp
   (use-package dictionary
