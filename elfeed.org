@@ -3,6 +3,7 @@
 
 ** https://www.youtube.com/feeds/videos.xml?channel_id=UCkRmQ_G_NbdbCQMpALg6UPg :emacsrocks:
 ** https://www.youtube.com/feeds/videos.xml?channel_id=UCxkMDXQ5qzYOgXPRnOBrp1w :mikeZamansky:
+** https://www.youtube.com/feeds/videos.xml?channel_id=UCnrgOD6G0y0_rcubQuICpTQ :influxdata:
 
 ** Blog                                                                :blog:
 
@@ -12,11 +13,16 @@
 *** https://8thlight.com/blog/feed/atom.xml                    :craftmanship:
 *** http://www.aaronsw.com/2002/feeds/pgessays.rss              :paul:graham:
 
-*** Influxdata                                                   :influxdata:
+*** Monitoring
+**** Influxdata                                                  :influxdata:
 
-**** https://www.influxdata.com/blog/category/tech/releases/feed/
-**** https://influxdb.com/index.xml
-**** https://www.influxdata.com/blog/category/news/feed/
+***** https://www.influxdata.com/blog/category/tech/releases/feed/
+***** https://influxdb.com/index.xml
+***** https://www.influxdata.com/blog/category/news/feed/
+
+**** Grafana
+
+***** https://grafana.com/blog/index.xml
 
 *** Emacs                                                             :emacs:
 
@@ -27,13 +33,8 @@
 
 ** News                                                                :news:
 
-*** Technology                                                         :tech:
-
-**** http://feeds.feedburner.com/oreilly/radar/atom                 :oreilly:
-
 *** Books                                                              :book:
 
-**** http://feeds.feedburner.com/oreilly/upcomingbooks                :oreilly:
 **** https://www.goodreads.com/user/updates_rss/4975060          :colinjones:
 
 *** emacs                                                             :emacs:
