@@ -456,14 +456,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         :config (setq keyfreq-mode 1
                       keyfreq-autosave-mode 1))
     #+END_SRC
-** Kubernetes
-#+BEGIN_SRC emacs-lisp
-(use-package kubernetes
-  :ensure t
-  :custom (kubernetes-logs-arguments (quote ("--tail=500")))
-  :commands (kubernetes-overview))
-   #+END_SRC
-
 ** Ledger-cli
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
