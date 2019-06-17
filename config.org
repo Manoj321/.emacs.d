@@ -362,18 +362,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
     (add-hook 'go-mode-hook 'my-go-mode-hook))
 #+END_SRC
-
-** Go Autocomplete
-#+BEGIN_SRC emacs-lisp
-  (use-package go-autocomplete
-    :ensure t
-    :requires go-mode
-    :config
-      (defun auto-complete-for-go ()
-        (auto-complete-mode 1))
-      (add-hook 'go-mode-hook 'auto-complete-for-go))
-#+END_SRC
-
 ** Helm company
 #+BEGIN_SRC emacs-lisp
 (use-package helm-company
