@@ -471,6 +471,17 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :mode "\\.dat$")
 #+END_SRC
 
+** LSP mode
+    #+BEGIN_SRC emacs-lisp
+    (use-package "lsp-mode"
+    :ensure t)
+    #+END_SRC
+
+** LSP go
+    #+BEGIN_SRC emacs-lisp
+    (use-package "lsp-go"
+    :ensure t)
+    #+END_SRC
 ** Magit
 #+begin_src emacs-lisp
   ;; Pushing to explicit refs is a multi step process. This function adds push review
