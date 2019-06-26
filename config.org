@@ -690,15 +690,21 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                     ("r" "Read about this later." entry (file "~/Dropbox/org/notes.org")
                      "* TODO %?\n\n" :empty-lines-after 2 :prepend t)
                     ("m" "Meeting notes automatically clocks in" entry (file "~/Dropbox/org/todo.org" )
-                     "* %? %^g" :empty-lines-after 2 :prepend t :clock-in t)
+                     "* %?\t%^g\n\n\s\s-" :empty-lines-after 2 :prepend t :clock-in t)
                     ("t" "Capture a TODO task" entry (file "~/Dropbox/org/todo.org")
-                     "* TODO %?" :empty-lines-after 2 :prepend t)
+                     (function mkm-org-capture-todo) :empty-lines-after 2 :prepend t)
+                    ("a" "Areview feedback" plain (file+function "~/Dropbox/org/review.org" areview-ask-location)
+                     "   - %?" :empty-lines 0)
                     ("f" "Capture a elfeed to notes" entry (file "~/Dropbox/org/notes.org")
                      (function mkm-elfeed/capture) :empty-lines-after 2 :prepend t)
                     ("h" "Capture a habit" plain (file "~/Dropbox/accounting/timelog.dat")
                      (function mkm-org-capture/activity) :immediate-finish t)
                     ("p" "Capture a TODO task" entry (file "~/Dropbox/org/personal.org")
                      "* TODO %?\n\s\s- " :empty-lines-after 2 :prepend t))))
+
+  (run-with-idle-timer 60 t (lambda ()
+                              (org-agenda-maybe-redo)))
+
   (add-hook 'org-mode-hook 'flyspell-mode)
   (add-hook 'org-mode-hook 'auto-fill-mode)
 
