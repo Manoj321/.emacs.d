@@ -572,11 +572,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   mu4e-headers-include-related nil
                   mu4e-headers-date-format "%y/%m/%d %H:%M:%S"
                   mu4e-headers-fields '((:date . nil)
-                                         (:flags . 6)
-                                         (:recipnum)
-                                         (:mailing-list . 20)
-                                         (:from-or-to . 20)
-                                         (:subject))
+                                        (:flags . 6)
+                                        (:recipnum)
+                                        (:mailing-list . 20)
+                                        (:from-or-to . 20)
+                                        (:subject))
                   mu4e-view-prefer-html nil))
 
   (advice-add 'mu4e~headers-quit-buffer :after 'bury-buffer)
