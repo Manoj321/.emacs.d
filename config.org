@@ -1005,6 +1005,7 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
   #+END_SRC
 
 random info page
+** random info page
 #+BEGIN_SRC emacs-lisp
 (defun info--get-node-count ()
   (save-excursion
@@ -1021,12 +1022,74 @@ random info page
   (info "emacs")
   (Info-goto-node (Info-extract-menu-counting
                    (random (info--get-node-count)))))
+  (defun info--get-node-count ()
+    (save-excursion
+      (let ((case-fold-search t)
+            (count 0))
+        (goto-char (point-min))
+        (search-forward "\n* menu:" nil t)
+        (while (search-forward "\n* " nil t)
+          (setq count (1+ count)))
+        count)))
+
+  (defun my-emacs-info-random()
+    "Fetch random info pages"
+    (interactive)
+    (info "emacs")
+    (Info-goto-node (Info-extract-menu-counting
+                     (random (info--get-node-count)))))
 #+END_SRC
 
-show utc time
+** Time helpers
 #+BEGIN_SRC emacs-lisp
   (defun utc()
     (current-time-string (current-time) t))
   (defun india()
     (current-time-string (current-time) "Asia/Kolkata"))
 #+END_SRC
+
+** Gerrit Link
+    #+BEGIN_SRC emacs-lisp
+      (defun my-gerrit-link (filename lineno)
+        (interactive (list (buffer-file-name) (line-number-at-pos)))
+        (if-let ((repo (eshell/basename (string-trim (vc-find-root filename ".git") nil "/"))))
+            (let* ((rpath (file-relative-name filename (vc-root-dir)))
+                   (gitblit-url (format "%s/plugins/gitiles/%s/+/master/%s#%d"
+                                        arista-gerrit-url
+                                        repo
+                                        rpath
+                                        lineno)))
+              (message "%s (copied to clipboard)" gitblit-url)
+              (kill-new gitblit-url))
+          (message "No git repo root detected")))
+    #+END_SRC
+** Pinned buffer mode
+   #+BEGIN_SRC emacs-lisp
+     (define-minor-mode pinned-buffer-mode
+       "Pin the current buffer to the selected window."
+       nil " P" nil
+       (set-window-dedicated-p (selected-window) pinned-buffer-mode))
+   #+END_SRC
+
+** Org overview
+   #+BEGIN_SRC emacs-lisp
+     (defun my-org-overview ()
+         ""
+        (interactive)
+         (occur "^\\(\\*+\\|#\\+name\\)"))
+   #+END_SRC
+
+** Copy buffer/region with pb
+   #+BEGIN_SRC emacs-lisp
+     (defun my-pb-copy ()
+       "Share entire buffer/region with pb. URL is copied to clipboard"
+       (interactive)
+       (let ((temp-file (make-temp-file ".sharing.")))
+         (if (region-active-p)
+             (write-region (point) (mark) temp-file)
+           (write-region (point-min) (point-max) temp-file))
+         (shell-command (format "curl -X POST -F c=@%s  pb 2>/dev/null| grep url: | cut -b 6-" temp-file) " sharing")
+         (with-current-buffer " sharing"
+           (clipboard-kill-ring-save (point-min) (point-max)))
+         (dired-delete-file temp-file)))
+   #+END_SRC
