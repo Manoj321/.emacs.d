@@ -716,43 +716,21 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         nil)))
 
   (setq org-agenda-custom-commands
-        '(("d" "Daily agenda and TODOs except from notes.org"
+        '(("d" "Custom daily agenda"
            ((tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("DONE" "WAIT" "VRFY" "BNWD" "IGNR"))
+                                                  (org-agenda-skip-if nil '(scheduled deadline))))
+                   (org-agenda-overriding-header "Just do it:")))
+            (tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("DONE" "TODO" "BNWD" "IGNR"))
+                                                  (org-agenda-skip-if nil '(scheduled deadline))))
+                   (org-agenda-overriding-header "Waiting:")))
             (agenda "" ((org-agenda-span 'day)))
             (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
                                                         (org-agenda-skip-if nil '(scheduled deadline))))
                          (org-agenda-overriding-header "ALL tasks:"))))
            ((org-agenda-files '("~/Dropbox/org/gcal.org"
-                                "~/Dropbox/org/todo.org"
-                                "~/Dropbox/org/meetings.org"))))
-          ("p" "Personal agenda"
-           ((tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
-            (agenda "" ((org-agenda-span 'day)))
-            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-if nil '(scheduled deadline))))
-                         (org-agenda-overriding-header "ALL tasks:"))))
-           ((org-agenda-files '("~/Dropbox/org/personal.org"))))
-          ("a" "Daily agenda and all TODOs"
-           ((tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
-            (agenda "" ((org-agenda-span 'day)))
-            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-if nil '(scheduled deadline))))
-                         (org-agenda-overriding-header "ALL tasks:")))))
-          ("r" "Reading list"
-           ((tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
-            (agenda "" ((org-agenda-span 'day)))
-            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-if nil '(scheduled deadline))))
-                         (org-agenda-overriding-header "ALL tasks:"))))
-           ((org-agenda-files '("~/Dropbox/org/notes.org"))))))
+                                "~/Dropbox/org/todo.org"))))))
 
   (defun mkm-org/read-entry()
     "Read a notes entry with webpage and notes TODO side-by-side"
