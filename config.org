@@ -519,32 +519,32 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 ** Highlight indent
 #+BEGIN_SRC emacs-lisp
-(use-package highlight-indent-guides
-   :ensure t
-   :config (setq highlight-indent-guides-method 'character))
+  (use-package highlight-indent-guides
+    :ensure t
+    :config (setq highlight-indent-guides-method 'character))
 #+END_SRC
-    
+
 ** Markdown mode
 #+BEGIN_SRC emacs-lisp
-(use-package markdown-mode
-  :ensure t
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  (use-package markdown-mode
+    :ensure t
+    :commands (markdown-mode gfm-mode)
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "multimarkdown"))
 #+END_SRC
 
 ** Matlab
-   #+BEGIN_SRC emacs-lisp
-   (use-package matlab-mode
-     :ensure t
-     :mode "\\.m$"
-     :init (progn
-              (setq matlab-indent-function t)
-              (setq matlab-shell-command "/Applications/MATLAB_R2012b.app/bin/matlab")
-              (setq matlab-shell-command-switches (list "-nodesktop" "-nosplash"))))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package matlab-mode
+        :ensure t
+        :mode "\\.m$"
+        :init (progn
+                (setq matlab-indent-function t)
+                (setq matlab-shell-command "/Applications/MATLAB_R2012b.app/bin/matlab")
+                (setq matlab-shell-command-switches (list "-nodesktop" "-nosplash"))))
+    #+END_SRC
 ** Mu4e
 #+BEGIN_SRC emacs-lisp
   ;; this path should have mu4e and org-mu4e
