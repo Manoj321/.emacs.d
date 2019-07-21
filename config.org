@@ -735,8 +735,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                    (org-agenda-overriding-header "Waiting:")))
             (agenda "" ((org-agenda-span 'day)))
             (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-entry-if 'todo '("WAIT"))
                                                         (org-agenda-skip-if nil '(scheduled deadline))))
-                         (org-agenda-overriding-header "ALL tasks:"))))
+                         (org-agenda-overriding-header "ALL tasks:")))
+            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-entry-if 'todo '("TODO"))
+                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                         (org-agenda-overriding-header "Low Priority Waiting.."))))
            ((org-agenda-files '("~/Dropbox/org/gcal.org"
                                 "~/Dropbox/org/todo.org"))))))
 
