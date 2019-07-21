@@ -866,6 +866,14 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
         (pdf-tools-install t))
 #+END_SRC
+** poporg
+   Edit large comment or string in a dedicated buffer since emacs is not good at
+   handling multiple major modes
+    #+BEGIN_SRC emacs-lisp
+      (use-package poporg
+        :ensure t
+        :bind (("C-c \"" . poporg-dwim)))
+    #+END_SRC
 ** Rainbow-identifiers
    #+BEGIN_SRC emacs-lisp
    (use-package rainbow-identifiers
