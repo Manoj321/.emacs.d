@@ -461,17 +461,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         :config (setq keyfreq-mode 1
                       keyfreq-autosave-mode 1))
     #+END_SRC
-** Ledger-cli
+** Ledger
 #+BEGIN_SRC emacs-lisp
   (use-package ledger-mode
     :ensure t
-    :config (setq ledger-reports
-                  (quote
-                   (("bal" "%(binary) -f %(ledger-file) bal")
-                    ("reg" "%(binary) -f %(ledger-file) reg")
-                    ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                    ("account-reg" "%(binary) -f %(ledger-file) reg --tail 30 %(account)")
-                    ("account-bal" "%(binary) -f %(ledger-file) bal %(account)")))
+    :config (setq ledger-reports '(("Monthly Balance" "ledger [[ledger-mode-flags]] -f /Users/manojm321/Dropbox/accounting/oct28.dat -M  -r --period 2019 reg ^Expenses ^Income and not Bonus")
+                                   ("bal" "%(binary) -f %(ledger-file) bal")
+                                   ("reg" "%(binary) -f %(ledger-file) reg")
+                                   ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                                   ("account-reg" "%(binary) -f %(ledger-file) reg --tail 30 %(account)")
+                                   ("account-bal" "%(binary) -f %(ledger-file) bal %(account)"))
                   ledger-report-is-reversed t)
     :mode "\\.dat$")
 #+END_SRC
