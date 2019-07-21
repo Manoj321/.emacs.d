@@ -318,6 +318,44 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
       :defer t)
 #+END_SRC
 
+** Eshell
+   #+BEGIN_SRC emacs-lisp
+     (defun my-shell (arg)
+       (interactive "c")
+       (if (or (< arg 32) (> arg 126))
+           (error "Please use printable character for shell name"))
+       (let* ((buffer (get-buffer (format "*eshell*<%c>" arg))))
+         (if buffer
+             (switch-to-buffer buffer)
+           (progn
+             (eshell)
+             (make-local-variable 'comint-input-sender)
+             (rename-buffer (format "*eshell*<%c>" arg))))))
+
+     (use-package eshell
+       :confg (progn
+                (setq eshell-where-to-jump 'begin
+                    eshell-review-quick-commands nil
+                    eshell-smart-space-goes-to-end t
+                    eshell-last-dir-ring-size 128
+                    eshell-prompt-function
+                    (lambda ()
+                      (concat
+                       (propertize "┌─[" 'face `(:foreground "green"))
+                       (propertize (user-login-name) 'face `(:foreground "red"))
+                       (propertize "@" 'face `(:foreground "green"))
+                       (propertize (car (split-string (system-name) "\\." t)) 'face `(:foreground "blue"))
+                       (propertize "]──[" 'face `(:foreground "green"))
+                       (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "orange"))
+                       (propertize "]──[" 'face `(:foreground "green"))
+                       (propertize (concat (eshell/pwd)) 'face `(:foreground "grey"))
+                       (propertize "]\n" 'face `(:foreground "green"))
+                       (propertize "└─>" 'face `(:foreground "green"))
+                       (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "grey")))))
+                (define-key global-map '[(meta ?z)] 'my-shell))
+   #+END_SRC
+
+
 ** FCI mode
 #+BEGIN_SRC emacs-lisp
   (use-package fill-column-indicator
