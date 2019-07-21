@@ -248,6 +248,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
            :config (zerodark-setup-modeline-format)))
     #+END_SRC
 * Packages
+** comint mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package comint-mode
+       :bind (:map comint-mode-map
+                   ("M-p" . comint-previous-matching-input-from-input)
+                   ("M-n" . comint-next-matching-input-from-input)))
+   #+END_SRC
 ** Company mode
     #+BEGIN_SRC emacs-lisp
       (use-package "company"
