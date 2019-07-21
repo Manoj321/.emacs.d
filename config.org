@@ -800,56 +800,110 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                      (split-window-right)
                      (eww url)))))))))
 
-    (defun mkm-elfeed/capture ()
-      (let ((entry (elfeed-search-selected :single)))
-        (concat "* TODO "
-                (elfeed-entry-title entry)
-                "\n\s\s:PROPERTIES:\n\s\s:URL: "
-                (elfeed-entry-link entry)
-                "\n\s\s:END:\n")))
+  (defun mkm-elfeed/capture ()
+    (let ((entry (elfeed-search-selected :single)))
+      (concat "* TODO "
+              (elfeed-entry-title entry)
+              "\n\s\s:PROPERTIES:\n\s\s:URL: "
+              (elfeed-entry-link entry)
+              "\n\s\s:END:\n")))
 
-    (defun mkm-elfeed/play-video ()
+  (defun my-play-in-vlc ()
       (interactive)
-      (let* ((entry (elfeed-search-selected :single))
-             (url (elfeed-entry-link entry)))
-        (elfeed-search-untag-all-unread)
+      (let* ((url (thing-at-point 'url t)))
         (start-process "vlc" "*vlc*"
                        "/Applications/VLC.app/Contents/MacOS/VLC" url)))
 
+  (defun mkm-elfeed/play-video ()
+    (interactive)
+    (let* ((entry (elfeed-search-selected :single))
+           (url (elfeed-entry-link entry)))
+      (elfeed-search-untag-all-unread)
+      (my-play-in-vlc url)))
 
-    (define-key elfeed-search-mode-map "v" #'mkm-elfeed/play-video)
+  (define-key elfeed-search-mode-map "v" #'mkm-elfeed/play-video)
 
-    (defun mkm-org-capture/activity ()
-      (let ((activity (read-string "Activity: " ))
-            (minutes (read-number "Minutes: " )))
-        (concat "i "
-                (format-time-string "%Y/%m/%d %H:%M:%S"
-                                    (time-subtract (current-time)
-                                                   (seconds-to-time (* minutes 60))))
-                " "
-                activity
-                "\no "
-                (format-time-string "%Y/%m/%d %H:%M:%S")
-                " done" )))
+  (defun mkm-org-capture/activity ()
+    (let ((activity (read-string "Activity: " ))
+          (minutes (read-number "Minutes: " )))
+      (concat "i "
+              (format-time-string "%Y/%m/%d %H:%M:%S"
+                                  (time-subtract (current-time)
+                                                 (seconds-to-time (* minutes 60))))
+              " "
+              activity
+              "\no "
+              (format-time-string "%Y/%m/%d %H:%M:%S")
+              " done" )))
 
-    (defun mkm-org-capture/link ()
-      "Make a TODO entry with a link in clipboard. Page title is used as task heading."
-      (let* ((url-string (s-trim (x-get-clipboard)))
-             (pdf (string-suffix-p "pdf" url-string)))
-        (unless pdf
-          (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
-            (concat "* TODO "
-                    page-title
-                    "\n\s\s:PROPERTIES:\n\s\s:URL: "
-                    url-string
-                    "\n\s\s:END:\n\n\s\s- %?")))))
+  (defun mkm-org-capture-todo ()
+    "Capture TODO intelligently"
+    (let* ((url-string (s-trim (x-get-clipboard)))
+           (rb-link (string-prefix-p "http://reviewboard" url-string))
+           (gerrit-link (string-prefix-p "http://gerrit" url-string))
+           (todo-begin "* TODO")
+           (todo-head "%?")
+           (todo-tags "%^g")
+           (todo-body "-\s")
+           (todo-prop ""))
+      (cond
+       (rb-link
+        (setq page-title (org-web-tools--html-title (org-web-tools--get-url url-string))
+              todo-head (concat "RR: " (car (s-split "|" page-title t)))
+              todo-tags (concat ":review:" todo-tags)
+              todo-prop (concat ":PROPERTIES:\n\s\s:URL:\s" url-string "\n\s\s:END:")
+              todo-body (concat todo-body "%?" ))))
+      (unless (string= "" todo-prop)
+        (setq todo-prop (concat "\n\s\s" todo-prop)))
+      (concat todo-begin " " todo-head "\t" todo-tags todo-prop "\n\n\s\s" todo-body)))
 
+  (defun mkm-org-capture/link ()
+    "Make a TODO entry with a link in clipboard. Page title is used as task heading."
+    (let* ((url-string (s-trim (x-get-clipboard)))
+           (pdf (string-suffix-p "pdf" url-string)))
+      (unless pdf
+        (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
+          (concat "* TODO "
+                  page-title
+                  "\n\s\s:PROPERTIES:\n\s\s:URL: "
+                  url-string
+                  "\n\s\s:END:\n\n\s\s- %?")))))
 
-    (setq org-export-with-author nil)
-    (setq org-export-with-date nil)
-    (setq org-export-with-toc nil)
-    (setq org-export-with-creator nil)
-   #+END_SRC
+  (defun areview-current-period-string ()
+    "Return Areview period for current month"
+    (let* ((year (calendar-extract-year (calendar-current-date)))
+           (month (calendar-extract-month (calendar-current-date))))
+      (case month
+        ((4 5 6 7 8 9) (format "%d-Apr-01 -- %d-Sept-30" year year))
+        ((1 2 3) (format "%d-Oct-01 -- %d-Mar-31" (- year 1) year))
+        ((10 11 12) (format "%d-Oct-01 -- %d-Mar-31" year (+ year 1))))))
+
+  (defun areview-ask-location ()
+    "Ask location to insert an areview item"
+    (goto-char (point-min))
+    (let* ((areview-period (areview-current-period-string)))
+      ;; find current areview period heading
+      (unless (re-search-forward
+               (format org-complex-heading-regexp-format (regexp-quote (areview-current-period-string)))
+               nil t)
+        (goto-char (point-max))
+        (or (bolp) (insert "\n"))
+        (insert "* " areview-period "\n")))
+    (let* ((org-refile-targets '((nil :maxlevel . 9)))
+           (hd (condition-case nil
+                   (car (org-refile-get-location "Name" nil t))
+                 (error (car org-refile-history)))))
+      (unless (re-search-forward
+               (format org-complex-heading-regexp-format (regexp-quote hd))
+               nil t)
+        (insert "\n")
+        (insert "** " hd "\n"))))
+
+  (setq org-export-with-author nil)
+  (setq org-export-with-date nil)
+  (setq org-export-with-toc nil)
+  (setq org-export-with-creator nil)
+    #+END_SRC
 ** org-bullets
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
