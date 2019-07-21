@@ -862,14 +862,13 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (use-package pdf-tools
     :ensure t
     :bind (:map pdf-view-mode-map
-          ("o" . pdf-outline)
-          ("M-g g" . pdf-view-goto-label)
-          ("M" . pdf-view-midnight-minor-mode))
-    :config
-      (progn
-        (setq pdf-tools-handle-upgrades nil) ; Use brew upgrade pdf-tools instead.
-        (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
-        (pdf-tools-install t))
+                ("o" . pdf-outline)
+                ("M-g g" . pdf-view-goto-label)
+                ("M" . pdf-view-midnight-minor-mode))
+    :config (progn
+              (setq pdf-tools-handle-upgrades nil) ; Use brew upgrade pdf-tools instead.
+              (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+    (pdf-tools-install t))
 #+END_SRC
 ** poporg
    Edit large comment or string in a dedicated buffer since emacs is not good at
