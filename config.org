@@ -229,13 +229,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (setq shr-use-fonts nil)
 
   (when window-system
-    (set-frame-name "EMAIL")
-    (make-frame '((name . "ORG")))
+    (set-frame-name "ORG")
     (make-frame '((name . "EDIT")))
 
-    (global-set-key (kbd "s-1") (lambda () (interactive) (select-frame-by-name "EMAIL")))
-    (global-set-key (kbd "s-2") (lambda () (interactive) (select-frame-by-name "ORG")))
-    (global-set-key (kbd "s-3") (lambda () (interactive) (select-frame-by-name "EDIT"))))
+    (global-set-key (kbd "s-1") (lambda () (interactive) (select-frame-by-name "ORG")))
+    (global-set-key (kbd "s-2") (lambda () (interactive) (select-frame-by-name "EDIT"))))
 
   ;; Split windows vertically, stops magit from horizontally splitting
   (setq split-height-threshold 100)
@@ -805,48 +803,48 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    #+END_SRC
 ** org-bullets
 #+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-   :ensure t
-   :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  (use-package org-bullets
+    :ensure t
+    :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 #+END_SRC
 ** org-gcal
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-gcal
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-gcal
         :ensure t
-        :config (run-with-timer 0 (* 60 60) #'org-gcal-sync))
-   #+END_SRC
+        :config (run-with-idle-timer 60 t #'org-gcal-sync))
+    #+END_SRC
 ** Org-journal
 #+BEGIN_SRC emacs-lisp
-(use-package org-journal
-   :ensure t
-   :config
-   (setq org-journal-dir "~/Dropbox/Notes/journal/"))
+  (use-package org-journal
+      :ensure t
+      :config
+      (setq org-journal-dir "~/Dropbox/Notes/journal/"))
 #+END_SRC
 
 ** org-pdfview
-   #+BEGIN_SRC emacs-lisp
-   (use-package org-pdfview
-   :ensure t
-   :config
-   (add-to-list 'org-file-apps '("\\.pdf\\'" . (lambda (file link) (org-pdfview-open link)))))
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package org-pdfview
+        :ensure t
+        :config
+        (add-to-list 'org-file-apps '("\\.pdf\\'" . (lambda (file link) (org-pdfview-open link)))))
+    #+END_SRC
 ** org-rifle
-   #+BEGIN_SRC emacs-lisp
-     (use-package helm-org-rifle
-       :ensure t)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package helm-org-rifle
+        :ensure t)
+    #+END_SRC
 ** org-web-tools
-   - Provides useful functions to work with web pages. Ex: extract title
+    - Provides useful functions to work with web pages. Ex: extract title
 #+BEGIN_SRC emacs-lisp
-(use-package org-web-tools
-   :ensure t)
+  (use-package org-web-tools
+    :ensure t)
 #+END_SRC
 ** ov
-   #+BEGIN_SRC emacs-lisp
-   (use-package ov
-    :ensure t)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package ov
+        :ensure t)
+    #+END_SRC
 ** PDB
 #+BEGIN_SRC emacs-lisp
   (use-package pdb-mode
@@ -875,60 +873,73 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         :bind (("C-c \"" . poporg-dwim)))
     #+END_SRC
 ** Rainbow-identifiers
-   #+BEGIN_SRC emacs-lisp
-   (use-package rainbow-identifiers
-     :ensure t)
-   #+END_SRC
+    #+BEGIN_SRC emacs-lisp
+      (use-package rainbow-identifiers
+        :ensure t)
+    #+END_SRC
 ** Recentf
 #+begin_src emacs-lisp
-(use-package recentf
-  :config
-  (recentf-mode t)
-  (setq recentf-max-saved-items 200))
+  (use-package recentf
+      :config
+      (recentf-mode t)
+      (setq recentf-max-saved-items 200))
 #+end_src
 ** Rust
+    #+BEGIN_SRC emacs-lisp
+      (use-package rust-mode
+        :hook (rust-mode-hook . rust-format-buffer)
+        :ensure t)
+      (use-package flycheck-rust
+        :ensure t)
+      (use-package cargo
+        :ensure t
+        :requires rust-mode
+        :hook (rust-mode-hook . cargo-minor-mode))
+    #+END_SRC
+** TOML mode
    #+BEGIN_SRC emacs-lisp
-  (use-package rust-mode
-    :hook (rust-mode-hook . rust-format-buffer)
-    :ensure t)
-  (use-package flycheck-rust
-    :ensure t)
-  (use-package cargo
-    :ensure t
-    :requires rust-mode
-    :hook (rust-mode-hook . cargo-minor-mode))
+     (use-package toml-mode
+       :ensure t)
    #+END_SRC
 ** Winner mode
 Winner mode allows you to undo/redo changes to window changes in Emacs.
 #+begin_src emacs-lisp
-(use-package winner
-  :config
-  (winner-mode t))
+  (use-package winner
+      :config (winner-mode t))
 #+end_src
+
+** Yasnippet
+    #+BEGIN_SRC emacs-lisp
+      (use-package yasnippet
+        :ensure t
+        :config (setq yas-snippet-dirs '("~/.emacs.d/mysnippets"))
+        (yas-global-mode 1))
+      (use-package yasnippet-snippets
+        :ensure t)
+    #+END_SRC
 
 ** YAML mode
 #+BEGIN_SRC emacs-lisp
-(use-package yaml-mode
-   :ensure t
-   :mode "\\.yaml$")
+  (use-package yaml-mode
+      :ensure t
+      :mode "\\.y(a)?ml$")
 #+END_SRC
 
 ** Undo tree
 #+BEGIN_SRC emacs-lisp
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :config (global-undo-tree-mode))
+  (use-package undo-tree
+    :ensure t
+    :diminish undo-tree-mode
+    :config (global-undo-tree-mode))
 #+END_SRC
 
-** wordnut
+** which-key
    #+BEGIN_SRC emacs-lisp
-     (use-package wordnut
-        :ensure t
-        :bind (("C-c d" . wordnut-search)))
+     (use-package which-key
+       :ensure t
+       :config (which-key-mode))
    #+END_SRC
 * Shell
-
 #+BEGIN_SRC emacs-lisp
   (setq eshell-prompt-function
         (lambda ()
