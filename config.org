@@ -60,8 +60,12 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
   (global-set-key (kbd "C-x c f") 'cp-cur-file-name)
   (global-set-key (kbd "C-x c w") 'cp-which-func)
 
-  ;; a4-changes mode
-  (use-package "a4-changes" )
+    ;; Integration with a4, for checking files out and for
+    ;; compiling/running/debugging within emacs.
+    (use-package "a4"
+      :bind  (("C-x g d" . (lambda()
+                             (interactive)
+                             (a4-changes-describe-change-num (thing-at-point 'word t))))))
 
   ;; Pylint compile
   (use-package "python-pylint"
@@ -531,7 +535,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   ;; be define in .git/config
   (defun magit-push-to-gerrit-spidar ()
     (interactive)
-    (magit-git-command-topdir "git push review"))
+    (magit-git-command-topdir "git push spidar"))
+  (defun magit-push-to-gerrit-reviewboard ()
+    (interactive)
+    (magit-git-command-topdir "git push reviewboard"))
 
   (use-package magit
     :bind ("C-c g" . magit-status)
@@ -541,7 +548,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :config
     (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
     (magit-define-popup-action 'magit-push-popup ?g "push to spidar" 'magit-push-to-gerrit-spidar)
-    (magit-define-popup-action 'magit-push-popup ?b "push to btc" 'magit-push-to-gerrit-btc))
+    (magit-define-popup-action 'magit-push-popup ?b "push to btc" 'magit-push-to-gerrit-btc)
+    (magit-define-popup-action 'magit-push-popup ?b "push to reviewboard" 'magit-push-to-gerrit-reviewboard))
 #+end_src
 
 *** Fullscreen magit
@@ -1041,6 +1049,12 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
        :ensure t
        :config (which-key-mode))
    #+END_SRC
+** VLF
+   #+BEGIN_SRC emacs-lisp
+     (use-package vlf
+       :ensure t
+       :config (require 'vlf-setup))
+   #+END_SRC
 
 * Re-create scratch buffer
     #+BEGIN_SRC emacs-lisp
@@ -1096,6 +1110,8 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
     (current-time-string (current-time) t))
   (defun india()
     (current-time-string (current-time) "Asia/Kolkata"))
+  (defun et()
+    (current-time-string (current-time) "America/New_York"))
 #+END_SRC
 
 ** Gerrit Link
@@ -1142,4 +1158,35 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
          (with-current-buffer " sharing"
            (clipboard-kill-ring-save (point-min) (point-max)))
          (dired-delete-file temp-file)))
+   (defun python-args-to-google-docstring (text &optional make-fields)
+  "Return a reST docstring format for the python arguments in yas-text."
+  (let* ((indent (concat "\n" (make-string (current-column) 32)))
+         (args (python-split-args text))
+     (nr 0)
+         (formatted-args
+      (mapconcat
+       (lambda (x)
+         (concat "   " (nth 0 x)
+             (if make-fields (format " : ${%d:arg%d}" (cl-incf nr) nr))
+             (if (nth 1 x) (concat " \(default " (nth 1 x) "\)"))))
+       args
+       indent)))
+    (unless (string= formatted-args "")
+      (concat
+       (mapconcat 'identity
+          (list "" "Args:" formatted-args)
+          indent)
+       "\n"))))
+   #+END_SRC
+
+** Reopen file with sudo
+
+   #+BEGIN_SRC emacs-lisp
+     ;; find file as sudo
+     (defun reopen-this-file-as-sudo ()
+        (interactive)
+        (when-let* ((p (point))
+                   (file-name (buffer-file-name)))
+                   (find-alternate-file (concat "/sudo::" file-name))
+                   (goto-char p)))
    #+END_SRC
