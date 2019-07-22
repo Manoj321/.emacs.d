@@ -60,12 +60,12 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
   (global-set-key (kbd "C-x c f") 'cp-cur-file-name)
   (global-set-key (kbd "C-x c w") 'cp-which-func)
 
-    ;; Integration with a4, for checking files out and for
-    ;; compiling/running/debugging within emacs.
-    (use-package "a4"
-      :bind  (("C-x g d" . (lambda()
-                             (interactive)
-                             (a4-changes-describe-change-num (thing-at-point 'word t))))))
+  ;; Integration with a4, for checking files out and for
+  ;; compiling/running/debugging within emacs.
+  (use-package "a4"
+    :bind  (("C-x g d" . (lambda()
+                           (interactive)
+                           (a4-changes-describe-change-num (thing-at-point 'word t))))))
 
   ;; Pylint compile
   (use-package "python-pylint"
@@ -78,6 +78,19 @@ I use [[https://github.com/jwiegley/use-package][use-package]] to manage my emac
   (defun my-shell-mode-hook ()
     (add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function t))
   (add-hook 'shell-mode-hook 'my-shell-mode-hook)
+
+  ;; disable aformat mode while expanding snippets
+  (add-hook 'yas-before-expand-snippet-hook (lambda()
+                                              (if (bound-and-true-p aformat-mode)
+                                                  (progn
+                                                    (setq my-reenable-aformat-mode t)
+                                                    (aformat-mode -1)))))
+  (add-hook 'yas-after-exit-snippet-hook (lambda()
+                                           (if my-reenable-aformat-mode
+                                               (progn
+                                                 (setq my-reenable-aformat-mode nil)
+                                                 (aformat-mode t)))))
+
   );;end arista specific changes
 #+END_SRC
 
@@ -1158,25 +1171,28 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
          (with-current-buffer " sharing"
            (clipboard-kill-ring-save (point-min) (point-max)))
          (dired-delete-file temp-file)))
-   (defun python-args-to-google-docstring (text &optional make-fields)
-  "Return a reST docstring format for the python arguments in yas-text."
-  (let* ((indent (concat "\n" (make-string (current-column) 32)))
-         (args (python-split-args text))
-     (nr 0)
-         (formatted-args
-      (mapconcat
-       (lambda (x)
-         (concat "   " (nth 0 x)
-             (if make-fields (format " : ${%d:arg%d}" (cl-incf nr) nr))
-             (if (nth 1 x) (concat " \(default " (nth 1 x) "\)"))))
-       args
-       indent)))
-    (unless (string= formatted-args "")
-      (concat
-       (mapconcat 'identity
-          (list "" "Args:" formatted-args)
-          indent)
-       "\n"))))
+   #+END_SRC
+** Python
+   #+BEGIN_SRC emacs-lisp
+     (defun python-args-to-google-docstring (text &optional make-fields)
+       "Return a reST docstring format for the python arguments in yas-text."
+       (let* ((indent (concat "\n" (make-string (current-column) 32)))
+              (args (python-split-args text))
+              (nr 0)
+              (formatted-args
+               (mapconcat
+                (lambda (x)
+                  (concat (s-trim (nth 0 x))
+                          (if make-fields (format " : ${%d:arg%d}" (cl-incf nr) nr))
+                          (if (nth 1 x) (concat " \(default " (nth 1 x) "\)"))))
+                args
+                indent)))
+         (unless (string= formatted-args "")
+           (concat
+            (mapconcat 'identity
+                       (list "" "Parameters" "----------" formatted-args)
+                       indent)
+            "\n"))))
    #+END_SRC
 
 ** Reopen file with sudo
