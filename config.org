@@ -350,7 +350,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
              (rename-buffer (format "*eshell*<%c>" arg))))))
 
      (use-package eshell
-       :confg (progn
+       :config (progn
                 (setq eshell-where-to-jump 'begin
                     eshell-review-quick-commands nil
                     eshell-smart-space-goes-to-end t
@@ -369,7 +369,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                        (propertize "]\n" 'face `(:foreground "green"))
                        (propertize "└─>" 'face `(:foreground "green"))
                        (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "grey")))))
-                (define-key global-map '[(meta ?z)] 'my-shell))
+                (define-key global-map '[(meta ?z)] 'my-shell)))
    #+END_SRC
 
 
