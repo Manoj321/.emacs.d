@@ -113,6 +113,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (scroll-bar-mode -1)
     (tooltip-mode -1))
 
+  (when (string= system-type "darwin")
+    (setq mac-option-modifier 'meta)
+    (setq mac-command-modifier 'hyper))
+
   (display-time)
   (setq display-time-format "%I:%M")
   ;; Hurts my ears
@@ -127,6 +131,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
   ;; Don't you dare to warn me!
   (setq large-file-warning-threshold nil)
+
+  ;; blinkty-blink
+  (blink-cursor-mode)
 
   ;; Allow pasting selection outside of Emacs
   (setq x-select-enable-clipboard t)
@@ -245,24 +252,19 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   ;;Donot use proportional fonts
   (setq shr-use-fonts nil)
 
-  (when window-system
-    (set-frame-name "ORG")
-    (make-frame '((name . "EDIT")))
-
-    (global-set-key (kbd "s-1") (lambda () (interactive) (select-frame-by-name "ORG")))
-    (global-set-key (kbd "s-2") (lambda () (interactive) (select-frame-by-name "EDIT"))))
-
   ;; Split windows vertically, stops magit from horizontally splitting
   (setq split-height-threshold 100)
+
+  (global-set-key (kbd "H-v") 'yank)
 #+END_SRC
 
 * Theme
-** Zerodark theme
+** COMMENT Zerodark theme
     #+BEGIN_SRC emacs-lisp
       (when window-system
         (use-package zerodark-theme
-           :ensure t
-           :config (zerodark-setup-modeline-format)))
+           :ensure t))
+           ;;:config (zerodark-setup-modeline-format)))
     #+END_SRC
 * Packages
 ** comint mode
@@ -413,7 +415,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :config
     (defun my-go-mode-hook ()
       (setq gofmt-command "goimports")
-      (lsp-go-enable)
+      (lsp-mode)
       (yas-minor-mode)
       ;; Customize compile command to run go build
       (if (not (string-match "go" compile-command))
@@ -455,8 +457,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
            ("C-h a" . helm-apropos)
            ("M-y" . helm-show-kill-ring)
            ("M-x" . helm-M-x)
-           ("C-x C-f" . helm-find-files))
-    :config (define-key helm-map (kbd "TAB" ) 'helm-execute-persistent-action ))
+           ("C-x C-f" . helm-find-files)
+           (:map helm-map
+                 ("C-i" . helm-execute-persistent-action))))
   (ido-mode -1) ;; Turn off ido mode.
 #+END_SRC
 ** HTMLize
@@ -750,7 +753,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                     ("r" "Read about this later." entry (file "~/Dropbox/org/notes.org")
                      "* TODO %?\n\n" :empty-lines-after 2 :prepend t)
                     ("m" "Meeting notes automatically clocks in" entry (file "~/Dropbox/org/todo.org" )
-                     "* %?\t%^g\n\n\s\s-" :empty-lines-after 2 :prepend t :clock-in t)
+                     (function mkm-org-capture-todo) :empty-lines-after 2 :prepend t :clock-in t)
                     ("t" "Capture a TODO task" entry (file "~/Dropbox/org/todo.org")
                      (function mkm-org-capture-todo) :empty-lines-after 2 :prepend t)
                     ("a" "Areview feedback" plain (file+function "~/Dropbox/org/review.org" areview-ask-location)
@@ -793,13 +796,17 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                    (org-agenda-overriding-header "Waiting:")))
             (agenda "" ((org-agenda-span 'day)))
             (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-entry-if 'todo '("WAIT"))
+                                                        (org-agenda-skip-entry-if 'todo '("WAIT" "BNWD"))
                                                         (org-agenda-skip-if nil '(scheduled deadline))))
                          (org-agenda-overriding-header "ALL tasks:")))
             (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-entry-if 'todo '("TODO"))
+                                                        (org-agenda-skip-entry-if 'todo '("TODO" "BNWD"))
                                                         (org-agenda-skip-if nil '(scheduled deadline))))
-                         (org-agenda-overriding-header "Low Priority Waiting.."))))
+                         (org-agenda-overriding-header "Low Priority Waiting..")))
+            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
+                                                        (org-agenda-skip-entry-if 'todo '("TODO" "WAIT"))
+                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                         (org-agenda-overriding-header "If only..."))))
            ((org-agenda-files '("~/Dropbox/org/gcal.org"
                                 "~/Dropbox/org/todo.org"))))))
 
@@ -859,7 +866,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
   (defun mkm-org-capture-todo ()
     "Capture TODO intelligently"
-    (let* ((url-string (s-trim (x-get-clipboard)))
+    (let* ((url-string (s-trim (if (x-get-clipboard) (x-get-clipboard) "")))
            (rb-link (string-prefix-p "http://reviewboard" url-string))
            (gerrit-link (string-prefix-p "http://gerrit" url-string))
            (todo-begin "* TODO")
@@ -943,9 +950,19 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (use-package org-journal
       :ensure t
       :config
-      (setq org-journal-dir "~/Dropbox/Notes/journal/"))
+      (setq org-journal-dir "~/Dropbox/Notes/journal/"
+            org-journal-file-type 'yearly))
 #+END_SRC
 
+** org-mru-clock
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-mru-clock
+       :ensure t
+       :bind (("C-x i" . org-mru-clock-in)
+              ("C-x j" . org-mru-clock-select-recent-task))
+       :init
+       (setq org-mru-clock-how-many 10))
+   #+END_SRC
 ** org-pdfview
     #+BEGIN_SRC emacs-lisp
       (use-package org-pdfview
@@ -1206,3 +1223,30 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
                    (find-alternate-file (concat "/sudo::" file-name))
                    (goto-char p)))
    #+END_SRC
+** Increase font
+   #+BEGIN_SRC emacs-lisp
+     (defun forgot-my-glasses ()
+       (interactive)
+       (set-face-attribute 'default nil :height 200))
+   #+END_SRC
+** Yank rectangle with newlines
+   #+BEGIN_SRC emacs-lisp
+   (defun yank-rectangle-as-newlines+ (&optional pos)
+     (interactive)
+     (let ((pos (or pos (point))))
+       (save-restriction
+         (narrow-to-region pos pos)
+         (yank-rectangle))))
+   #+END_SRC
+
+* Make Frames
+#+BEGIN_SRC emacs-lisp
+  (when window-system
+    (set-frame-name "ORG")
+    (make-frame '((name . "EDIT")))
+
+    (global-set-key (kbd "H-1") (lambda () (interactive) (select-frame-by-name "ORG")))
+    (global-set-key (kbd "H-2") (lambda () (interactive) (select-frame-by-name "EDIT")))
+    (toggle-frame-fullscreen)
+    (toggle-frame-fullscreen))
+#+END_SRC

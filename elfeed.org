@@ -30,7 +30,7 @@
 **** http://endlessparentheses.com/atom.xml                    :endlessparen:
 **** https://oremacs.com/atom.xml                                   :oremacs:
 **** http://planet.emacsen.org/atom.xml                             :emacsen:
-
+**** https://loomcom.com/blog/index.xml.                               :loom:
 ** News                                                                :news:
 
 *** Books                                                              :book:
