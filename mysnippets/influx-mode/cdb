@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: CreateDatabase
+# key: cdb
+# --
+create database "$1" with duration $2d replication 3 name "$1RP"$0

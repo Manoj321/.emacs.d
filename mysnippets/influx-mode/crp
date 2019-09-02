@@ -1,0 +1,4 @@
+# key: crp
+# name: retention policies
+# --
+create retention policy "$1" ON "$2" duration $3d replication 3$0  
