@@ -1,0 +1,2 @@
+;;; -*- no-byte-compile: t -*-
+(define-package "kapacitor" "20190414.1908" "Main file for kapacitor-mode" '((emacs "25.1") (magit "2.13.0") (magit-popup "2.12.4")) :commit "e3300d8b4017a2f66b0d929cb85bcc7ee2612072" :keywords '("kapacitor" "emacs" "magit" "tools") :authors '(("Manoj Kumar Manikchand" . "manojm.321@gmail.com")) :maintainer '("Manoj Kumar Manikchand" . "manojm.321@gmail.com") :url "http://github.com/Manoj321/kapacitor-el")
