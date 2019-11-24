@@ -274,6 +274,23 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                    ("M-p" . comint-previous-matching-input-from-input)
                    ("M-n" . comint-next-matching-input-from-input)))
    #+END_SRC
+** compilation mode
+   #+BEGIN_SRC emacs-lisp
+     (use-package compile
+       :config (setq compilation-scroll-output t
+                     compilation-process-setup-function 'my-compilation-setup
+                     compilation-finish-function 'my-compilation-finish))
+
+     (defun my-compilation-setup ()
+       "Enable comint mode and shell minor mode"
+       (setq buffer-read-only nil)
+       (with-no-warnings (comint-mode))
+       (compilation-shell-minor-mode))
+
+     (defun my-compilation-finish (&optional a b)
+       "Enable compilation mode"
+       (compilation-mode))
+   #+END_SRC
 ** Company mode
     #+BEGIN_SRC emacs-lisp
       (use-package "company"
