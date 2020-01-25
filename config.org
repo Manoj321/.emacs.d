@@ -259,12 +259,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 #+END_SRC
 
 * Theme
-** COMMENT Zerodark theme
+** Zerodark theme
     #+BEGIN_SRC emacs-lisp
       (when window-system
         (use-package zerodark-theme
            :ensure t))
-           ;;:config (zerodark-setup-modeline-format)))
     #+END_SRC
 * Packages
 ** comint mode
@@ -956,6 +955,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :config (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 #+END_SRC
+** org-download
+   #+BEGIN_SRC emacs-lisp
+(use-package org-download
+  :config  (setq-default org-download-image-dir "./images"))
+   #+END_SRC
 ** org-gcal
     #+BEGIN_SRC emacs-lisp
       (use-package org-gcal
