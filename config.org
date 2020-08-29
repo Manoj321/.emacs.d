@@ -635,31 +635,27 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :bind (("C-c m" . mu4e))
     :config (setq mu4e-index-cleanup nil      ;; don't do a full cleanup check
                   mu4e-index-lazy-check t    ;; don't consider up-to-date dirs
-                  mu4e-maildir   "~/mbsync"
-                  mu4e-sent-folder "/[Gmail].Sent Mail"
-                  mu4e-drafts-folder "/[Gmail].Drafts"
-                  mu4e-trash-folder "/[Gmail].Trash"
-                  mu4e-refile-folder "/[Gmail].Archive"
+                  mail-user-agent 'mu4e-user-agent
                   mu4e-confirm-quit nil
                   mu4e-view-show-images t
-                  mu4e-sent-messages-behavior 'sent
+                  mu4e-sent-messages-behavior 'delete
                   mu4e-get-mail-command "mbsync gmail"
                   mu4e-attachment-dir  "~/Downloads"
                   mu4e-view-show-images t
                   mu4e-headers-results-limit 500
-                  mu4e-update-interval 300
+                  mu4e-update-interval 120
                   mu4e-hide-index-messages t
                   mu4e-headers-include-related nil
-                  mu4e-headers-date-format "%y/%m/%d %H:%M:%S"
-                  mu4e-headers-fields '((:date . nil)
+                  message-kill-buffer-on-exit t
+                  mu4e-headers-skip-duplicates t
+                  mu4e-headers-date-format "%d/%m/%y %H:%M:%S"
+                  mu4e-headers-fields '((:human-date . 20)
                                         (:flags . 6)
-                                        (:recipnum)
+                                        (:recipnum . 3)
                                         (:mailing-list . 20)
                                         (:from-or-to . 20)
-                                        (:subject))
+                                        (:thread-subject))
                   mu4e-view-prefer-html nil))
-
-  (advice-add 'mu4e~headers-quit-buffer :after 'bury-buffer)
 
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (add-hook 'mu4e-view-mode-hook
@@ -691,30 +687,32 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                              nil "attachment")
           (message "skipping non-regular file %s" file)))))
   (progn
+    (setq mu4e-bookmarks nil)
+    (add-to-list  'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "DM"
+                                  :query "recip:manojm321"
+                                  :key ?m) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Unread posts addressed to me"
-                                  :query "recip:manojm321 flag:unread AND NOT flag:trashed"
-                                  :key ?m))
+                                  :name "RR"
+                                  :query "\( s:Change in OR s:Review Request \)"
+                                  :key ?r) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Unread Influxdata posts addressed to me"
-                                  :query "s:InfluxData flag:unread"
-                                  :key ?d))
+                                  :name "SW Announce"
+                                  :query "to:sw-announce date:3d..now"
+                                  :key ?a) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Unread posts from spidar"
-                                  :query "from:spidar flag:unread"
-                                  :key ?s))
+                                  :name "Cron"
+                                  :query "s:Cron date:3d..now"
+                                  :key ?c) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Unread review requests"
-                                  :query "\( s:Change in OR s:Review Request \)AND flag:unread"
-                                  :key ?r))
+                                  :name "Unread"
+                                  :query "flag:unread"
+                                  :key ?u) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Invitations"
-                                  :query "s:Invitation AND flag:unread"
-                                  :key ?i))
-    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Unread Cron messages"
-                                  :query "s:Cron AND flag:unread"
-                                  :key ?c)))
+                                  :name "Meeting Notes"
+                                  :query "s:sw meeting notes date:7d..now"
+                                  :key ?n) t)
+)
 #+END_SRC
 
 ** Mu4e-alert
