@@ -30,7 +30,7 @@
 (org-babel-load-file (concat user-emacs-directory "config.org"))
 
 ;; load secrets
-(load-library "~/secrets.el")
+(load-library "~/secrets.el.gpg")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

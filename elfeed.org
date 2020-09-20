@@ -12,17 +12,22 @@
 *** http://nullprogram.com/feed/
 *** https://8thlight.com/blog/feed/atom.xml                    :craftmanship:
 *** http://www.aaronsw.com/2002/feeds/pgessays.rss              :paul:graham:
+*** https://www.cncf.io/newsroom/blog/                                 :cncf:
 
 *** Monitoring
-**** Influxdata                                                  :influxdata:
+**** Influxdata                                                  :tsd:
 
 ***** https://www.influxdata.com/blog/category/tech/releases/feed/
 ***** https://influxdb.com/index.xml
 ***** https://www.influxdata.com/blog/category/news/feed/
 
-**** Grafana
+**** Grafana                                                        :viz:
 
 ***** https://grafana.com/blog/index.xml
+
+**** TimescaleDB                                                :tsd:
+
+***** https://blog.timescale.com/blog/rss/
 
 *** Emacs                                                             :emacs:
 
@@ -31,6 +36,10 @@
 **** https://oremacs.com/atom.xml                                   :oremacs:
 **** http://planet.emacsen.org/atom.xml                             :emacsen:
 **** https://loomcom.com/blog/index.xml.                               :loom:
+*** Programming
+**** https://blog.golang.org/feed.atom                               :golang:
+*** Engineering                                                 :engineering:
+**** https://eng.uber.com/rss
 ** News                                                                :news:
 
 *** Books                                                              :book:
@@ -40,6 +49,9 @@
 *** emacs                                                             :emacs:
 
 **** http://reddit.com/r/emacs/.rss                                  :reddit:
+
+** NYT
+**** https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml          :nyt:
 
 ** Comic                                                              :comic:
 

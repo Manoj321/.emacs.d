@@ -325,6 +325,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** Emojify
    #+begin_src emacs-lisp
      (use-package emojify
+       :preface (setq (emojify-emoji-styles '(unicode)))
        :hook (after-init . global-emojify-mode))
    #+end_src
 ** Elfeed
@@ -577,8 +578,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 ** LSP go
     #+BEGIN_SRC emacs-lisp
-    (use-package "lsp-go"
-    :ensure t)
+      (use-package lsp-go
+        :disabled t
+        :ensure t)
     #+END_SRC
 ** Magit
 #+begin_src emacs-lisp
@@ -752,6 +754,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     #+BEGIN_SRC emacs-lisp
       (use-package mu4e-conversation
         :requires mu4e
+        :disabled t
         :ensure t
         :config (global-mu4e-conversation-mode))
     #+END_SRC
@@ -1346,6 +1349,59 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
          (yank-rectangle))))
    #+END_SRC
 
+** Register
+   #+BEGIN_SRC emacs-lisp
+   (set-register ?a (set-marker (make-marker) 1 (get-buffer "*Org Agenda*")))
+   (set-register ?c `(file . "~/.emacs.d/config.org"))
+   (set-register ?t `(file . "~/Dropbox/org/todo.org"))
+   #+END_SRC
+** Compilation: Elapsed time
+   #+BEGIN_SRC emacs-lisp
+     (defun dm/calculate-compile-time (start-time end-time)
+       "Compute the compile/grep time between START-TIME and END-TIME.
+     Time is formatted in hours, minutes, and seconds."
+       (format-seconds
+        "%H %M, %z%S"
+        (time-to-seconds
+         (time-subtract
+          (apply #'encode-time (parse-time-string (format-time-string
+                                                   (concat
+                                                    start-time
+                                                    " %Y"))))
+          (apply #'encode-time (parse-time-string (format-time-string
+                                                   (concat
+                                                    end-time
+                                                    " %Y"))))))))
+
+     (defun dm/print-compile-time ()
+       "Print the compile/grep time of a `compilation-mode' buffer that finished successfully.
+     Time is formatted in hours, minutes, and seconds."
+       (interactive)
+       (when (derived-mode-p 'compilation-mode)
+         (let ((start (save-excursion
+                        (goto-char (point-min))
+                        (and
+                         (re-search-forward
+                          (format
+                           "^%s started at \\(.*\\)"
+                           mode-name) nil t)
+                         (match-string 1))))
+               (end (save-excursion
+                      (goto-char (point-min))
+                      (and
+                       (re-search-forward
+                        (format
+                         "^%s.* at \\(.*\\)"
+                         mode-name) nil t)
+                       (match-string 1)))))
+           (unless (and start end)
+             (user-error "Cannot calculate compile time. Did the compilation finished successfully?"))
+           (message
+            (format "%s took %s"
+                    mode-name
+                    (dm/calculate-compile-time end start))))))
+     (define-key compilation-mode-map (kbd "c") #'dm/print-compile-time)
+   #+END_SRC
 ** Make Tabs
 #+BEGIN_SRC emacs-lisp
   (when window-system
