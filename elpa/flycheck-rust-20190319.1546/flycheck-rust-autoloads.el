@@ -13,9 +13,7 @@
 Setup Rust in Flycheck.
 
 If the current file is part of a Cargo project, configure
-Flycheck according to the Cargo project layout.
-
-\(fn)" t nil)
+Flycheck according to the Cargo project layout." t nil)
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "flycheck-rust" '("flycheck-rust-")))
 

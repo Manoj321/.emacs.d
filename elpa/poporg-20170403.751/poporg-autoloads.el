@@ -17,9 +17,7 @@ If the current buffer is an edit buffer, run `poporg-edit-exit'.
 If the region is active, edit it in an empty buffer.  Otherwise, find a nearby
 string or comment using `poporg-find-string-or-comment' and edit that in an
 empty buffer.  If there is an active edit nearby, pop to its other buffer and
-edit that instead.
-
-\(fn)" t nil)
+edit that instead." t nil)
 
 (autoload 'poporg-update "poporg" "\
 Update the contents of the original buffer.
@@ -31,14 +29,10 @@ Also update the overlay.
 \(fn WITH-SAVE)" t nil)
 
 (autoload 'poporg-update-and-save "poporg" "\
-Update and save the original buffer; update the region.
-
-\(fn)" t nil)
+Update and save the original buffer; update the region." t nil)
 
 (autoload 'poporg-edit-exit "poporg" "\
-Exit the edit buffer, replacing the original region.
-
-\(fn)" t nil)
+Exit the edit buffer, replacing the original region." t nil)
 
 (if (fboundp 'register-definition-prefixes) (register-definition-prefixes "poporg" '("poporg-")))
 

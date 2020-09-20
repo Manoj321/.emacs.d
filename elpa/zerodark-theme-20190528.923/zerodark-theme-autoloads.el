@@ -11,13 +11,11 @@
 ;;; Generated autoloads from zerodark-theme.el
 
 (autoload 'zerodark-setup-modeline-format "zerodark-theme" "\
-Setup the mode-line format for zerodark.
-
-\(fn)" t nil)
+Setup the mode-line format for zerodark." t nil)
 
 (when (and (boundp 'custom-theme-load-path) load-file-name) (add-to-list 'custom-theme-load-path (file-name-as-directory (file-name-directory load-file-name))))
 
-(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "zerodark-theme" '("zerodark" "true-color-p" "cached-for")))
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "zerodark-theme" '("cached-for" "true-color-p" "zerodark")))
 
 ;;;***
 
