@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/manojm321/.emacs.d/elpa/org-gcal-20200501.24/org-gcal.el  -*- no-byte-compile: t -*-
+(define-package "org-gcal" "20200501.24" "Org sync with Google Calendar" '((request "20190901") (request-deferred "20181129") (alert "0") (persist "0") (emacs "26")) :commit "2ee2b31547e6f4e33db70fb812d552e55d612fd6" :keywords '("convenience") :authors '(("myuhe <yuhei.maeda_at_gmail.com>")) :maintainer '("Raimon Grau" . "raimonster@gmail.com") :url "https://github.com/kidd/org-gcal.el")
