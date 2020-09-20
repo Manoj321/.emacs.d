@@ -188,11 +188,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
            ("C-c l" . windmove-right)
            ("C-c j" . windmove-left)))
 
-  (use-package timeclock
-    :bind (("C-c O" . timeclock-out)
-           ("C-c I" . timeclock-in))
-    :config (setq timeclock-file "~/Dropbox/accounting/timelog.dat"))
-
   (global-set-key (kbd "M-m") 'back-to-indentation)
 
   ;; Comment/un-comment
