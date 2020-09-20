@@ -1,0 +1,7 @@
+# key: bld
+# name: build status
+# --
+#+HEADER: :var MUT=(org-entry-get nil "MUT" t)
+#+BEGIN_SRC shell :results value drawer 
+  $0ap abuild -p $MUT
+#+END_SRC

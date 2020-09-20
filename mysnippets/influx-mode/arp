@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: arp
+# key: arp
+# --
+ALTER RETENTION POLICY "$1" ON "$2" DURATION $3d SHARD DURATION $4d$0

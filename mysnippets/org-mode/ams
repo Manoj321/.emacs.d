@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: a4 mut status
+# key: ams
+# --
+- ams
+   #+HEADER: :var MUT=(org-entry-get nil "MUT" t)
+   #+BEGIN_SRC shell :results value drawer 
+     $0a4 mut status -m $MUT
+   #+END_SRC

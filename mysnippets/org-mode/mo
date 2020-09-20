@@ -1,0 +1,25 @@
+# key: mo
+# name: mut overview
+# --
+$0`(make-string (1+ (org-current-level)) ?*)` Mut Overview
+     
+`(make-string (+ (org-current-level) 2) ?*)` mut status
+         #+BEGIN_SRC shell
+           a4 mut status -m manojm321.$1
+         #+END_SRC
+`(make-string (+ (org-current-level) 2) ?*)` build status
+         #+BEGIN_SRC shell
+           ap abuild -p manojm321.$1
+         #+END_SRC
+`(make-string (+ (org-current-level) 2) ?*)` build status
+         #+BEGIN_SRC shell
+           a bld parallel status -w manojm321.$1
+         #+END_SRC
+`(make-string (+ (org-current-level) +2) ?*)` testing status
+         #+BEGIN_SRC shell
+           a4 matt show tests -m manojm321.$1
+         #+END_SRC
+`(make-string (+ (org-current-level) +2) ?*)` rejected tests
+         #+BEGIN_SRC shell
+           a4 matt show tests --state=rejected -v -m manojm321.$1
+         #+END_SRC

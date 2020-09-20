@@ -1,0 +1,8 @@
+# key: tr
+# name: Reject Tests
+# --
+#+HEADER: :var MUT=(org-entry-get nil "MUT" t)
+#+BEGIN_SRC shell  :dir /ssh:us180:~  :results value drawer 
+  $0a4 matt show tests --state=rejected -v -m $MUT
+#+END_SRC
+

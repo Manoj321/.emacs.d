@@ -1,0 +1,9 @@
+# key: tll
+# name: All Tests
+# --
+#+HEADER: :var MUT=(org-entry-get nil "MUT" t)
+#+BEGIN_SRC shell :results value drawer 
+  $0a4 matt show tests -m $MUT
+#+END_SRC
+
+
