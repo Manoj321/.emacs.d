@@ -537,21 +537,41 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     #+END_SRC
 ** Ledger
 #+BEGIN_SRC emacs-lisp
-  (use-package ledger-mode
-    :ensure t
-    :config (setq ledger-reports '(("Monthly Balance" "ledger [[ledger-mode-flags]] -f /Users/manojm321/Dropbox/accounting/oct28.dat -M  -r --period 2019 reg ^Expenses ^Income and not Bonus")
-                                   ("bal" "%(binary) -f %(ledger-file) bal")
-                                   ("reg" "%(binary) -f %(ledger-file) reg")
-                                   ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
-                                   ("account-reg" "%(binary) -f %(ledger-file) reg --tail 30 %(account)")
-                                   ("account-bal" "%(binary) -f %(ledger-file) bal %(account)"))
-                  ledger-report-is-reversed t)
-    :mode "\\.dat$")
+    (use-package ledger-mode
+      :ensure t
+      :preface (defun my-ledger-save ()
+                 "Automatically clean the ledger buffer at each save."
+                 (interactive)
+                 (save-excursion
+                   (when (buffer-modified-p)
+                     (with-demoted-errors (ledger-mode-clean-buffer))
+                     (save-buffer))))
+      :config (setq ledger-reports '(("Monthly Balance" "ledger [[ledger-mode-flags]] -f /Users/manojm321/Dropbox/personal/accounting/oct28.dat -M  -r --period 2019 reg ^Expenses ^Income and not Bonus")
+                                     ("Monthly Food" "ledger [[ledger-mode-flags]] -f /Users/manojm321/Dropbox/personal/accounting/oct28.dat -AMn reg Expenses:Food")
+                                     ("bal" "%(binary) -f %(ledger-file) bal")
+                                     ("reg" "%(binary) -f %(ledger-file) reg")
+                                     ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+                                     ("account-reg" "%(binary) -f %(ledger-file) reg --tail 30 %(account)")
+                                     ("account-bal" "%(binary) -f %(ledger-file) bal %(account)"))
+                    ledger-report-is-reversed t
+                    ledger-complete-in-steps t
+                    ledger-accounts-file "/Users/manojm321/Dropbox/personal/accounting/Accounts.dat")
+      :mode "\\.dat$")
+
+  (add-hook 'ledger-mode-hook
+            (lambda ()
+              (setq-local tab-always-indent 'complete)
+              (setq-local completion-cycle-threshold t)
+              (setq-local ledger-complete-in-steps t)))
+  (add-hook 'ledger-mode-hook
+            (lambda ()  (add-hook 'before-save-hook #'ledger-mode-clean-buffer  nil 'make-it-local)))
+#+END_SRC
+
 #+END_SRC
 
 ** LSP mode
     #+BEGIN_SRC emacs-lisp
-    (use-package "lsp-mode"
+    (use-package lsp-mode
     :ensure t)
     #+END_SRC
 
@@ -633,19 +653,17 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
   (use-package mu4e
     :bind (("C-c m" . mu4e))
-    :config (setq mu4e-index-cleanup nil      ;; don't do a full cleanup check
-                  mu4e-index-lazy-check t    ;; don't consider up-to-date dirs
-                  mail-user-agent 'mu4e-user-agent
+    :config (setq mail-user-agent 'mu4e-user-agent
                   mu4e-confirm-quit nil
                   mu4e-view-show-images t
                   mu4e-sent-messages-behavior 'delete
                   mu4e-get-mail-command "mbsync gmail"
                   mu4e-attachment-dir  "~/Downloads"
                   mu4e-view-show-images t
-                  mu4e-headers-results-limit 500
-                  mu4e-update-interval 120
+                  mu4e-headers-results-limit 200
+                  mu4e-update-interval 300
                   mu4e-hide-index-messages t
-                  mu4e-headers-include-related nil
+                  mu4e-headers-include-related t
                   message-kill-buffer-on-exit t
                   mu4e-headers-skip-duplicates t
                   mu4e-headers-date-format "%d/%m/%y %H:%M:%S"
@@ -657,6 +675,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                                         (:thread-subject))
                   mu4e-view-prefer-html nil))
 
+  (require 'mu4e)
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (add-hook 'mu4e-view-mode-hook
             (lambda()
@@ -664,6 +683,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
               (local-set-key (kbd "<tab>") 'shr-next-link)
               (local-set-key (kbd "<backtab>") 'sdhr-previous-link)))
 
+  (add-to-list 'mu4e-view-actions
+                   '("browser" . mu4e-action-view-in-browser) t)
   (add-hook 'mu4e-compose-mode-hook
             (defun mkm-compose-message-setting ()
               "My settings for message composition."
@@ -694,25 +715,28 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                                   :key ?m) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
                                   :name "RR"
-                                  :query "\( s:Change in OR s:Review Request \)"
+                                  :query "\( s:Change in OR s:Review Request \) AND (gerrit OR reviewboard)"
                                   :key ?r) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "SW Announce"
+                                  :name "Unread"
+                                  :query "(flag:unread OR (manoj AND flag:unread)) AND NOT (s:bug report OR list:support-watchers.arista.com OR list:sw-infra-alerts.arista.com OR s:Anacron OR s:Cron Daemon)"
+                                  :key ?u) t)
+    (add-to-list  'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Bugs"
+                                  :query "flag:unread AND s:bug report for AND from:arastra@arista.com"
+                                  :key ?b) t)
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Alerts"
+                                  :query "(list:sw-infra-alerts.arista.com OR s:Anacron OR s:Cron Daemon) AND date:3d..now"
+                                  :key ?c) t)
+    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
+                                  :name "Announce"
                                   :query "to:sw-announce date:3d..now"
                                   :key ?a) t)
     (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Cron"
-                                  :query "s:Cron date:3d..now"
-                                  :key ?c) t)
-    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
-                                  :name "Unread"
-                                  :query "flag:unread"
-                                  :key ?u) t)
-    (add-to-list 'mu4e-bookmarks (make-mu4e-bookmark
                                   :name "Meeting Notes"
                                   :query "s:sw meeting notes date:7d..now"
-                                  :key ?n) t)
-)
+                                  :key ?n) t))
 #+END_SRC
 
 ** Mu4e-alert
@@ -721,7 +745,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         :ensure t
         :config (progn
                   (setq mu4e-alert-interesting-mail-query
-                        "recip:manojm321 flag:unread date:7d..now AND NOT flag:trashed")
+                        "recip:manojm321 AND flag:unread")
                   (mu4e-alert-enable-mode-line-display)))
     #+END_SRC
 ** Mu4e-conversation
@@ -746,7 +770,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :custom-face  '((org-block-begin-line ((t (:background "gray22" :foreground "gray50" :height 0.9))))
                     (org-block-end-line ((t (:background "gray22" :foreground "gray50" :height 0.9)))))
     :config (setq org-directory '("~/Dropbox/org")
-                  org-agenda-files '("~/Dropbox/org/")
+                  org-agenda-files '("~/Dropbox/org/" "~/Dropbox/personal/")
                   org-agenda-text-search-extra-files '(agenda-archives)
                   org-enforce-todo-dependencies t
                   org-log-done 'time
@@ -757,14 +781,19 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   org-use-speed-commands t
                   org-src-fontify-natively t
                   org-catch-invisible-edits 'error
+                  org-refile-targets '((org-agenda-files :maxlevel . 3))
+                  org-deadline-warning-days 2
+                  org-outline-path-complete-in-steps nil
+                  org-refile-use-outline-path 'file
+                  org-refile-allow-creating-parent-nodes 'confirm
                   org-capture-templates
                   '(("k" "Karate Notes" entry (file  "~/Dropbox/Notes/Karate/karate_notes.org")
                      "* REVW %t \n\n\s\s-\s%?" :empty-lines-after 2 :prepend t)
                     ("e" "Capture email as TODO" entry (file "~/Dropbox/org/todo.org")
-                     "* TODO %?\n\n%a\n" :empty-lines-after 2 :prepend t)
-                    ("l" "Capture a link from clipboard" entry (file "~/Dropbox/org/notes.org")
+                     (function mkm-capture-email) :empty-lines-after 2 :prepend t)
+                    ("l" "Capture a link from clipboard" entry (file "~/Dropbox/personal/notes.org")
                      (function mkm-org-capture/link)  :empty-lines-after 2 :prepend t)
-                    ("r" "Read about this later." entry (file "~/Dropbox/org/notes.org")
+                    ("r" "Read about this later." entry (file "~/Dropbox/personal/notes.org")
                      "* TODO %?\n\n" :empty-lines-after 2 :prepend t)
                     ("m" "Meeting notes automatically clocks in" entry (file "~/Dropbox/org/todo.org" )
                      (function mkm-org-capture-todo) :empty-lines-after 2 :prepend t :clock-in t)
@@ -772,25 +801,32 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                      (function mkm-org-capture-todo) :empty-lines-after 2 :prepend t)
                     ("a" "Areview feedback" plain (file+function "~/Dropbox/org/review.org" areview-ask-location)
                      "   - %?" :empty-lines 0)
-                    ("f" "Capture a elfeed to notes" entry (file "~/Dropbox/org/notes.org")
+                    ("f" "Capture a elfeed to notes" entry (file "~/Dropbox/personal/notes.org")
                      (function mkm-elfeed/capture) :empty-lines-after 2 :prepend t)
                     ("h" "Capture a habit" plain (file "~/Dropbox/accounting/timelog.dat")
                      (function mkm-org-capture/activity) :immediate-finish t)
+                    ("s" "Capture a support request" entry (file "~/Dropbox/org/todo.org")
+                     "* %? :support:%^g\n\s\s- " :empty-lines-after 2 :prepend t :clock-in t)
+                    ("b" "capture a break" entry (file "~/Dropbox/org/lunch.org")
+                     "* %? :break:%^g\n\s\s- " :empty-lines-after 2 :prepend t :clock-in t)
                     ("p" "Capture a TODO task" entry (file "~/Dropbox/org/personal.org")
                      "* TODO %?\n\s\s- " :empty-lines-after 2 :prepend t))))
 
-  (run-with-idle-timer 60 t (lambda ()
-                              (org-agenda-maybe-redo)))
+  ;; required to expand snippets
+  (require 'org-tempo)
+
+  (run-with-idle-timer 300 t #'make-thread #'(lambda() (org-agenda-maybe-redo)))
 
   (add-hook 'org-mode-hook 'flyspell-mode)
   (add-hook 'org-mode-hook 'auto-fill-mode)
+  (add-hook 'org-capture-prepare-finalize-hook 'org-id-get-create)
 
   ;; mark bold text in red color
   (add-to-list 'org-emphasis-alist '("*" (:foreground "red")))
 
   (defun air-org-skip-subtree-if-priority (priority)
     "Skip an agenda subtree if it has a priority of PRIORITY.
-        PRIORITY may be one of the characters ?A, ?B, or ?C."
+              PRIORITY may be one of the characters ?A, ?B, or ?C."
     (let ((subtree-end (save-excursion (org-end-of-subtree t)))
           (pri-value (* 1000 (- org-lowest-priority priority)))
           (pri-current (org-get-priority (thing-at-point 'line t))))
@@ -798,31 +834,43 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
           subtree-end
         nil)))
 
+  (defun org-agenda-skip-if-blocked ()
+    (let ((next-headline (save-excursion
+                           (or (outline-next-heading) (point-max)))))
+      (if (org-entry-blocked-p) next-headline)))
+
   (setq org-agenda-custom-commands
         '(("d" "Custom daily agenda"
            ((tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("DONE" "WAIT" "VRFY" "BNWD" "IGNR"))
-                                                  (org-agenda-skip-if nil '(scheduled deadline))))
+                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("DONE" "WAIT" "VRFY" "BNWD" "IGNR" "CNCL"))
+                                                  (org-agenda-skip-if nil '(scheduled deadline))
+                                                  (org-agenda-skip-if-blocked)))
                    (org-agenda-overriding-header "Just do it:")))
             (tags "PRIORITY=\"A\""
-                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("DONE" "TODO" "BNWD" "IGNR"))
-                                                  (org-agenda-skip-if nil '(scheduled deadline))))
+                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("DONE" "TODO" "BNWD" "IGNR" "CNCL"))
+                                                  (org-agenda-skip-if nil '(scheduled deadline))
+                                                  (org-agenda-skip-if-blocked)))
                    (org-agenda-overriding-header "Waiting:")))
             (agenda "" ((org-agenda-span 'day)))
             (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-entry-if 'todo '("WAIT" "BNWD"))
-                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                                                        (org-agenda-skip-entry-if 'todo '("WAIT" "CNCL"))
+                                                        (org-agenda-skip-if nil '(scheduled deadline))
+                                                        (org-agenda-skip-if-blocked)))
                          (org-agenda-overriding-header "ALL tasks:")))
             (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-entry-if 'todo '("TODO" "BNWD"))
-                                                        (org-agenda-skip-if nil '(scheduled deadline))))
+                                                        (org-agenda-skip-entry-if 'todo '("TODO" "BNWD" "CNCL"))
+                                                        (org-agenda-skip-if nil '(scheduled deadline))
+                                                        (org-agenda-skip-if-blocked)))
                          (org-agenda-overriding-header "Low Priority Waiting..")))
-            (alltodo "" ((org-agenda-skip-function '(or (air-org-skip-subtree-if-priority ?A)
-                                                        (org-agenda-skip-entry-if 'todo '("TODO" "WAIT"))
-                                                        (org-agenda-skip-if nil '(scheduled deadline))))
-                         (org-agenda-overriding-header "If only..."))))
+            (search "*!{\\[[[:digit:]]*/[[:digit:]]*\\]}" ((org-agenda-overriding-header "Projects"))))
            ((org-agenda-files '("~/Dropbox/org/gcal.org"
-                                "~/Dropbox/org/todo.org"))))))
+                                "~/Dropbox/org/personal.org"
+                                "~/Dropbox/org/todo.org"))))
+          ("1" "Level 1 project headings"
+           ((tags "LEVEL=1"
+                  ((org-agenda-skip-function '(or (org-agenda-skip-entry-if 'todo '("WAIT" "VRFY" "BNWD" "IGNR" "CNCL" "TODO")))))))
+
+           ((org-agenda-files '("~/Dropbox/org/todo.org"))))))
 
   (defun mkm-org/read-entry()
     "Read a notes entry with webpage and notes TODO side-by-side"
@@ -842,6 +890,16 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                      (split-window-right)
                      (eww url)))))))))
 
+  (defun mkm-capture-email ()
+    (let ((msg (mu4e-message-at-point)))
+      (mu4e~view-mark-as-read-maybe msg)
+      (concat "* TODO "
+              (plist-get msg :subject)
+              "\t:%^g:"
+              "\n\s\s:PROPERTIES:\n\s\s:URL: "
+              (mu4e~org-store-link-message)
+              "\n\s\s:END:\n")))
+
   (defun mkm-elfeed/capture ()
     (let ((entry (elfeed-search-selected :single)))
       (concat "* TODO "
@@ -851,10 +909,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
               "\n\s\s:END:\n")))
 
   (defun my-play-in-vlc ()
-      (interactive)
-      (let* ((url (thing-at-point 'url t)))
-        (start-process "vlc" "*vlc*"
-                       "/Applications/VLC.app/Contents/MacOS/VLC" url)))
+    (interactive)
+    (let* ((url (thing-at-point 'url t)))
+      (start-process "vlc" "*vlc*"
+                     "/Applications/VLC.app/Contents/MacOS/VLC" url)))
 
   (defun mkm-elfeed/play-video ()
     (interactive)
@@ -881,23 +939,35 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (defun mkm-org-capture-todo ()
     "Capture TODO intelligently"
     (let* ((url-string (s-trim (if (x-get-clipboard) (x-get-clipboard) "")))
-           (rb-link (string-prefix-p "http://reviewboard" url-string))
-           (gerrit-link (string-prefix-p "http://gerrit" url-string))
+           (m (string-match ".*\\(http[s]?://[a-zA-z.0-9/-\\+]+\\)" url-string))
+           (link (match-string 1 url-string))
+           (rb (string-match-p "http://reviewboard" url-string))
+           (ghc (string-match-p "https://chat.google.com" url-string))
+           (gerrit (string-match-p "https://gerrit" url-string))
            (todo-begin "* TODO")
            (todo-head "%?")
            (todo-tags "%^g")
            (todo-body "-\s")
            (todo-prop ""))
       (cond
-       (rb-link
-        (setq page-title (org-web-tools--html-title (org-web-tools--get-url url-string))
-              todo-head (concat "RR: " (car (s-split "|" page-title t)))
+       (rb
+        (setq page-title (org-web-tools--html-title (org-web-tools--get-url link))
+              todo-head (concat "[#A] RR: " (car (s-split "|" page-title t)))
               todo-tags (concat ":review:" todo-tags)
-              todo-prop (concat ":PROPERTIES:\n\s\s:URL:\s" url-string "\n\s\s:END:")
-              todo-body (concat todo-body "%?" ))))
+              todo-prop (concat ":PROPERTIES:\n\s\s:URL:\s" link "\n\s\s:END:")
+              todo-body (concat todo-body "%?" )))
+       (gerrit
+        (setq todo-head (concat "[#A] RR: %?")
+              todo-tags (concat ":review:" todo-tags)
+              todo-prop (concat ":PROPERTIES:\n\s\s:URL:\s" link "\n\s\s:END:")))
+       (ghc
+        (setq todo-begin "*"
+              todo-head (concat "%?")
+              todo-tags (concat ":support:ghc:" todo-tags)
+              todo-prop (concat ":PROPERTIES:\n\s\s:URL:\s" link "\n\s\s:END:"))))
       (unless (string= "" todo-prop)
         (setq todo-prop (concat "\n\s\s" todo-prop)))
-      (concat todo-begin " " todo-head "\t" todo-tags todo-prop "\n\n\s\s" todo-body)))
+     (concat todo-begin " " todo-head "\t" todo-tags todo-prop "\n\n\s\s" todo-body)))
 
   (defun mkm-org-capture/link ()
     "Make a TODO entry with a link in clipboard. Page title is used as task heading."
@@ -946,6 +1016,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (setq org-export-with-toc nil)
   (setq org-export-with-creator nil)
     #+END_SRC
+
+** org-download
+   #+BEGIN_SRC emacs-lisp
+     (use-package org-download
+       :ensure t)
+   #+END_SRC
 ** org-bullets
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
@@ -961,8 +1037,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** org-gcal
     #+BEGIN_SRC emacs-lisp
       (use-package org-gcal
-        :ensure t
-        :config (run-with-idle-timer 60 t #'org-gcal-sync))
+        :ensure t)
     #+END_SRC
 ** Org-journal
 #+BEGIN_SRC emacs-lisp
@@ -992,7 +1067,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** org-rifle
     #+BEGIN_SRC emacs-lisp
       (use-package helm-org-rifle
-        :ensure t)
+        :ensure t
+        :config (setq helm-org-rifle-directories-filename-regexp "^todo\.org\\(_archive\\)?$"))
     #+END_SRC
 ** org-web-tools
     - Provides useful functions to work with web pages. Ex: extract title
@@ -1055,6 +1131,14 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         :requires rust-mode
         :hook (rust-mode-hook . cargo-minor-mode))
     #+END_SRC
+** sdcv
+   Install sdcv with brew install sdcv
+#+BEGIN_SRC emacs-lisp
+  (use-package sdcv
+    :ensure t
+    :bind (("C-c d" . sdcv-search-pointer)))
+#+END_SRC
+
 ** TOML mode
    #+BEGIN_SRC emacs-lisp
      (use-package toml-mode
@@ -1246,7 +1330,11 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
    #+BEGIN_SRC emacs-lisp
      (defun forgot-my-glasses ()
        (interactive)
-       (set-face-attribute 'default nil :height 200))
+       (set-face-attribute 'default nil :height 200 :width 'normal))
+
+     (defun found-my-glasses ()
+       (interactive)
+       (set-face-attribute 'default nil :height 130 :width 'normal))
    #+END_SRC
 ** Yank rectangle with newlines
    #+BEGIN_SRC emacs-lisp
@@ -1258,14 +1346,18 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
          (yank-rectangle))))
    #+END_SRC
 
-* Make Frames
+** Make Tabs
 #+BEGIN_SRC emacs-lisp
   (when window-system
-    (set-frame-name "ORG")
-    (make-frame '((name . "EDIT")))
-
-    (global-set-key (kbd "H-1") (lambda () (interactive) (select-frame-by-name "ORG")))
-    (global-set-key (kbd "H-2") (lambda () (interactive) (select-frame-by-name "EDIT")))
-    (toggle-frame-fullscreen)
-    (toggle-frame-fullscreen))
+    ;; leave first for agenda
+    (tab-new-to 2)
+    (tab-new-to 3)
+    (tab-new-to 4)
+    (global-set-key (kbd "H-1") (lambda () (interactive) (tab-select 1)))
+    (global-set-key (kbd "H-2") (lambda () (interactive) (tab-select 2)))
+    (global-set-key (kbd "H-3") (lambda () (interactive) (tab-select 3)))
+    (global-set-key (kbd "H-4") (lambda () (interactive) (tab-select 4)))
+    (global-set-key (kbd "H-}") (lambda () (interactive) (tab-next)))
+    (global-set-key (kbd "H-{") (lambda () (interactive) (tab-previous))))
 #+END_SRC
+
