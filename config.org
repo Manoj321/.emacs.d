@@ -114,6 +114,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (tooltip-mode -1))
 
   (when (string= system-type "darwin")
+    (setq mac-control-modifier 'control)
     (setq mac-option-modifier 'meta)
     (setq mac-command-modifier 'hyper))
 
@@ -124,6 +125,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
   ;; set font to 13pt
   (set-face-attribute 'default nil :height 110 :width 'normal)
+
+  (setq comment-auto-fill-only-comments t)
 
   ;; Keep all backup and auto-save files in one directory
   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
@@ -177,9 +180,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
   ;; Enable show parenthesis
   (show-paren-mode t)
-
-  ;; highlight current line
-  (global-hl-line-mode t)
 
   ;; Window movement, a gamer might recognize these key combinations!
   (use-package windmove
@@ -256,15 +256,14 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (setq split-height-threshold 100)
 
   (global-set-key (kbd "H-v") 'yank)
-#+END_SRC
 
-* Theme
-** Zerodark theme
-    #+BEGIN_SRC emacs-lisp
-      (when window-system
-        (use-package zerodark-theme
-           :ensure t))
-    #+END_SRC
+  ;; delete history
+  (setq history-delete-duplicates t)
+
+  (setenv "PAGER" "cat")
+
+  (global-unset-key (kbd "C-x C-b"))
+#+END_SRC
 * Packages
 ** comint mode
    #+BEGIN_SRC emacs-lisp
@@ -302,12 +301,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
         :ensure t
         :config (push 'company-lsp company-backends))
     #+END_SRC
-** Dictionary
-#+BEGIN_SRC emacs-lisp
-  (use-package dictionary
-    :ensure t
-    :bind (("C-c d" . dictionary-lookup-definition)))
-#+END_SRC
 ** DockerFile-mode
 #+BEGIN_SRC emacs-lisp
   (use-package dockerfile-mode
@@ -329,6 +322,11 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :config (use-package docker-tramp
               :ensure t))
 #+END_SRC
+** Emojify
+   #+begin_src emacs-lisp
+     (use-package emojify
+       :hook (after-init . global-emojify-mode))
+   #+end_src
 ** Elfeed
 #+begin_src emacs-lisp
   (use-package elfeed
@@ -357,36 +355,38 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
    #+BEGIN_SRC emacs-lisp
      (defun my-shell (arg)
        (interactive "c")
-       (if (or (< arg 32) (> arg 126))
-           (error "Please use printable character for shell name"))
-       (let* ((buffer (get-buffer (format "*eshell*<%c>" arg))))
+       (if (and (< arg 96) (> arg 123))
+           (error "Please use alphanum character for shell name"))
+
+       (let* ((func-name (if (and (> arg 47) (< arg 58))
+                               'eshell
+                           'shell))
+              (buffer-name (format "*%s*<%c>" func-name arg))
+              (buffer (get-buffer buffer-name)))
          (if buffer
              (switch-to-buffer buffer)
-           (progn
-             (eshell)
-             (make-local-variable 'comint-input-sender)
-             (rename-buffer (format "*eshell*<%c>" arg))))))
-
+           (funcall func-name)
+           (make-local-variable 'comint-input-sender)
+           (rename-buffer buffer-name))))
      (use-package eshell
        :config (progn
                 (setq eshell-where-to-jump 'begin
                     eshell-review-quick-commands nil
                     eshell-smart-space-goes-to-end t
                     eshell-last-dir-ring-size 128
+                    eshell-cmpl-cycle-completions nil
                     eshell-prompt-function
                     (lambda ()
                       (concat
-                       (propertize "┌─[" 'face `(:foreground "green"))
-                       (propertize (user-login-name) 'face `(:foreground "red"))
-                       (propertize "@" 'face `(:foreground "green"))
-                       (propertize (car (split-string (system-name) "\\." t)) 'face `(:foreground "blue"))
-                       (propertize "]──[" 'face `(:foreground "green"))
+                       (propertize "┌─[" 'face `(:foreground "grey"))
                        (propertize (format-time-string "%H:%M" (current-time)) 'face `(:foreground "orange"))
-                       (propertize "]──[" 'face `(:foreground "green"))
-                       (propertize (concat (eshell/pwd)) 'face `(:foreground "grey"))
-                       (propertize "]\n" 'face `(:foreground "green"))
-                       (propertize "└─>" 'face `(:foreground "green"))
-                       (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "grey")))))
+                       (propertize "]──[" 'face `(:foreground "grey"))
+                       (propertize (if (= eshell-last-command-status 0) (string-as-multibyte "\U00002705") (string-as-multibyte "\U0001F534")) 'face `(:foreground "black"))
+                       (propertize "]──[" 'face `(:foreground "grey"))
+                       (propertize (concat (eshell/pwd)) 'face `(:foreground "black"))
+                       (propertize "]\n" 'face `(:foreground "grey"))
+                       (propertize "└─>" 'face `(:foreground "grey"))
+                       (propertize (if (= (user-uid) 0) " # " " $ ") 'face `(:foreground "black")))))
                 (define-key global-map '[(meta ?z)] 'my-shell)))
    #+END_SRC
 
