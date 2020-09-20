@@ -325,7 +325,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 ** Emojify
    #+begin_src emacs-lisp
      (use-package emojify
-       :preface (setq (emojify-emoji-styles '(unicode)))
+       :preface (setq emojify-emoji-styles '(unicode))
        :hook (after-init . global-emojify-mode))
    #+end_src
 ** Elfeed
@@ -412,10 +412,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     separate package-lint library.
 
     #+BEGIN_SRC emacs-lisp
-      (use-package flycheck-package
+      (use-package flycheck
         :ensure t
-        :requires flycheck
-        :config (flycheck-package-setup))
+        :init (global-flycheck-mode))
     #+END_SRC
 ** Fly-spell
     #+BEGIN_SRC emacs-lisp
@@ -1060,13 +1059,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
        :init
        (setq org-mru-clock-how-many 10))
    #+END_SRC
-** org-pdfview
-    #+BEGIN_SRC emacs-lisp
-      (use-package org-pdfview
-        :ensure t
-        :config
-        (add-to-list 'org-file-apps '("\\.pdf\\'" . (lambda (file link) (org-pdfview-open link)))))
-    #+END_SRC
 ** org-rifle
     #+BEGIN_SRC emacs-lisp
       (use-package helm-org-rifle
