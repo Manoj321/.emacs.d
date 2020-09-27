@@ -284,19 +284,7 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
        "Enable compilation mode"
        (compilation-mode))
    #+END_SRC
-** Company mode
-    #+BEGIN_SRC emacs-lisp
-      (use-package "company"
-        :ensure t
-        :hook (after-init-hook . global-company-mode))
-    #+END_SRC
-** company lsp
-    #+BEGIN_SRC emacs-lisp
-      (use-package "company-lsp"
-        :ensure t
-        :config (push 'company-lsp company-backends))
-    #+END_SRC
-** DockerFile-mode
+** Dockerfile-mode
 #+BEGIN_SRC emacs-lisp
   (use-package dockerfile-mode
       :mode "Dockerfile.*")
@@ -395,11 +383,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     (setq fci-rule-column 85))
 #+END_SRC
 
-** Fly-Check
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure t)
-#+END_SRC
 ** flycheck-package
     This library provides a flycheck checker for the metadata in Emacs Lisp files
     which are intended to be packages. That metadata includes the package
@@ -434,11 +417,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                "go build -v && go test -v -race && go vet")))
 
     (add-hook 'go-mode-hook 'my-go-mode-hook))
-#+END_SRC
-** Helm company
-#+BEGIN_SRC emacs-lisp
-  (use-package helm-company
-    :ensure t)
 #+END_SRC
 ** Helm godoc
     #+BEGIN_SRC emacs-lisp
@@ -497,22 +475,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                       jedi:use-shortcuts t))
     #+END_SRC
 
-** Jenkins-mode
-#+BEGIN_SRC emacs-lisp
-  (use-package jenkins
-    :ensure t
-    :init (progn
-            (setq jenkins-url "http://jenkins")
-            (setq jenkins-username "manojm321")))
-#+END_SRC
-** Indium
-    #+BEGIN_SRC emacs-lisp
-      (use-package js2-mode
-        :ensure t)
-      (use-package indium
-        :requires js2-mode
-        :ensure t)
-    #+END_SRC
 ** Kapacitor
     #+BEGIN_SRC emacs-lisp
       (use-package kapacitor
@@ -564,18 +526,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
 
 #+END_SRC
 
-** LSP mode
-    #+BEGIN_SRC emacs-lisp
-    (use-package lsp-mode
-    :ensure t)
-    #+END_SRC
-
-** LSP go
-    #+BEGIN_SRC emacs-lisp
-      (use-package lsp-go
-        :disabled t
-        :ensure t)
-    #+END_SRC
 ** Magit
 #+begin_src emacs-lisp
   ;; Pushing to explicit refs is a multi step process. This function adds push review
@@ -1005,11 +955,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
   (setq org-export-with-creator nil)
     #+END_SRC
 
-** org-download
-   #+BEGIN_SRC emacs-lisp
-     (use-package org-download
-       :ensure t)
-   #+END_SRC
 ** org-bullets
 #+BEGIN_SRC emacs-lisp
   (use-package org-bullets
@@ -1027,15 +972,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
       (use-package org-gcal
         :ensure t)
     #+END_SRC
-** Org-journal
-#+BEGIN_SRC emacs-lisp
-  (use-package org-journal
-      :ensure t
-      :config
-      (setq org-journal-dir "~/Dropbox/Notes/journal/"
-            org-journal-file-type 'yearly))
-#+END_SRC
-
 ** org-mru-clock
    #+BEGIN_SRC emacs-lisp
      (use-package org-mru-clock
@@ -1087,11 +1023,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
       (use-package poporg
         :ensure t
         :bind (("C-c \"" . poporg-dwim)))
-    #+END_SRC
-** Rainbow-identifiers
-    #+BEGIN_SRC emacs-lisp
-      (use-package rainbow-identifiers
-        :ensure t)
     #+END_SRC
 ** Recentf
 #+begin_src emacs-lisp
