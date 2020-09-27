@@ -652,10 +652,9 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :config (setq mail-user-agent 'mu4e-user-agent
                   mu4e-confirm-quit nil
                   mu4e-view-show-images t
-                  mu4e-sent-messages-behavior 'delete
+                  mu4e-sent-messages-behavior 'sent
                   mu4e-get-mail-command "mbsync gmail"
                   mu4e-attachment-dir  "~/Downloads"
-                  mu4e-view-show-images t
                   mu4e-headers-results-limit 200
                   mu4e-update-interval 300
                   mu4e-hide-index-messages t
@@ -743,14 +742,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   (setq mu4e-alert-interesting-mail-query
                         "recip:manojm321 AND flag:unread")
                   (mu4e-alert-enable-mode-line-display)))
-    #+END_SRC
-** Mu4e-conversation
-    #+BEGIN_SRC emacs-lisp
-      (use-package mu4e-conversation
-        :requires mu4e
-        :disabled t
-        :ensure t
-        :config (global-mu4e-conversation-mode))
     #+END_SRC
 ** protbuf-mode
     #+BEGIN_SRC emacs-lisp
