@@ -374,7 +374,6 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                 (define-key global-map '[(meta ?z)] 'my-shell)))
    #+END_SRC
 
-
 ** FCI mode
 #+BEGIN_SRC emacs-lisp
   (use-package fill-column-indicator
@@ -1050,6 +1049,12 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
     :ensure t
     :bind (("C-c d" . sdcv-search-pointer)))
 #+END_SRC
+
+** sendmail
+   #+begin_src emacs-lisp
+     (use-package sendmail
+       :config (setq send-mail-function 'smtpmail-send-it))
+   #+end_src
 
 ** TOML mode
    #+BEGIN_SRC emacs-lisp
