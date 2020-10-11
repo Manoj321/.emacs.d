@@ -845,11 +845,10 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
               (elfeed-entry-link entry)
               "\n\s\s:END:\n")))
 
-  (defun my-play-in-vlc ()
+  (defun my-play-in-vlc (url)
     (interactive)
-    (let* ((url (thing-at-point 'url t)))
-      (start-process "vlc" "*vlc*"
-                     "/Applications/VLC.app/Contents/MacOS/VLC" url)))
+    (start-process "vlc" "*vlc*"
+                     "/Applications/VLC.app/Contents/MacOS/VLC" url))
 
   (defun mkm-elfeed/play-video ()
     (interactive)
