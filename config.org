@@ -723,6 +723,8 @@ Some are adopted from [[https://github.com/magnars][magnars(@emacsrocks)]]
                   org-outline-path-complete-in-steps nil
                   org-refile-use-outline-path 'file
                   org-refile-allow-creating-parent-nodes 'confirm
+                  org-columns-default-format "%70ITEM(Task) %2PRIORITY %10Effort(Effort){:} %10CLOCKSUM"
+                  org-global-properties '(("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00"))
                   org-capture-templates
                   '(("k" "Karate Notes" entry (file  "~/Dropbox/Notes/Karate/karate_notes.org")
                      "* REVW %t \n\n\s\s-\s%?" :empty-lines-after 2 :prepend t)

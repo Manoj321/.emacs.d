@@ -5,6 +5,7 @@
 ** https://www.youtube.com/feeds/videos.xml?channel_id=UCxkMDXQ5qzYOgXPRnOBrp1w :mikeZamansky:
 ** https://www.youtube.com/feeds/videos.xml?channel_id=UCnrgOD6G0y0_rcubQuICpTQ :influxdata:
 
+** https://www.youtube.com/feeds/videos.xml?channel_id=UCuyRsHZILrU7ZDIAbGASHdA :theprint:
 ** Blog                                                                :blog:
 
 *** http://www.saffo.com/feed/
@@ -51,8 +52,7 @@
 **** http://reddit.com/r/emacs/.rss                                  :reddit:
 
 ** NYT
-**** https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml          :nyt:
-
+*** https://rss.nytimes.com/services/xml/rss/nyt/MostEmailed.xml        :nyt:
 ** Comic                                                              :comic:
 
 *** http://what-if.xkcd.com/feed.atom
