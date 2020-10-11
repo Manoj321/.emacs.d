@@ -1332,3 +1332,34 @@ Winner mode allows you to undo/redo changes to window changes in Emacs.
     (global-set-key (kbd "H-{") (lambda () (interactive) (tab-previous))))
 #+END_SRC
 
+** Highlight clocked in status
+   copied [[https://github.com/iqbalansari/dotEmacs/blob/master/config/workflow.org#better-display-of-clocked-in-task-also-indicate-if-not-currently-clocked-in][from]]
+   #+begin_src emacs-lisp
+     (setq org-clock-clocked-in-display nil)
+
+     (defface iqbal-org-not-clocked-in
+       `((t :background "red" :foreground "white" :weight bold))
+       "Face for when you are not clocked in to an org task")
+
+     (defface iqbal-org-clocked-in
+       `((t :background "LimeGreen" :foreground "white" :weight bold))
+       "Face for when you are not clocked in to an org task")
+
+     (defun iqbal-org-clock-mode-line ()
+       (let ((clocking-p (and (fboundp 'org-clocking-p)
+                              (org-clocking-p))))
+         (when clocking-p
+             (org-clock-update-mode-line))
+         (let ((mode-line-string (format " %s "
+                                         (if clocking-p
+                                             org-mode-line-string
+                                           (org-propertize "Not clocked in"
+                                                           'help-echo "You are not clocked in to any task"))))
+               (mode-line-face (if clocking-p
+                                   'iqbal-org-clocked-in
+                                 'iqbal-org-not-clocked-in)))
+           (format "%s " (propertize mode-line-string 'face mode-line-face)))))
+
+     (setq global-mode-string (remove '(:eval (iqbal-org-clock-mode-line)) global-mode-string))
+     (push '(:eval (iqbal-org-clock-mode-line)) global-mode-string)
+   #+end_src
